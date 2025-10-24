@@ -1,0 +1,46 @@
+import { RenderStatus, RenderButton, SetColumnMenu } from '../utils/TableFuncs';
+import Table from './Table'
+
+//dummy data
+const rows = [
+    { id: 1, name: 'Bob', start_date: '30 Sep 2025', end_date:'1 Oct 2025', duration: '1', affected_lesson: 'Algebra I: Intro to Algebra', status:'pending', button: 'pending' },
+    { id: 2, name: 'Jim', start_date: '1 Oct 2025', end_date:'2 Oct 2025', duration: '1', affected_lesson: 'NA', status:'pending', button: 'pending' },
+    { id: 3, name: 'Jim', start_date: '3 Oct 2025', end_date:'7 Oct 2025', duration: '3', affected_lesson: 'NA', status:'confirmed', button: 'confirmed' }
+    ]
+const columns = [
+    { field: 'name', headerName: 'Name', minWidth: 100, flex: 3 },
+    { field: 'start_date', headerName: 'Start Date', minWidth: 100, flex: 1 },
+    { field: 'end_date', headerName: 'End Date', minWidth: 100, flex: 1 },
+    { field: 'duration', headerName: 'Duration (days)', minWidth: 100, flex: 1},
+    { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, renderCell: RenderStatus, align: 'center'},
+    { field: 'affected_lesson', headerName: 'Affected Lesson', minWidth: 300, flex: 3 },
+    { field: 'button', headerName: '', minWidth: 200, flex: 2, renderCell: RenderButton, sortable: false, filterable: false,
+        confirmedBtnProps: [
+            {name: 'View Schedule', href: null},
+        ],
+        cancelledBtnProps: [
+            {name: 'View Schedule', href: null}
+        ],
+        pendingBtnProps: [
+            {name: 'View Conflict', href: null},
+            {name: 'Approve', href: null},
+            {name: 'Reject', href: null}
+        ]
+     }        
+];
+
+//Main table component
+const LeaveTable = ()=>{
+    return (
+        <div className='table'>
+            <Table 
+                rows = {rows}
+                columns = {columns}
+                rowSpacingVals = {[0,30]}
+                slots={{ columnMenu: SetColumnMenu }}
+            />
+        </div>
+    )
+
+}
+export default LeaveTable;
