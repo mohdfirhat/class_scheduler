@@ -18,6 +18,7 @@ const Table = (props)=>{
                 // getRowSpacing={getRowSpacing}
                 slots={props.slots}
                 getRowHeight={() => 'auto'}
+                rowSpanning = {props.rowSpanning}
                 showToolbar
                 sx={{
                     //set padding within cells

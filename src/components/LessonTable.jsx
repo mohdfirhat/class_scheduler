@@ -8,7 +8,7 @@ import './LessonTable.css'
 const rows = [
     { id: 1, name: 'Algebra I: Intro to Algebra', date: '30 Sep 2025', time:'0800-1000', venue: 'Classroom 2A', class: 'Class 5A', teacher:'Bob', status: 'confirmed', button: 'confirmed' },
     { id: 2, name: 'Algebra II: Advanced Algebra', date: '30 Sep 2025', time:'0800-1000', venue: 'Classroom 2B', class: 'Class 5C', teacher:'Jim', status: 'cancelled', button: 'cancelled' },
-    { id: 3, name: 'Differentiation III: Differential Equations', date: '30 Sep 2025', time:'1200-1400', venue: 'Classroom 2B', class: 'Class 5A', teacher:'Bob', status: 'pending', button: 'pending' }
+    { id: 3, name: 'Differentiation III: Differential Equations', date: '30 Sep 2025', time:'1200-1400', venue: 'Classroom 2B', class: 'Class 5A', teacher:'Bob', status: 'pending', button: 'pending' },
 ];
 
 const columns = [

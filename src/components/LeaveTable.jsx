@@ -3,10 +3,11 @@ import Table from './Table'
 
 //dummy data
 const rows = [
-    { id: 1, name: 'Bob', start_date: '30 Sep 2025', end_date:'1 Oct 2025', duration: '1', affected_lesson: 'Algebra I: Intro to Algebra', status:'pending', button: 'pending' },
+    { id: 1, name: 'Bob', start_date: '30 Sep 2025', end_date:'1 Oct 2025', duration: '1', affected_lesson: 'Algebra I: Intro to Algebra', status:'pending', button: 'conflict' },
     { id: 2, name: 'Jim', start_date: '1 Oct 2025', end_date:'2 Oct 2025', duration: '1', affected_lesson: 'NA', status:'pending', button: 'pending' },
-    { id: 3, name: 'Jim', start_date: '3 Oct 2025', end_date:'7 Oct 2025', duration: '3', affected_lesson: 'NA', status:'confirmed', button: 'confirmed' }
-    ]
+    { id: 3, name: 'Jim', start_date: '3 Oct 2025', end_date:'7 Oct 2025', duration: '3', affected_lesson: 'NA', status:'confirmed', button: 'confirmed' },
+    { id: 4, name: 'Jim', start_date: '5 Oct 2025', end_date:'8 Oct 2025', duration: '3', affected_lesson: 'NA', status:'cancelled', button: 'cancelled' }    
+]
 const columns = [
     { field: 'name', headerName: 'Name', minWidth: 100, flex: 3 },
     { field: 'start_date', headerName: 'Start Date', minWidth: 100, flex: 1 },
@@ -22,6 +23,10 @@ const columns = [
             {name: 'View Schedule', href: null}
         ],
         pendingBtnProps: [
+            {name: 'Approve', href: null},
+            {name: 'Reject', href: null}
+        ],
+        conflictBtnProps: [
             {name: 'View Conflict', href: null},
             {name: 'Approve', href: null},
             {name: 'Reject', href: null}
