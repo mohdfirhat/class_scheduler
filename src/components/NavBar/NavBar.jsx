@@ -1,24 +1,22 @@
 import styles from "./NavBar.module.css";
 import avatar from "../../assets/avatar.png";
-import { useState } from "react";
+import { NavLink } from "react-router";
 
 const tabs = ["Lessons", "Teachers", "Leaves"];
 
 const NavBar = () => {
-  const [activeTab, setActiveTab] = useState(0);
   return (
     <nav className={styles.navContainer}>
       <ul className={styles.tabContainer}>
         {tabs.map((tab, index) => (
-          <li
-            key={index}
-            className={`${styles.tab} ${activeTab === index ? styles.active : ""}`}
-            onClick={() => {
-              setActiveTab(index);
-            }}
+          <NavLink
+            to={`/${tab.toLowerCase()}`}
+            className={({ isActive, isPending }) =>
+              isPending ? `${styles.tab}` : isActive ? `${styles.tab} ${styles.active}` : `${styles.tab}`
+            }
           >
-            {tab}
-          </li>
+            <li key={index}>{tab}</li>
+          </NavLink>
         ))}
       </ul>
       <div className={styles.avatarContainer}>

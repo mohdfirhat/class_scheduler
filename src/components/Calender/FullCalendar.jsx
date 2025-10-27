@@ -4,11 +4,9 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
-import { useState } from "react";
 
-export default function FullCalender({ leaves, lessons }) {
-  const [selectedTeacherId, setSelectedTeacherId] = useState(1); // TODO: Change to null
-  const [otherTeacherId, setOtherTeacherId] = useState(2);
+export default function FullCalender({ leaves, lessons, selectedTeacherId }) {
+  // const [selectedTeacherId, setSelectedTeacherId] = useState(2); // TODO: Change to null
 
   function formatStartDate(date) {
     const start = new Date(date);
@@ -21,24 +19,29 @@ export default function FullCalender({ leaves, lessons }) {
     return start;
   }
   const createLessonEvent = (lesson) => ({
-    title: lesson.subject.id,
+    title: lesson.subject.subject_code,
     start: lesson.start_time,
     end: lesson.end_time,
-    color: selectedTeacherId ? "blue" : "orange",
+    color: lesson.teacher.id === selectedTeacherId ? "blue" : "darkorange",
     extendedProps: {
       type: "lesson",
       teacher: `${lesson.teacher.first_name} ${lesson.teacher.last_name}`,
       venueName: lesson.venue.name,
       venueDesc: lesson.venue.description,
+      data: lesson,
     },
   });
   const createLeaveEvent = (leave) => ({
     title: `${leave.teacher.first_name} ${leave.teacher.last_name} Leave`,
     start: formatStartDate(leave.start_date),
     end: formatEndDate(leave.end_date),
-    color: selectedTeacherId ? "lightblue" : "lightorange",
-    borderColor: selectedTeacherId ? "blue" : "orange",
+    color: leave.teacher.id === selectedTeacherId ? "lightblue" : "sandybrown",
+    borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",
+    extendedProps: {
+      type: "lesson",
+      data: leave,
+    },
   });
   const lessonEvents = lessons.map((lesson) => createLessonEvent(lesson));
   const leaveEvents = leaves.map((leave) => createLeaveEvent(leave));
@@ -51,7 +54,7 @@ export default function FullCalender({ leaves, lessons }) {
       headerToolbar={{
         left: "prev,next today",
         center: "title",
-        right: "timeGridWeek,timeGridDay",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
       }}
       initialView="timeGridWeek"
       events={events}
