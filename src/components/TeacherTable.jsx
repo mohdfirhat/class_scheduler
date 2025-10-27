@@ -15,13 +15,13 @@ const rows = [
 ];
 
 const columns = [
-    { field: 'avatar', headerName: 'Avatar', minWidth: 100, flex: 1, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'avatar', headerName: '', minWidth: 100, flex: 1, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'firstName', headerName: 'First Name', minWidth: 150, flex: 1.5 },
     { field: 'lastName', headerName: 'Last Name', minWidth: 150, flex: 1.5 },
     { field: 'dept', headerName: 'Department', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'subject', headerName: 'Subject(s) Taught', minWidth: 100, flex: 1 , rowSpanValueGetter: rowSpanValueFunc},
     { field: 'leave', headerName: 'No. of leave days remaining', minWidth: 200, flex: 2, rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'button', headerName: '', minWidth: 200, flex: 2, sortable: false, filterable: false, renderCell: RenderButton, rowSpanValueGetter: rowSpanValueFunc,
+    { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, rowSpanValueGetter: rowSpanValueFunc,
         teacherBtnProps: [
             {name: 'View Schedule', href: null}
         ]
@@ -30,14 +30,13 @@ const columns = [
 
 //Main table component
 const TeacherTable = ()=>{
-    
     return (
         <div className='table'>
             <Table 
                 rows = {rows}
                 columns = {columns}
                 rowSpacingVals = {[0,30]}
-                slots={{ columnMenu: SetColumnMenu }}
+                slots={{ columnMenu: SetColumnMenu}}
                 rowSpanning = {true}
             />
         </div>

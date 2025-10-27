@@ -1,3 +1,7 @@
 DataGrid {
     text-align: center;
 }
+
+.table {
+    width: '90vw';
+}

@@ -1,6 +1,6 @@
 import { RenderStatus, RenderButton, SetColumnMenu } from '../utils/TableFuncs';
 import Table from './Table'
-
+import {Fragment} from 'react';
 //dummy data
 const rows = [
     { id: 1, name: 'Bob', start_date: '30 Sep 2025', end_date:'1 Oct 2025', duration: '1', affected_lesson: 'Algebra I: Intro to Algebra', status:'pending', button: 'conflict' },
@@ -15,7 +15,7 @@ const columns = [
     { field: 'duration', headerName: 'Duration (days)', minWidth: 100, flex: 1},
     { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, renderCell: RenderStatus, align: 'center'},
     { field: 'affected_lesson', headerName: 'Affected Lesson', minWidth: 300, flex: 3 },
-    { field: 'button', headerName: '', minWidth: 200, flex: 2, renderCell: RenderButton, sortable: false, filterable: false,
+    { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, sortable: false, filterable: false,
         confirmedBtnProps: [
             {name: 'View Schedule', href: null},
         ],
@@ -37,14 +37,14 @@ const columns = [
 //Main table component
 const LeaveTable = ()=>{
     return (
-        <div className='table'>
-            <Table 
+        <Fragment>
+            <Table
                 rows = {rows}
                 columns = {columns}
                 rowSpacingVals = {[0,30]}
                 slots={{ columnMenu: SetColumnMenu }}
             />
-        </div>
+        </Fragment>
     )
 
 }

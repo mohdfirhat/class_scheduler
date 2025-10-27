@@ -19,7 +19,7 @@ const columns = [
     { field: 'class', headerName: 'Class', minWidth: 100, flex: 1 },
     { field: 'teacher', headerName: 'Teacher', minWidth: 100, flex: 1 },
     { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, align: 'center', renderCell: RenderStatus},
-    { field: 'button', headerName: '', minWidth: 200, flex: 2, sortable: false, filterable: false, renderCell: RenderButton,
+    { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton,
         confirmedBtnProps: [
             {name: 'Edit Lesson', href: null},
             {name: 'Cancel Lesson', href: null}

@@ -1,7 +1,14 @@
 import { DataGrid } from '@mui/x-data-grid';
+import './Table.css'
+//function for hiding certain columns in column menu in toolbar
+const hiddenFields = ['avatar', 'button'];
+const getTogglableColumns = (columns) => {
+  return columns
+    .filter((column) => !hiddenFields.includes(column.field))
+    .map((column) => column.field);
+};
 
 const Table = (props)=>{
-
     //function used to adjust row margins
     const getRowSpacing = ()=> {
         return {
@@ -20,6 +27,7 @@ const Table = (props)=>{
                 getRowHeight={() => 'auto'}
                 rowSpanning = {props.rowSpanning}
                 showToolbar
+                slotProps={{columnsManagement: {getTogglableColumns,},}}
                 sx={{
                     //set padding within cells
                     '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '30px' }

@@ -1,11 +1,15 @@
+import { Padding } from "@mui/icons-material";
+import LeaveTable from "../components/LeaveTable";
 import NavBar from "../components/NavBar/NavBar";
 
-const LeaveOverviewPage = () => {
-  return (
-    <>
-      <NavBar />
-      <h1>Leave Overview</h1>
-    </>
-  );
-};
+//Main table component
+const LeaveOverviewPage = ()=>{
+    return (
+        <div className = 'page' style = {{justifyItems: 'center'}}>
+            <NavBar />
+            <LeaveTable/>
+        </div>
+    )
+
+}
 export default LeaveOverviewPage;

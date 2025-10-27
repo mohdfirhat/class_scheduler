@@ -17,6 +17,7 @@ function App() {
       <Route path="/conflicts/:leaveId" element={<LeaveConflictPage />} />
     </Routes>
   );
+
 }
 
 export default App;
