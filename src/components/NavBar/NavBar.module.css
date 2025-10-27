@@ -1,0 +1,39 @@
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  height: 3rem;
+}
+
+.tabContainer {
+  list-style-type: none;
+  display: flex;
+  padding: 0px;
+  gap: 1rem;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab {
+  padding: 0.5rem;
+  border: 3px solid grey;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.active {
+  background-color: lightgrey;
+}
