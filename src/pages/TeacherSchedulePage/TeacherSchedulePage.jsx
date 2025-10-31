@@ -1,4 +1,4 @@
-import FullCalender from "../../components/Calender/FullCalendar";
+import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import NavBar from "../../components/NavBar/NavBar";
 import { scheduleLeaves, scheduleLessons } from "../../fakedata/data";
 import styles from "./TeacherSchedulePage.module.css";
@@ -13,7 +13,12 @@ const TeacherSchedulePage = () => {
       <NavBar />
       <main>
         <div className={styles.calendarContainer}>
-          <FullCalender lessons={scheduleLessons} leaves={scheduleLeaves} selectedTeacherId={Number(teacherId)} />
+          <AppFullCalendar
+            lessons={scheduleLessons}
+            leaves={scheduleLeaves}
+            selectedTeacherId={Number(teacherId)}
+            initialView="timeGridWeek"
+          />
         </div>
       </main>
     </>

@@ -5,7 +5,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 
-export default function FullCalender({ leaves, lessons, selectedTeacherId }) {
+export default function AppFullCalendar({
+  leaves,
+  lessons,
+  selectedTeacherId,
+  initialView,
+  initialDate,
+  ref = undefined,
+}) {
   // const [selectedTeacherId, setSelectedTeacherId] = useState(2); // TODO: Change to null
 
   function formatStartDate(date) {
@@ -50,13 +57,15 @@ export default function FullCalender({ leaves, lessons, selectedTeacherId }) {
   return (
     // <div style={{ width: "100vw", height: "100vh-6rem" }}>
     <FullCalendar
+      ref={ref}
+      initialDate={initialDate}
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       }}
-      initialView="timeGridWeek"
+      initialView={initialView}
       events={events}
       editable={false}
       selectable

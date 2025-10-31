@@ -36,7 +36,7 @@ export const lessons = [
       occupancy: 10,
     },
     subject: {
-      id: "CS101",
+      subject_code: "CS101",
       name: "Programming Fundamentals",
     },
     description: "",
@@ -85,7 +85,7 @@ export const scheduleLessons = [
       occupancy: 10,
     },
     subject: {
-      id: "CS101",
+      subject_code: "CS101",
       name: "Programming Fundamentals",
     },
     description: "",

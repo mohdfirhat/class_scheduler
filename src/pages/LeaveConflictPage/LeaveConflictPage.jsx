@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./LeaveConflictPage.module.css";
 import { leaves, lessons } from "../../fakedata/data";
 import NavBar from "../../components/NavBar/NavBar";
-import FullCalender from "../../components/Calender/FullCalendar";
+import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 
 const LeaveConflictPage = () => {
   //TODO: Firhat
@@ -14,7 +14,12 @@ const LeaveConflictPage = () => {
       <NavBar />
       <main>
         <div className={styles.calendarContainer}>
-          <FullCalender lessons={lessons} leaves={leaves} selectedTeacherId={selectedTeacherId} />
+          <AppFullCalendar
+            lessons={lessons}
+            leaves={leaves}
+            selectedTeacherId={selectedTeacherId}
+            initialView="timeGridWeek"
+          />
         </div>
       </main>
     </>

@@ -10,7 +10,7 @@ const NavBar = () => {
       <ul className={styles.tabContainer}>
         {tabs.map((tab, index) => (
           <NavLink
-            to={`/${tab.toLowerCase()}`}
+            to={`/dashboard/${tab.toLowerCase()}`}
             className={({ isActive, isPending }) =>
               isPending ? `${styles.tab}` : isActive ? `${styles.tab} ${styles.active}` : `${styles.tab}`
             }
@@ -24,7 +24,5 @@ const NavBar = () => {
       </div>
     </nav>
   );
-    
-
 };
 export default NavBar;
