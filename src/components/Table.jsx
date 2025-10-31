@@ -1,5 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import './Table.css'
+
+
 //function for hiding certain columns in column menu in toolbar
 const hiddenFields = ['avatar', 'button'];
 const getTogglableColumns = (columns) => {

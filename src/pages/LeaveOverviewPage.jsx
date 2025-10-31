@@ -5,7 +5,7 @@ import NavBar from "../components/NavBar/NavBar";
 //Main table component
 const LeaveOverviewPage = ()=>{
     return (
-        <div className = 'page' style = {{justifyItems: 'center'}}>
+        <div className = 'page' >
             <NavBar />
             <LeaveTable/>
         </div>

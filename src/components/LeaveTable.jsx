@@ -15,7 +15,7 @@ const columns = [
     { field: 'duration', headerName: 'Duration (days)', minWidth: 100, flex: 1},
     { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, renderCell: RenderStatus, align: 'center'},
     { field: 'affected_lesson', headerName: 'Affected Lesson', minWidth: 300, flex: 3 },
-    { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, sortable: false, filterable: false,
+    { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, 
         confirmedBtnProps: [
             {name: 'View Schedule', href: null},
         ],

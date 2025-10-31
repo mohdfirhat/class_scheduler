@@ -7,11 +7,11 @@ import './LessonTable.css'
 
 //dummy data
 const rows = [
-    { id: 1, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Biology', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
-    { id: 2, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Chemistry', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
-    { id: 3, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Elementary Mathematics', leave: '24', button: 'teacher' },
-    { id: 4, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Additional Mathematics', leave: '24', button: 'teacher' },
-    { id: 5, firstName: 'Daisy', dept: 'English', subject:'Additional Mathematics', leave: '24', button: 'teacher' },
+    { id: 1, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Biology', email: 'bob@gmail.com', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
+    { id: 2, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Chemistry', email: 'bob@gmail.com', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
+    { id: 3, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Elementary Mathematics', email: 'jim@gmail.com', leave: '24', button: 'teacher' },
+    { id: 4, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Additional Mathematics', email: 'jim@gmail.com', leave: '24', button: 'teacher' },
+    { id: 5, firstName: 'Daisy', dept: 'English', subject:'Additional Mathematics', email: 'daisy@gmail.com', leave: '24', button: 'teacher' },
 ];
 
 const columns = [
@@ -20,6 +20,7 @@ const columns = [
     { field: 'lastName', headerName: 'Last Name', minWidth: 150, flex: 1.5 },
     { field: 'dept', headerName: 'Department', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'subject', headerName: 'Subject(s) Taught', minWidth: 100, flex: 1 , rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'email', headerName: 'Email', minWidth: 150, flex: 1.5 , rowSpanValueGetter: rowSpanValueFunc},
     { field: 'leave', headerName: 'No. of leave days remaining', minWidth: 200, flex: 2, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, rowSpanValueGetter: rowSpanValueFunc,
         teacherBtnProps: [
