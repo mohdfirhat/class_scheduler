@@ -7,20 +7,24 @@ import LessonForm from "../../components/LessonForm/LessonForm";
 import { getLocalDatetimeString } from "../../utils/DateFuncs";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import { leaves, lessons } from "../../fakedata/data";
+import dayjs from "dayjs";
 
 const CreateLessonPage = () => {
-  const now = new Date("2025-10-27 08:00:00");
-  const twoHoursLater = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+  //set now to 27/10/25 08.00
+  const now = dayjs().date(27).month(9).hour(8).minute(0).second(0).millisecond(0);
+  const twoHoursLater = now.add(2, "hour");
 
   const { lessonId } = useParams();
+  console.log(lessonId);
   const calendarOneRef = useRef(null);
   const calendarTwoRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    date: getLocalDatetimeString(now),
-    startTime: "",
-    endTime: "",
+    classSize: "",
+    date: now.toISOString(), // defaults to today
+    startTime: now.toISOString(), // 8 AM
+    endTime: twoHoursLater.toISOString(), // 10 AM
     teacherId: 1,
     venueId: 11,
   });
@@ -34,7 +38,9 @@ const CreateLessonPage = () => {
 
   // useEffect(() => {
   //   //Fetch lesson details
+  //   //if does not exist? redirect to create
   // }, []);
+
   useEffect(() => {
     const calendarOneApi = calendarOneRef.current?.getApi();
     const calendarTwoApi = calendarTwoRef.current?.getApi();

@@ -61,20 +61,30 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
         }}
       >
         <Typography variant="h6" textAlign="center" gutterBottom>
-          Create / Update Lesson
+          {lessonId ? "Update" : "Create"} Lesson
         </Typography>
 
         {/* Name + Description */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          {/* Lesson Name Input */}
-          <TextField label="Lesson Name" value={formData.name} onChange={handleChange("name")} required fullWidth />
+          <Stack direction="column" spacing={2} gap="1.2rem">
+            {/* Lesson Name Input */}
+            <TextField label="Lesson Name" value={formData.name} onChange={handleChange("name")} required fullWidth />
+            {/* Lesson Name Input */}
+            <TextField
+              label="Class Size"
+              value={formData.classSize}
+              onChange={handleChange("classSize")}
+              required
+              fullWidth
+            />
+          </Stack>
           {/* Lesson Description Input */}
           <TextField
             label="Description"
             value={formData.description}
             onChange={handleChange("description")}
             multiline
-            rows={3}
+            rows={5}
             fullWidth
           />
         </Stack>
@@ -147,7 +157,7 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" color="primary">
-            Save Lesson
+            {lessonId ? "Update" : "Create"} Lesson
           </Button>
         </Stack>
       </Box>
