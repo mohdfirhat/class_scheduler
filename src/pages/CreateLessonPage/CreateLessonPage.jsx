@@ -18,10 +18,11 @@ const CreateLessonPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    startTime: getLocalDatetimeString(now),
-    endTime: getLocalDatetimeString(twoHoursLater),
-    teacher: 1,
-    venue: 11,
+    date: getLocalDatetimeString(now),
+    startTime: "",
+    endTime: "",
+    teacherId: 1,
+    venueId: 11,
   });
   const [teacherOneId, setTeacherOneId] = useState(2);
   const [teacherTwoId, setTeacherTwoId] = useState(3);
@@ -38,12 +39,12 @@ const CreateLessonPage = () => {
     const calendarOneApi = calendarOneRef.current?.getApi();
     const calendarTwoApi = calendarTwoRef.current?.getApi();
     if (calendarOneApi) {
-      calendarOneApi.gotoDate(formData.startTime);
+      calendarOneApi.gotoDate(formData.date);
     }
     if (calendarTwoApi) {
-      calendarTwoApi.gotoDate(formData.startTime);
+      calendarTwoApi.gotoDate(formData.date);
     }
-  }, [formData.startTime]);
+  }, [formData.date]);
 
   // 🧑‍🏫 Fake teacher data (as if from DB)
   const teachers = [
@@ -73,16 +74,17 @@ const CreateLessonPage = () => {
       <div className={styles.calendarContainer}>
         <AppFullCalendar
           leaves={teacherOneLeaves}
+          selectedTeacherId={teacherOneId}
           lessons={teacherOneLessons}
           initialView="timeGridDay"
-          initialDate={formData.startTime}
+          // initialDate={Date.now()}
           ref={calendarOneRef}
         />
         <AppFullCalendar
           leaves={teacherTwoLeaves}
           lessons={teacherTwoLessons}
           initialView="timeGridDay"
-          initialDate={formData.startTime}
+          // initialDate={Date.now()}
           ref={calendarTwoRef}
         />
       </div>
