@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./CreateLessonPage.module.css";
 
 import LessonForm from "../../components/LessonForm/LessonForm";
-import { getLocalDatetimeString } from "../../utils/DateFuncs";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import { leaves, lessons } from "../../fakedata/data";
 import dayjs from "dayjs";
