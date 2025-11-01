@@ -12,9 +12,9 @@ export default function AppFullCalendar({
   initialView,
   initialDate,
   ref = undefined,
+  setFormData = undefined,
+  conflictLessons = undefined,
 }) {
-  // const [selectedTeacherId, setSelectedTeacherId] = useState(2); // TODO: Change to null
-
   function formatStartDate(date) {
     const start = new Date(date);
     start.setHours(8, 0, 0, 0);
@@ -46,7 +46,7 @@ export default function AppFullCalendar({
     borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",
     extendedProps: {
-      type: "lesson",
+      type: "leave",
       data: leave,
     },
   });
@@ -77,7 +77,7 @@ export default function AppFullCalendar({
       eventOverlap={true}
       weekends={false}
       eventDidMount={(info) => {
-        console.log(info.event);
+        // console.log(info.event);
         tippy(info.el, {
           content:
             info.event.extendedProps.type === "lesson"
@@ -99,6 +99,17 @@ export default function AppFullCalendar({
       }}
       eventClick={(info) => {
         console.log(info.event._def);
+        console.log(`Clicked Lesson with id: ${info.event.extendedProps.data.id}`);
+        if (setFormData !== undefined) {
+          if (
+            conflictLessons.find(
+              (lesson) => lesson.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "lesson"
+            )
+          ) {
+            console.log("It is a conflicting Lesson");
+            setFormData((oldData) => ({ ...oldData, selectedLessonId: info.event.extendedProps.data.id }));
+          }
+        }
       }}
     />
     // </div>

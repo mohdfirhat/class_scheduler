@@ -14,8 +14,9 @@ const NavBar = () => {
             className={({ isActive, isPending }) =>
               isPending ? `${styles.tab}` : isActive ? `${styles.tab} ${styles.active}` : `${styles.tab}`
             }
+            key={index}
           >
-            <li key={index}>{tab}</li>
+            <li>{tab}</li>
           </NavLink>
         ))}
       </ul>
