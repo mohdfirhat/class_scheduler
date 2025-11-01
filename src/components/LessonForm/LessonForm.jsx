@@ -2,6 +2,8 @@ import { Box, TextField, Button, MenuItem, Typography, Stack } from "@mui/materi
 import dayjs from "dayjs";
 import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import VenuePopup from "../VenuePopup/VenuePopup";
+import { AlignHorizontalCenter } from "@mui/icons-material";
 
 const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
   const handleChange = (field) => (event) => {
@@ -143,13 +145,15 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
             ))}
           </TextField>
         </Stack>
-
+        <VenuePopup sx={{justifyContent:'center'}}formData={formData} venues={venues}/>
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" color="primary">
             Save Lesson
           </Button>
         </Stack>
+
+        
       </Box>
     </LocalizationProvider>
   );

@@ -1,0 +1,22 @@
+.venueWindow{
+    display:flex;
+    flex-direction: row;
+}
+.venueDetails{
+    text-align: 'center';
+    padding:10%;
+
+}
+.venueImg{
+    width: 50%;
+    height: 50%;
+    padding:3%;
+}
+span{
+    vertical-align: middle;
+    line-height: 10%;
+}
+.test{
+
+    text-align: center;
+}

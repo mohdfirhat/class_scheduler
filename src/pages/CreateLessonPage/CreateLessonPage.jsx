@@ -55,9 +55,18 @@ const CreateLessonPage = () => {
 
   // 🏫 Fake venue data (as if from DB)
   const venues = [
-    { id: 10, name: "Room 101" },
-    { id: 11, name: "Lab 2" },
-    { id: 12, name: "Auditorium" },
+    { id: 10, name: "Room 101", occupancy: 30,
+      src:'https://uploads.teachablecdn.com/attachments/ci7bzIifRVqCgY7825cT_ivan-aleksic-PDRFeeDniCk-unsplash.jpg',
+      description:'brief classroom description'
+    },
+    { id: 11, name: "Lab 2", occupancy:50,
+      src:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7OxaAhMWB_HKPoEj0ra9oyrnMQ1BLCEDOrQ&s',
+      description:'brief lab description'
+    },
+    { id: 12, name: "Auditorium", occupancy:100,
+      src:'https://www.csctessensohn.sg/images/gather/gather_aud_left5.png',
+      description:'brief auditorium description'
+    },
   ];
 
   return (
