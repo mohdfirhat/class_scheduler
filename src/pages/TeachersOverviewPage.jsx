@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar/NavBar";
-import TeacherTable from "../components/TeacherTable";
+import TeacherTable from "../components/Tables/TeacherTable";
 
 const TeachersOverviewPage = () => {
   return (

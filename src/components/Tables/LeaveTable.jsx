@@ -1,4 +1,4 @@
-import { RenderStatus, RenderButton, SetColumnMenu } from '../utils/TableFuncs';
+import { RenderStatus, RenderButton, SetColumnMenu } from '../../utils/TableFuncs';
 import Table from './Table'
 import {Fragment} from 'react';
 //dummy data
@@ -13,7 +13,7 @@ const columns = [
     { field: 'start_date', headerName: 'Start Date', minWidth: 100, flex: 1 },
     { field: 'end_date', headerName: 'End Date', minWidth: 100, flex: 1 },
     { field: 'duration', headerName: 'Duration (days)', minWidth: 100, flex: 1},
-    { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, renderCell: RenderStatus, align: 'center'},
+    { field: 'status', headerName: 'Status', minWidth: 100, align: 'center', flex: 1, renderCell: RenderStatus},
     { field: 'affected_lesson', headerName: 'Affected Lesson', minWidth: 300, flex: 3 },
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, 
         confirmedBtnProps: [

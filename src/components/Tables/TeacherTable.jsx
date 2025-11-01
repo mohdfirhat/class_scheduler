@@ -1,4 +1,4 @@
-import { RenderButton, SetColumnMenu, RenderAvatar, rowSpanValueFunc } from '../utils/TableFuncs';
+import { RenderButton, SetColumnMenu, RenderAvatar, rowSpanValueFunc } from '../../utils/TableFuncs';
 import Table from './Table'
 import './LessonTable.css'
 
@@ -15,9 +15,9 @@ const rows = [
 ];
 
 const columns = [
-    { field: 'avatar', headerName: '', minWidth: 100, flex: 1, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'firstName', headerName: 'First Name', minWidth: 150, flex: 1.5 },
-    { field: 'lastName', headerName: 'Last Name', minWidth: 150, flex: 1.5 },
+    { field: 'avatar', headerName: 'Avatar', minWidth: 100, flex: 1, disableColumnMenu: true, sortable: false, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'firstName', headerName: 'First Name', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
+    { field: 'lastName', headerName: 'Last Name', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
     { field: 'dept', headerName: 'Department', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'subject', headerName: 'Subject(s) Taught', minWidth: 100, flex: 1 , rowSpanValueGetter: rowSpanValueFunc},
     { field: 'email', headerName: 'Email', minWidth: 150, flex: 1.5 , rowSpanValueGetter: rowSpanValueFunc},

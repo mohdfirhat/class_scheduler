@@ -1,4 +1,4 @@
-import { RenderStatus, RenderButton, SetColumnMenu } from '../utils/TableFuncs';
+import { RenderStatus, RenderButton, SetColumnMenu } from '../../utils/TableFuncs';
 import Table from './Table'
 import './LessonTable.css'
 

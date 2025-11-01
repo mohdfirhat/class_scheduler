@@ -30,6 +30,7 @@ const Table = (props)=>{
                 rowSpanning = {props.rowSpanning}
                 showToolbar
                 slotProps={{columnsManagement: {getTogglableColumns,},}}
+                disableRowSelectionOnClick
                 sx={{
                     //set padding within cells
                     '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '30px' }

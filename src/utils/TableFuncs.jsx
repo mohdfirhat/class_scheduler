@@ -1,4 +1,4 @@
-import { GridColumnMenu} from '@mui/x-data-grid';
+import { GridColumnMenu } from '@mui/x-data-grid';
 import { CheckCircle, Cancel, Pending } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -93,7 +93,7 @@ export const RenderAvatar = (props) => {
         return (
             <Avatar 
                 src = {props.value}
-                sx={{ width: 100, height: 100 }}    
+                sx={{ width: 100, height: 100 }}
             />
         )
     } else {

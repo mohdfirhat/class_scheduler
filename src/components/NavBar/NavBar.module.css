@@ -4,7 +4,6 @@
   height: 5rem;
   padding: 0.5rem 1rem;
   box-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
-  background-color: aquamarine;
 }
 
 .tabContainer {
@@ -17,29 +16,10 @@
   justify-content: center;
 }
 
-.tab {
-  padding: 0.5rem;
-  border: 3px solid grey;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  color: inherit;
-  text-decoration: none;
-}
-
-.active {
-  background-color: lightgrey;
-}
-
 .avatarContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding-right: 10%; */
+  padding-right: 10%;
 }
 
-.avatar {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  object-fit: cover;
-}

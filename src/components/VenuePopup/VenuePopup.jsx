@@ -3,7 +3,7 @@ import { Grid, Button } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import './VenuePopup.css'
 
-export default function VenuePopup({formData, venues}) {
+const VenuePopup= ({formData, venues})=> {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,11 +30,11 @@ export default function VenuePopup({formData, venues}) {
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: 'bottom',
+            vertical: 'top',
             horizontal: 'left'
           }}
           sx={{
@@ -63,3 +63,4 @@ export default function VenuePopup({formData, venues}) {
     
   );
 }
+export default VenuePopup;
