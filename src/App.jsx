@@ -12,6 +12,7 @@ import TeachersOverviewPage from "./pages/TeachersOverviewPage";
 import LessonOverviewPage from "./pages/LessonOverviewPage";
 import LeaveOverviewPage from "./pages/LeaveOverviewPage";
 import CreateLessonPage from "./pages/CreateLessonPage/CreateLessonPage";
+import VenuePopup from "./components/VenuePopup/VenuePopup";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />
       <Route path="/schedules/:teacherId" element={<TeacherSchedulePage />} />
       <Route path="/conflicts/:leaveId" element={<LeaveConflictPage />} />
+      <Route path="/venue" element={<VenuePopup/>} />
     </Routes>
   );
 }

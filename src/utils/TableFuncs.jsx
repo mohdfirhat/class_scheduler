@@ -111,7 +111,8 @@ export function stringAvatar(fName, lName) {
        return {
             sx: {
             bgcolor: stringToColor(fName),
-            width: 100, height: 100  
+            width: 100, height: 100,
+            fontSize: 35  
             },
             children: `${fName[0]}`,
         }; 
@@ -119,7 +120,8 @@ export function stringAvatar(fName, lName) {
         return {
             sx: {
             bgcolor: stringToColor(fName+' '+lName),
-            width: 100, height: 100  
+            width: 100, height: 100,
+            fontSize: 30   
             },
             children: `${fName[0]}${lName[0]}`,
         };

@@ -15,13 +15,13 @@ const rows = [
 ];
 
 const columns = [
-    { field: 'avatar', headerName: 'Avatar', minWidth: 100, flex: 1, disableColumnMenu: true, sortable: false, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'firstName', headerName: 'First Name', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
-    { field: 'lastName', headerName: 'Last Name', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
-    { field: 'dept', headerName: 'Department', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'subject', headerName: 'Subject(s) Taught', minWidth: 100, flex: 1 , rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'email', headerName: 'Email', minWidth: 150, flex: 1.5 , rowSpanValueGetter: rowSpanValueFunc},
-    { field: 'leave', headerName: 'No. of leave days remaining', minWidth: 200, flex: 2, rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'avatar', headerName: 'Avatar', headerClassName:'table-header', minWidth: 100, flex: 1, disableColumnMenu: true, sortable: false, renderCell: RenderAvatar, rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'firstName', headerName: 'First Name', headerClassName:'table-header', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
+    { field: 'lastName', headerName: 'Last Name', headerClassName:'table-header', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc },
+    { field: 'dept', headerName: 'Department', headerClassName:'table-header', minWidth: 150, flex: 1.5, rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'subject', headerName: 'Subject(s) Taught', headerClassName:'table-header', minWidth: 100, flex: 1.5 , rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'email', headerName: 'Email', headerClassName:'table-header', minWidth: 150, flex: 1.5 , rowSpanValueGetter: rowSpanValueFunc},
+    { field: 'leave', headerName: 'No. of leave days remaining', headerClassName:'table-header', minWidth: 200, flex: 2, rowSpanValueGetter: rowSpanValueFunc},
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, rowSpanValueGetter: rowSpanValueFunc,
         teacherBtnProps: [
             {name: 'View Schedule', href: null}

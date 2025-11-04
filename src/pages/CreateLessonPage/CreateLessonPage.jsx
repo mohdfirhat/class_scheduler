@@ -1,10 +1,8 @@
 import { useParams } from "react-router";
-import NavBar from "../../components/NavBar/NavBar";
 import { useEffect, useRef, useState } from "react";
 import styles from "./CreateLessonPage.module.css";
 
 import LessonForm from "../../components/LessonForm/LessonForm";
-import LessonPageBreadcrumbs from "../../components/LessonPageBreadcrumbs";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import { leaves, lessons } from "../../fakedata/data";
 import dayjs from "dayjs";
@@ -78,8 +76,6 @@ const CreateLessonPage = () => {
   return (
     //TODO: Firhat
     <>
-      <NavBar />
-      <LessonPageBreadcrumbs />
       <LessonForm
         teachers={teachers}
         venues={venues}

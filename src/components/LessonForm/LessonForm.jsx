@@ -74,6 +74,7 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
             {/* Lesson Name Input */}
             <TextField
               label="Class Size"
+              type="number"
               value={formData.classSize}
               onChange={handleChange("classSize")}
               required

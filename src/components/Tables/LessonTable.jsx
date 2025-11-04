@@ -12,13 +12,13 @@ const rows = [
 ];
 
 const columns = [
-    { field: 'name', headerName: 'Name', minWidth: 300, flex: 3 },
-    { field: 'date', headerName: 'Date', minWidth: 100, flex: 1 },
-    { field: 'time', headerName: 'Time', minWidth: 100, flex: 1},
-    { field: 'venue', headerName: 'Venue', minWidth: 150, flex: 1.5 },
-    { field: 'class', headerName: 'Class', minWidth: 100, flex: 1 },
-    { field: 'teacher', headerName: 'Teacher', minWidth: 100, flex: 1 },
-    { field: 'status', headerName: 'Status', minWidth: 100, flex: 1, align: 'center', renderCell: RenderStatus},
+    { field: 'name', headerName: 'Name', headerClassName:'table-header', minWidth: 300, flex: 3, fontWeight: 'bold' },
+    { field: 'date', headerName: 'Date', headerClassName:'table-header',minWidth: 100, flex: 1 },
+    { field: 'time', headerName: 'Time', headerClassName:'table-header',minWidth: 100, flex: 1},
+    { field: 'venue', headerName: 'Venue', headerClassName:'table-header',minWidth: 150, flex: 1.5 },
+    { field: 'class', headerName: 'Class', headerClassName:'table-header',minWidth: 100, flex: 1 },
+    { field: 'teacher', headerName: 'Teacher', headerClassName:'table-header',minWidth: 100, flex: 1 },
+    { field: 'status', headerName: 'Status', headerClassName:'table-header',minWidth: 100, flex: 1, align: 'center', renderCell: RenderStatus},
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton,
         confirmedBtnProps: [
             {name: 'Edit Lesson', href: null},
@@ -37,6 +37,7 @@ const columns = [
 const LessonTable = ()=>{
     return (
         <div className='table'>
+            <h1 className="page-title">Lesson Overview</h1>
             <Table 
                 rows = {rows}
                 columns = {columns}

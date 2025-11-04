@@ -1,4 +1,5 @@
 import { DataGrid } from '@mui/x-data-grid';
+import Typography from '@mui/material/Typography';
 import './Table.css'
 
 
@@ -20,7 +21,8 @@ const Table = (props)=>{
     }
 
     return (
-        <div className='table'>
+
+        <Typography component='div'>
             <DataGrid 
                 rows={props.rows} 
                 columns={props.columns}
@@ -33,10 +35,24 @@ const Table = (props)=>{
                 disableRowSelectionOnClick
                 sx={{
                     //set padding within cells
-                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '30px' }
+                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '30px' },
+                    //edit table headers
+                    '& .table-header':{
+                        fontWeight: 'bold',
+                        fontSize: 20
+                    },
+                    
+                    //set general styles
+                    fontSize: 18,
+                    borderColor: 'transparent',
+                    //padding top/bottom
+                    pt: '1%',
+                    //padding left/right
+                    px: '3%'
                 }}
-            />         
-        </div>
+            />
+        </Typography>         
+
     )
 }
 export default Table;

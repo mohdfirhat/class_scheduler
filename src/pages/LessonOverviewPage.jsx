@@ -1,15 +1,17 @@
 import NavBar from "../components/NavBar/NavBar";
-import LessonTable from "../components/Tables/LessonTable";
-import LessonPageBreadcrumbs from "../components/LessonPageBreadcrumbs";
+import LessonTabsBar from "../components/LessonTabsBar"; 
+import Footer from "../components/Footer";
+import Box from '@mui/material/Box';
 
 const LessonOverviewPage = () => {
   return (
-    <>
+    <Box sx={{display: 'flex',flexDirection: 'column',minHeight: '100vh'}}>
       <NavBar />
-      <LessonPageBreadcrumbs />
-      <h1>Lesson Overview</h1>
-      <LessonTable />
-    </>
+      <Box sx= {{flexGrow: 1}}>
+        <LessonTabsBar />
+      </Box>
+      <Footer />
+    </Box>
   );
 };
 export default LessonOverviewPage;

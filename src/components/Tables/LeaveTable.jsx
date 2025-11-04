@@ -9,12 +9,12 @@ const rows = [
     { id: 4, name: 'Jim', start_date: '5 Oct 2025', end_date:'8 Oct 2025', duration: '3', affected_lesson: 'NA', status:'cancelled', button: 'cancelled' }    
 ]
 const columns = [
-    { field: 'name', headerName: 'Name', minWidth: 100, flex: 3 },
-    { field: 'start_date', headerName: 'Start Date', minWidth: 100, flex: 1 },
-    { field: 'end_date', headerName: 'End Date', minWidth: 100, flex: 1 },
-    { field: 'duration', headerName: 'Duration (days)', minWidth: 100, flex: 1},
-    { field: 'status', headerName: 'Status', minWidth: 100, align: 'center', flex: 1, renderCell: RenderStatus},
-    { field: 'affected_lesson', headerName: 'Affected Lesson', minWidth: 300, flex: 3 },
+    { field: 'name', headerName: 'Name', headerClassName:'table-header', minWidth: 100, flex: 3 },
+    { field: 'start_date', headerName: 'Start Date', headerClassName:'table-header', minWidth: 100, flex: 1 },
+    { field: 'end_date', headerName: 'End Date', headerClassName:'table-header', minWidth: 100, flex: 1 },
+    { field: 'duration', headerName: 'Duration (days)', headerClassName:'table-header', minWidth: 100, flex: 1},
+    { field: 'status', headerName: 'Status', headerClassName:'table-header', minWidth: 100, align: 'center', flex: 1, renderCell: RenderStatus},
+    { field: 'affected_lesson', headerName: 'Affected Lesson', headerClassName:'table-header', minWidth: 300, flex: 3 },
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton, 
         confirmedBtnProps: [
             {name: 'View Schedule', href: null},
