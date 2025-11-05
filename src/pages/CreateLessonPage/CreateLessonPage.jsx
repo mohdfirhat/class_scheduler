@@ -7,25 +7,25 @@ import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import { leaves, lessons } from "../../fakedata/data";
 import dayjs from "dayjs";
 
-const CreateLessonPage = () => {
-  //set now to 27/10/25 08.00
-  const now = dayjs().date(27).month(9).hour(8).minute(0).second(0).millisecond(0);
-  const twoHoursLater = now.add(2, "hour");
+const defaultLesson= {
+      name: "",
+      description: "",
+      classSize: "",
+      date: dayjs().toISOString(),
+      startTime: dayjs().minute(0).toISOString(), 
+      endTime: dayjs().minute(0).add(2, 'hour').toISOString(),
+      teacherId: "",
+      venueId: "",
+};
+
+const CreateLessonPage = ({lessonObject=defaultLesson, isUpdating}) => {
 
   const { lessonId } = useParams();
-  console.log(lessonId);
+  
   const calendarOneRef = useRef(null);
   const calendarTwoRef = useRef(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    classSize: "",
-    date: now.toISOString(), // defaults to today
-    startTime: now.toISOString(), // 8 AM
-    endTime: twoHoursLater.toISOString(), // 10 AM
-    teacherId: 1,
-    venueId: 11,
-  });
+  const [formData, setFormData] = useState(lessonObject);
+ 
   const [teacherOneId, setTeacherOneId] = useState(2);
   const [teacherTwoId, setTeacherTwoId] = useState(3);
 
@@ -52,8 +52,8 @@ const CreateLessonPage = () => {
 
   // 🧑‍🏫 Fake teacher data (as if from DB)
   const teachers = [
-    { id: 1, name: "Mr. Smith" },
-    { id: 2, name: "Ms. Johnson" },
+    { id: 1, name: "Bob" },
+    { id: 2, name: "Jim" },
     { id: 3, name: "Dr. Brown" },
   ];
 
@@ -82,6 +82,7 @@ const CreateLessonPage = () => {
         setFormData={setFormData}
         formData={formData}
         lessonId={lessonId}
+        isUpdating={isUpdating}
       />
       <div className={styles.calendarContainer}>
         <AppFullCalendar

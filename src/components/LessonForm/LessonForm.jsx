@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import VenuePopup from "../VenuePopup/VenuePopup";
 import { AlignHorizontalCenter } from "@mui/icons-material";
 
-const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
+const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdating }) => {
   const handleChange = (field) => (event) => {
     console.log(event.target.value);
     setFormData({ ...formData, [field]: event.target.value });
@@ -63,7 +63,7 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId }) => {
         }}
       >
         <Typography variant="h6" textAlign="center" gutterBottom>
-          {lessonId ? "Update" : "Create"} Lesson
+          {isUpdating ? "Edit" : "Create"} Lesson
         </Typography>
 
         {/* Name + Description */}

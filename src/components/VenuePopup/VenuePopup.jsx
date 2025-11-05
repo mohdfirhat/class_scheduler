@@ -15,8 +15,18 @@ const VenuePopup= ({formData, venues})=> {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const selectedVenue = venues.find(venue => venue.id == formData.venueId);
- 
+  
+  let selectedVenue;
+  if (venues.find(venue => venue.id == formData.venueId)){
+    selectedVenue = venues.find(venue => venue.id == formData.venueId);
+  } else{
+    selectedVenue = {
+      name:"",
+      occupancy:"",
+      description:""
+    }
+  }
+  
   return (
     <Grid className='test'container>
       <Grid size = {4.8}></Grid>

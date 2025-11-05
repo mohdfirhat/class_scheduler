@@ -1,40 +1,50 @@
 import { RenderStatus, RenderButton, SetColumnMenu } from '../../utils/TableFuncs';
-import Table from './Table'
-import './LessonTable.css'
+import Table from './Table';
+import './LessonTable.css';
+import dayjs from "dayjs";
 
-//See valueFormatter() for converting date/time without changing values
-//https://mui.com/x/react-data-grid/column-definition/#value-formatter
+//function for displaying time in table with valueGetter
+const getTimeRange = (value, row) => {
+    return ( `${dayjs(row.startTime).format('h:mm a')} - ${dayjs(row.endTime).format('h:mm a')}`);
+};
+
 //dummy data
 const rows = [
-    { id: 1, name: 'Algebra I: Intro to Algebra', date: '30 Sep 2025', time:'0800-1000', venue: 'Classroom 2A', class: 'Class 5A', teacher:'Bob', status: 'confirmed', button: 'confirmed' },
-    { id: 2, name: 'Algebra II: Advanced Algebra', date: '30 Sep 2025', time:'0800-1000', venue: 'Classroom 2B', class: 'Class 5C', teacher:'Jim', status: 'cancelled', button: 'cancelled' },
-    { id: 3, name: 'Differentiation III: Differential Equations', date: '30 Sep 2025', time:'1200-1400', venue: 'Classroom 2B', class: 'Class 5A', teacher:'Bob', status: 'pending', button: 'pending' },
+    { id: 1, name: 'Algebra I: Intro to Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 10, venue: 'Room 101', class: 'Class 5A', classSize: 30, teacherId: 1, teacher:'Bob', status: 'confirmed', button: 'confirmed' },
+    { id: 2, name: 'Algebra II: Advanced Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 11, venue: 'Lab 2',class: 'Class 5C', classSize: 34, teacherId: 2, teacher:'Jim', status: 'cancelled', button: 'cancelled' },
+    { id: 3, name: 'Differentiation III: Differential Equations', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 12:00').toISOString(), endTime: dayjs('2025-09-30 14:00').toISOString(), venueId: 12, venue: 'Auditorium',class: 'Class 5A', classSize: 30, teacherId: 2, teacher:'Jim', status: 'pending', button: 'pending' },
 ];
 
 const columns = [
-    { field: 'name', headerName: 'Name', headerClassName:'table-header', minWidth: 300, flex: 3, fontWeight: 'bold' },
-    { field: 'date', headerName: 'Date', headerClassName:'table-header',minWidth: 100, flex: 1 },
-    { field: 'time', headerName: 'Time', headerClassName:'table-header',minWidth: 100, flex: 1},
-    { field: 'venue', headerName: 'Venue', headerClassName:'table-header',minWidth: 150, flex: 1.5 },
+    { field: 'name', headerName: 'Name', headerClassName:'table-header', minWidth: 200, flex: 2, fontWeight: 'bold' },
+    { field: 'date', headerName: 'Date', headerClassName:'table-header',minWidth: 100, flex: 1 ,valueFormatter: (value)=>{return dayjs(value).format('DD-MMM-YYYY');}},
+    { field: 'time', headerName: 'Time', headerClassName:'table-header',minWidth: 150, flex: 1.5, valueGetter: getTimeRange},
+    { field: 'venue', headerName: 'Venue', headerClassName:'table-header',minWidth: 100, flex: 1 },
     { field: 'class', headerName: 'Class', headerClassName:'table-header',minWidth: 100, flex: 1 },
+    { field: 'classSize', headerName: 'Class Size', headerClassName:'table-header',minWidth: 100, flex: 1 },
     { field: 'teacher', headerName: 'Teacher', headerClassName:'table-header',minWidth: 100, flex: 1 },
     { field: 'status', headerName: 'Status', headerClassName:'table-header',minWidth: 100, flex: 1, align: 'center', renderCell: RenderStatus},
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton,
         confirmedBtnProps: [
-            {name: 'Edit Lesson', href: null},
-            {name: 'Cancel Lesson', href: null}
+            {name: 'Edit Lesson', href: null, onclick},
+            {name: 'Cancel Lesson', href: null, onclick}
         ],
         cancelledBtnProps: [
         ],
         pendingBtnProps: [
-            {name: 'Edit Lesson', href: null},
-            {name: 'Cancel Lesson', href: null}
-        ]
+            {name: 'Edit Lesson', href: null, onclick},
+            {name: 'Cancel Lesson', href: null, onclick}
+        ],
+        handleEditClick:'',
+        handleCancelClick:''
     }      
 ];
 
 //Main table component
-const LessonTable = ()=>{
+const LessonTable = (props)=>{
+    //set handleEditClick func from LessonTabsBar to button props 
+    columns.find(col => col.field == 'button').handleEditClick= props.handleEditClick;
+    columns.find(col => col.field == 'button').handleCancelClick= props.handleCancelClick;
     return (
         <div className='table'>
             <h1 className="page-title">Lesson Overview</h1>

@@ -48,9 +48,19 @@ function a11yProps(index) {
 export default function LessonTabsBar() {
   const [value, setValue] = React.useState(0);
   const [isUpdating, setisUpdating] = React.useState(false);
+  const [lessonObject, setlessonObject] = React.useState();
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue != 2){
+      setisUpdating(false);
+    }
   };
+  const handleEditClick = (props) => {
+    setisUpdating(true);
+    setValue(2);
+    setlessonObject(props);
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -59,18 +69,18 @@ export default function LessonTabsBar() {
         <Tabs value={value} onChange={handleChange} aria-label="Tabs panel" textColor ='primary' indicatorColor='primary'>
           <Tab icon = {<Home/>} iconPosition="end" label="Lesson Overview" {...a11yProps(0)} />
           <Tab icon = {<Add/>} iconPosition="end" label="Create Lesson" {...a11yProps(1)} />
-          <Tab icon = {<Update/>} iconPosition="end" label="Update Lesson" disabled={!isUpdating} {...a11yProps(2)} />
+          <Tab icon = {<Update/>} iconPosition="end" label="Edit Lesson" disabled={!isUpdating} {...a11yProps(2)} />
         </Tabs>
         </ThemeProvider>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LessonTable/>
+        <LessonTable handleEditClick={handleEditClick}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <CreateLessonPage />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <CreateLessonPage />
+        <CreateLessonPage lessonObject = {lessonObject} isUpdating = {isUpdating}/>
       </CustomTabPanel>
     </Box>
   );

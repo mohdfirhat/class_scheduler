@@ -32,32 +32,70 @@ export function RenderStatus(props) {
 
 //function used to display buttons depending on status
 export function RenderButton(props){
+    
+    
+    const handleEditClick = ()=> {
+        props.colDef.handleEditClick(props.row);
+    };
+    const handleCancelClick = ()=> {
+        
+    };
+    const handleViewScheduleClick = ()=> {
+
+    };
+    const handleApproveClick = ()=> {
+        
+    };
+    const handleRejectClick = ()=> {
+        
+    };
+    const handleTeacherScheduleClick = ()=> {
+        
+    };
+    const handleViewConflict = ()=> {
+    
+    };
+
+    //Switch case for mapping handlers to button onClicks depending on status
     let btnProps;
     switch (props.value) {
-        case 'confirmed':
+        case 'confirmed': 
             btnProps = props.colDef.confirmedBtnProps;
+            btnProps.find(btn => btn.name == 'Edit Lesson') ? btnProps.find(btn => btn.name == 'Edit Lesson').onclick = handleEditClick : null;
+            btnProps.find(btn => btn.name == 'Cancel Lesson') ? btnProps.find(btn => btn.name == 'Cancel Lesson').onclick = handleCancelClick : null;
+            btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleViewScheduleClick : null; 
             break;
         
         case 'cancelled':
             btnProps = props.colDef.cancelledBtnProps;
+            btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleViewScheduleClick : null; 
             break;    
 
         case 'pending':
             btnProps = props.colDef.pendingBtnProps;
+            btnProps.find(btn => btn.name == 'Edit Lesson') ? btnProps.find(btn => btn.name == 'Edit Lesson').onclick = handleEditClick : null;
+            btnProps.find(btn => btn.name == 'Cancel Lesson') ? btnProps.find(btn => btn.name == 'Cancel Lesson').onclick = handleCancelClick : null;
+            btnProps.find(btn => btn.name == 'Approve') ? btnProps.find(btn => btn.name == 'Approve').onclick = handleApproveClick : null;
+            btnProps.find(btn => btn.name == 'Reject') ? btnProps.find(btn => btn.name == 'Reject').onclick = handleRejectClick : null;
             break;
 
         case 'conflict':
             btnProps = props.colDef.conflictBtnProps;
+            btnProps.find(btn => btn.name == 'View Conflict') ? btnProps.find(btn => btn.name == 'View Conflict').onclick = handleViewConflict : null;
+            btnProps.find(btn => btn.name == 'Approve') ? btnProps.find(btn => btn.name == 'Approve').onclick = handleApproveClick : null;
+            btnProps.find(btn => btn.name == 'Reject') ? btnProps.find(btn => btn.name == 'Reject').onclick = handleRejectClick : null;
             break;
 
         case 'teacher':
             btnProps = props.colDef.teacherBtnProps;
+            btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleTeacherScheduleClick : null; 
             break;
     }
+
     return (
-        <ButtonGroup variant="outlined" orientation="vertical" aria-label="Basic button group">
-            {btnProps.map( btn => (
-                <Button href = {btn.href}>{btn.name}</Button>
+        <ButtonGroup variant="outlined" orientation="vertical" aria-label="Button column group">
+            {btnProps.map( btn=> (
+                <Button href = {btn.href} onClick={btn.onclick}>{btn.name}</Button>
             ))}
         </ButtonGroup>
     )
