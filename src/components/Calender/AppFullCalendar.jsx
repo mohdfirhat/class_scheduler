@@ -10,7 +10,7 @@ export default function AppFullCalendar({
   lessons,
   selectedTeacherId,
   initialView,
-  initialDate,
+  initialDate = undefined,
   ref = undefined,
   setFormData = undefined,
   conflictLessons = undefined,

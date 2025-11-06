@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import NavBar from "../../components/NavBar/NavBar";
 import { scheduleLeaves, scheduleLessons } from "../../fakedata/data";
@@ -18,6 +19,7 @@ const TeacherSchedulePage = () => {
             leaves={scheduleLeaves}
             selectedTeacherId={Number(teacherId)}
             initialView="timeGridWeek"
+            initialDate={"2025-10-27"}
           />
         </div>
       </main>

@@ -358,3 +358,53 @@ export const conflictAllLeaves = [
     status: "pending",
   },
 ];
+
+export const timeslots = [
+  {
+    id: 1,
+    startTime: "08:00.00",
+    endTime: "10:00:00",
+  },
+  {
+    id: 2,
+    startTime: "10:00.00",
+    endTime: "12:00:00",
+  },
+  {
+    id: 3,
+    startTime: "13:00.00",
+    endTime: "15:00:00",
+  },
+  {
+    id: 4,
+    startTime: "15:00.00",
+    endTime: "17:00:00",
+  },
+];
+
+export const courses = [
+  {
+    courseCode: "CS101",
+    name: "Programming Fundamentals",
+  },
+  {
+    courseCode: "CS102",
+    name: "Object-Oriented Programming",
+  },
+  {
+    courseCode: "CS103",
+    name: "Data Structures and Algorithms",
+  },
+  {
+    courseCode: "CS201",
+    name: "Database Systems",
+  },
+  {
+    courseCode: "CS202",
+    name: "Web Development",
+  },
+  {
+    courseCode: "CS203",
+    name: "Software Engineering",
+  },
+];

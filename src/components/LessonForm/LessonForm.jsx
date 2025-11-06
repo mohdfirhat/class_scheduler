@@ -4,6 +4,7 @@ import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-picker
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import VenuePopup from "../VenuePopup/VenuePopup";
 import { AlignHorizontalCenter } from "@mui/icons-material";
+import { courses, timeslots } from "../../fakedata/data";
 
 const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdating }) => {
   const handleChange = (field) => (event) => {
@@ -67,33 +68,50 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
         </Typography>
 
         {/* Name + Description */}
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <Stack direction="column" spacing={2} gap="1.2rem">
-            {/* Lesson Name Input */}
-            <TextField label="Lesson Name" value={formData.name} onChange={handleChange("name")} required fullWidth />
-            {/* Lesson Name Input */}
-            <TextField
-              label="Class Size"
-              type="number"
-              value={formData.classSize}
-              onChange={handleChange("classSize")}
-              required
-              fullWidth
-            />
-          </Stack>
-          {/* Lesson Description Input */}
+
+        <Stack direction="row" spacing={2}>
+          {/* Lesson Name Input */}
           <TextField
-            label="Description"
-            value={formData.description}
-            onChange={handleChange("description")}
-            multiline
-            rows={5}
+            select
+            label="Course Name"
+            value={formData.courseCode}
+            onChange={handleChange("courseCode")}
+            required
             fullWidth
+          >
+            {courses.map((course) => (
+              <MenuItem key={course.courseCode} value={course.courseCode}>
+                {course.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          {/* Class Size Input */}
+          <TextField
+            label="Class Size"
+            type="number"
+            value={formData.classSize}
+            onChange={handleChange("classSize")}
+            required
+            fullWidth
+            onKeyDown={(e) => {
+              if (["-", "e"].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
         </Stack>
+        {/* Lesson Description Input */}
+        <TextField
+          label="Description"
+          value={formData.description}
+          onChange={handleChange("description")}
+          multiline
+          rows={5}
+          fullWidth
+        />
 
         {/* Date + Time Pickers */}
-        <Stack direction="column" spacing={2}>
+        <Stack direction="row" spacing={2}>
           {/* Date on top */}
           <DatePicker
             label="Lesson Date"
@@ -103,22 +121,21 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
-          {/* Start + End Time side by side */}
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <TimePicker
-              label="Start Time"
-              value={formData.startTime ? dayjs(formData.startTime) : null}
-              onChange={handleTimeChange("startTime")}
-              slotProps={{ textField: { fullWidth: true, required: true } }}
-            />
-
-            <TimePicker
-              label="End Time"
-              value={formData.endTime ? dayjs(formData.endTime) : null}
-              onChange={handleTimeChange("endTime")}
-              slotProps={{ textField: { fullWidth: true, required: true } }}
-            />
-          </Stack>
+          {/* Timeslot Input */}
+          <TextField
+            select
+            label="Timeslot"
+            value={formData.timeslot}
+            onChange={handleChange("timeslot")}
+            required
+            fullWidth
+          >
+            {timeslots.map((timeslot) => (
+              <MenuItem key={timeslot.id} value={timeslot.id}>
+                {`${timeslot.startTime.substring(0, 5)}-${timeslot.endTime.substring(0, 5)}`}
+              </MenuItem>
+            ))}
+          </TextField>
         </Stack>
 
         {/* Teacher + Venue */}
@@ -156,15 +173,13 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
             ))}
           </TextField>
         </Stack>
-        <VenuePopup sx={{justifyContent:'center'}}formData={formData} venues={venues}/>
+        <VenuePopup sx={{ justifyContent: "center" }} formData={formData} venues={venues} />
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" color="primary">
             {lessonId ? "Update" : "Create"} Lesson
           </Button>
         </Stack>
-
-        
       </Box>
     </LocalizationProvider>
   );
