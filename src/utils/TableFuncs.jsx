@@ -95,7 +95,7 @@ export const RenderButton = (props) => {
     return (
         <ButtonGroup variant="outlined" orientation="vertical" aria-label="Button column group">
             {btnProps.map( btn=> (
-                <Button href = {btn.href} onClick={btn.onclick}>{btn.name}</Button>
+                <Button sx={{color: '#00838f',}} href = {btn.href} onClick={btn.onclick}>{btn.name}</Button>
             ))}
         </ButtonGroup>
     )

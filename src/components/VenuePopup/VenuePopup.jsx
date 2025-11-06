@@ -31,7 +31,7 @@ const VenuePopup= ({formData, venues})=> {
     <Grid className='test'container>
       <Grid size = {4.8}></Grid>
       <Grid size = {4}>
-          <Button aria-describedby={id} variant="text" onClick={handleClick}>
+          <Button aria-describedby={id} sx={{color: '#00838f',}} variant="text" onClick={handleClick}>
           <u>Venue Information</u>
         </Button>
         <Popover

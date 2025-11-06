@@ -3,9 +3,9 @@ import Table from './Table';
 
 //dummy data
 const rows = [
-    { id: 'AL101', name: 'Algebra I: Intro to Algebra', department: 'Mathematics', description: 'Introduction class to basic algebra' },
-    { id: 'AL102', name: 'Algebra II: Advanced Algebra', department: 'Mathematics', description: 'An in-depth look at complex algebraic equations' },
-    { id: 'DF103', name: 'Differentiation III: Differential Equations', department: 'Mathematics', description: 'Introduction to ordinary and partial differential equations' },
+    { id: 'CS101', name: 'Programming Fundamentals', department: 'Computer Science', description: 'Introduction class to Programming Fundamentals' },
+    { id: 'CS102', name: 'Object-Oriented Programming', department: 'Computer Science', description: 'Basics of Object Oriented Programming' },
+    { id: 'CS103', name: 'Data Structures and Algorithms', department: 'Computer Science', description: 'Basics of Data Structures and Algorithms' },
 ];
 
 const columns = [

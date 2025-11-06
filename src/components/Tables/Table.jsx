@@ -11,13 +11,6 @@ const getTogglableColumns = (columns) => {
 };
 
 const Table = (props)=>{
-    //function used to adjust row margins
-    const getRowSpacing = ()=> {
-        return {
-        top: props.rowSpacingVals[0],
-        bottom: props.rowSpacingVals[1]
-        };
-    }
 
     return (
 
@@ -25,7 +18,6 @@ const Table = (props)=>{
             <DataGrid 
                 rows={props.rows} 
                 columns={props.columns}
-                // getRowSpacing={getRowSpacing}
                 slots={props.slots}
                 getRowHeight={() => 'auto'}
                 rowSpanning = {props.rowSpanning}
@@ -40,7 +32,10 @@ const Table = (props)=>{
                         fontWeight: 'bold',
                         fontSize: 20
                     },
-                    
+                    //remove colored borders when cells are highlighted
+                    '& .MuiDataGrid-cell:focus ': {
+                        outline: '0px', 
+                    },
                     //set general styles
                     fontSize: 18,
                     borderColor: 'transparent',

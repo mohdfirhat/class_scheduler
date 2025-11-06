@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 const defaultSection = {
   courseCode: "",
-  description: "",
+  remarks: "",
   classSize: "",
   date: dayjs().toISOString(),
   timeslot: "",

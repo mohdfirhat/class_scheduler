@@ -3,12 +3,10 @@ import dayjs from "dayjs";
 import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import VenuePopup from "../VenuePopup/VenuePopup";
-import { AlignHorizontalCenter } from "@mui/icons-material";
 import { courses, timeslots } from "../../fakedata/data";
 
 const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
   const handleChange = (field) => (event) => {
-    console.log(field);
     setFormData({ ...formData, [field]: event.target.value });
   };
 
@@ -68,7 +66,6 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
         </Typography>
 
         {/* Name + Description */}
-
         <Stack direction="row" spacing={2}>
           {/* Section Name Input */}
           <TextField
@@ -85,6 +82,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
               </MenuItem>
             ))}
           </TextField>
+          
           {/* Class Size Input */}
           <TextField
             label="Class Size"
@@ -100,16 +98,20 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             }}
           />
         </Stack>
-        {/* Section Description Input */}
-        <TextField
-          label="Description"
-          value={formData.description}
-          onChange={handleChange("description")}
-          multiline
-          rows={5}
-          fullWidth
-        />
-
+        
+        <Stack>
+          {/* Section Remarks Input */}
+          <TextField
+            label="Remarks"
+            value={formData.remarks}
+            onChange={handleChange("remarks")}
+            //limit the no. of input characters to 50
+            slotProps={{htmlInput:{maxLength: 50}}}
+            multiline
+            rows={1}
+            fullWidth
+          />
+        </Stack>
         {/* Date + Time Pickers */}
         <Stack direction="row" spacing={2}>
           {/* Date on top */}
@@ -132,7 +134,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           >
             {timeslots.map((timeslot) => (
               <MenuItem key={timeslot.id} value={timeslot.id}>
-                {`${timeslot.startTime.substring(0, 5)}-${timeslot.endTime.substring(0, 5)}`}
+                {`${timeslot.startTime.substring(0, 5)} - ${timeslot.endTime.substring(0, 5)}`}
               </MenuItem>
             ))}
           </TextField>
@@ -173,11 +175,11 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             ))}
           </TextField>
         </Stack>
-        <VenuePopup sx={{ justifyContent: "center" }} formData={formData} venues={venues} />
+        <VenuePopup sx={{ justifyContent: "center"}} formData={formData} venues={venues} />
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
-          <Button type="submit" variant="contained" color="primary">
-            {sectionId ? "Update" : "Create"} Section
+          <Button type="submit" variant="contained" sx={{backgroundColor: '#00838f',}}>
+            {isUpdating ? "Edit" : "Create"} Section
           </Button>
         </Stack>
       </Box>

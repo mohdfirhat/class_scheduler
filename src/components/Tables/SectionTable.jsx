@@ -1,40 +1,33 @@
 import { RenderStatus, RenderButton, SetColumnMenu } from "../../utils/TableFuncs";
 import Table from "./Table";
 import dayjs from "dayjs";
-
-//function for displaying time in table with valueGetter
-const getTimeRange = (value, row) => {
-  return `${dayjs(row.startTime).format("h:mm a")} - ${dayjs(row.endTime).format("h:mm a")}`;
-};
+import {timeslots} from "../../fakedata/data";
 
 //dummy data
 const rows = [
   {
     id: 1,
     courseCode: "CS101",
-    name: "Algebra I: Intro to Algebra",
+    name: "Programming Fundamentals",
     date: dayjs("2025-09-30").toISOString(),
-    startTime: dayjs("2025-09-30 08:00").toISOString(),
-    endTime: dayjs("2025-09-30 10:00").toISOString(),
+    timeslot: 1,
     venueId: 10,
     venue: "Room 101",
-    class: "Class 5A",
     classSize: 30,
     teacherId: 1,
     teacher: "Bob",
+    remarks: 'Class test 1',
     status: "confirmed",
     button: "confirmed",
   },
   {
     id: 2,
     courseCode: "CS102",
-    name: "Algebra II: Advanced Algebra",
+    name: "Object-Oriented Programming",
     date: dayjs("2025-09-30").toISOString(),
-    startTime: dayjs("2025-09-30 08:00").toISOString(),
-    endTime: dayjs("2025-09-30 10:00").toISOString(),
+    timeslot: 1,
     venueId: 11,
     venue: "Lab 2",
-    class: "Class 5C",
     classSize: 34,
     teacherId: 2,
     teacher: "Jim",
@@ -44,13 +37,11 @@ const rows = [
   {
     id: 3,
     courseCode: "CS103",
-    name: "Differentiation III: Differential Equations",
+    name: "Data Structures and Algorithms",
     date: dayjs("2025-09-30").toISOString(),
-    startTime: dayjs("2025-09-30 12:00").toISOString(),
-    endTime: dayjs("2025-09-30 14:00").toISOString(),
+    timeslot: 3,
     venueId: 12,
     venue: "Auditorium",
-    class: "Class 5A",
     classSize: 30,
     teacherId: 2,
     teacher: "Jim",
@@ -80,17 +71,20 @@ const columns = [
     },
   },
   {
-    field: "time",
+    field: "timeslot",
     headerName: "Time",
     headerClassName: "table-header",
-    minWidth: 150,
-    flex: 1.5,
-    valueGetter: getTimeRange,
+    minWidth: 10,
+    flex: 1,
+    valueGetter: (id)=>{
+      const timeslot = timeslots.find(timeslot => timeslot.id === id);
+      return (`${timeslot.startTime.substring(0, 5)} - ${timeslot.endTime.substring(0, 5)}`)
+    },
   },
   { field: "venue", headerName: "Venue", headerClassName: "table-header", minWidth: 100, flex: 1 },
-  { field: "class", headerName: "Class", headerClassName: "table-header", minWidth: 100, flex: 1 },
   { field: "classSize", headerName: "Class Size", headerClassName: "table-header", minWidth: 100, flex: 1 },
   { field: "teacher", headerName: "Teacher", headerClassName: "table-header", minWidth: 100, flex: 1 },
+  { field: "remarks", headerName: "Remarks", headerClassName: "table-header", minWidth: 100, flex: 1 },
   {
     field: "status",
     headerName: "Status",

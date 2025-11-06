@@ -1,5 +1,5 @@
 import NavBar from "../NavBar/NavBar";
-import SectionTabsBar from "../CourseTabsBar"; 
+import CourseTabsBar from "../CourseTabsBar"; 
 import Footer from "../Footer";
 import Box from '@mui/material/Box';
 
@@ -8,7 +8,7 @@ const CourseOverviewTab = () => {
     <Box sx={{display: 'flex',flexDirection: 'column',minHeight: '100vh'}}>
       <NavBar />
       <Box sx= {{flexGrow: 1}}>
-        <SectionTabsBar />
+        <CourseTabsBar />
       </Box>
       <Footer />
     </Box>
