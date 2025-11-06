@@ -6,7 +6,7 @@ import VenuePopup from "../VenuePopup/VenuePopup";
 import { AlignHorizontalCenter } from "@mui/icons-material";
 import { courses, timeslots } from "../../fakedata/data";
 
-const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdating }) => {
+const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
   const handleChange = (field) => (event) => {
     console.log(field);
     setFormData({ ...formData, [field]: event.target.value });
@@ -39,10 +39,10 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
     event.preventDefault();
     console.log("Submitted form data:", formData);
 
-    if (lessonId) {
-      //TODO: update to lesson
+    if (sectionId) {
+      //TODO: update to section
     } else {
-      // create lesson
+      // create section
     }
   };
   return (
@@ -64,13 +64,13 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
         }}
       >
         <Typography variant="h6" textAlign="center" gutterBottom>
-          {isUpdating ? "Edit" : "Create"} Lesson
+          {isUpdating ? "Edit" : "Create"} Section
         </Typography>
 
         {/* Name + Description */}
 
         <Stack direction="row" spacing={2}>
-          {/* Lesson Name Input */}
+          {/* Section Name Input */}
           <TextField
             select
             label="Course Name"
@@ -100,7 +100,7 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
             }}
           />
         </Stack>
-        {/* Lesson Description Input */}
+        {/* Section Description Input */}
         <TextField
           label="Description"
           value={formData.description}
@@ -114,7 +114,7 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
         <Stack direction="row" spacing={2}>
           {/* Date on top */}
           <DatePicker
-            label="Lesson Date"
+            label="Section Date"
             inputFormat="DD/MM/YYYY"
             value={formData.date ? dayjs(formData.date) : null}
             onChange={handleDateChange}
@@ -177,11 +177,11 @@ const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdat
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" color="primary">
-            {lessonId ? "Update" : "Create"} Lesson
+            {sectionId ? "Update" : "Create"} Section
           </Button>
         </Stack>
       </Box>
     </LocalizationProvider>
   );
 };
-export default LessonForm;
+export default SectionForm;

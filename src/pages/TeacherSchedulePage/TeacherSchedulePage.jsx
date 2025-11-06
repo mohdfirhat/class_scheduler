@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import NavBar from "../../components/NavBar/NavBar";
-import { scheduleLeaves, scheduleLessons } from "../../fakedata/data";
+import { scheduleLeaves, scheduleSections } from "../../fakedata/data";
 import styles from "./TeacherSchedulePage.module.css";
 import { useParams } from "react-router";
 
@@ -15,7 +15,7 @@ const TeacherSchedulePage = () => {
       <main>
         <div className={styles.calendarContainer}>
           <AppFullCalendar
-            lessons={scheduleLessons}
+            sections={scheduleSections}
             leaves={scheduleLeaves}
             selectedTeacherId={Number(teacherId)}
             initialView="timeGridWeek"

@@ -1,6 +1,5 @@
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from '@mui/material/Typography';
-import './Table.css'
 
 
 //function for hiding certain columns in column menu in toolbar

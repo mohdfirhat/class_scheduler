@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import LessonTable from "../components/Tables/LessonTable";
+import SectionTable from './Tables/SectionTable';
 import CourseTable from './Tables/CourseTable';
-import CreateLessonPage from '../pages/CreateLessonPage/CreateLessonPage';
-import { Home, Update, Add, People, MenuBook } from '@mui/icons-material';
+import CreateSectionTab from './Tabs/CreateSectionTab';
+import { Update, Add, People, MenuBook } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -46,10 +46,10 @@ const a11yProps = (index) => {
   };
 }
 
-const LessonTabsBar = () => {
+const CourseTabsBar = () => {
   const [value, setValue] = React.useState(0);
   const [isUpdating, setisUpdating] = React.useState(false);
-  const [lessonObject, setlessonObject] = React.useState();
+  const [sectionObject, setSectionObject] = React.useState();
   
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -60,7 +60,7 @@ const LessonTabsBar = () => {
   const handleEditClick = (props) => {
     setisUpdating(true);
     setValue(3);
-    setlessonObject(props);
+    setSectionObject(props);
   }
 
   return (
@@ -79,16 +79,16 @@ const LessonTabsBar = () => {
         <CourseTable handleEditClick={handleEditClick}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <LessonTable handleEditClick={handleEditClick}/>
+        <SectionTable handleEditClick={handleEditClick}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <CreateLessonPage />
+        <CreateSectionTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <CreateLessonPage lessonObject = {lessonObject} isUpdating = {isUpdating}/>
+        <CreateSectionTab sectionObject = {sectionObject} isUpdating = {isUpdating}/>
       </CustomTabPanel>
     </Box>
   );
 }
 
-export default LessonTabsBar;
+export default CourseTabsBar;

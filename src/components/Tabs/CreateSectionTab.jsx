@@ -1,13 +1,13 @@
 import { useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import styles from "./CreateLessonPage.module.css";
+import styles from "./CreateSectionTab.module.css";
 
-import LessonForm from "../../components/LessonForm/LessonForm";
+import SectionForm from "../../components/SectionForm/SectionForm";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
-import { leaves, lessons } from "../../fakedata/data";
+import { leaves, sections } from "../../fakedata/data";
 import dayjs from "dayjs";
 
-const defaultLesson = {
+const defaultSection = {
   courseCode: "",
   description: "",
   classSize: "",
@@ -17,20 +17,20 @@ const defaultLesson = {
   venueId: "",
 };
 
-const CreateLessonPage = ({ lessonObject = defaultLesson, isUpdating }) => {
-  const { lessonId } = useParams();
+const CreateSectionTab = ({ sectionObject = defaultSection, isUpdating }) => {
+  const { sectionId } = useParams();
 
   const calendarOneRef = useRef(null);
   const calendarTwoRef = useRef(null);
-  const [formData, setFormData] = useState(lessonObject);
+  const [formData, setFormData] = useState(sectionObject);
 
   const [teacherOneId, setTeacherOneId] = useState(2);
   const [teacherTwoId, setTeacherTwoId] = useState(3);
 
   const teacherOneLeaves = leaves.filter((leave) => leave.teacher.id === teacherOneId);
-  const teacherOneLessons = lessons.filter((lesson) => lesson.teacher.id === teacherOneId);
+  const teacherOneSections = sections.filter((section) => section.teacher.id === teacherOneId);
   const teacherTwoLeaves = leaves.filter((leave) => leave.teacher.id === teacherTwoId);
-  const teacherTwoLessons = lessons.filter((lesson) => lesson.teacher.id === teacherTwoId);
+  const teacherTwoSections = sections.filter((section) => section.teacher.id === teacherTwoId);
 
   // useEffect(() => {
   //   //Fetch lesson details
@@ -83,26 +83,26 @@ const CreateLessonPage = ({ lessonObject = defaultLesson, isUpdating }) => {
   return (
     //TODO: Firhat
     <>
-      <LessonForm
+      <SectionForm
         teachers={teachers}
         venues={venues}
         setFormData={setFormData}
         formData={formData}
-        lessonId={lessonId}
+        sectionId={sectionId}
         isUpdating={isUpdating}
       />
       <div className={styles.calendarContainer}>
         <AppFullCalendar
           leaves={teacherOneLeaves}
           selectedTeacherId={teacherOneId}
-          lessons={teacherOneLessons}
+          sections={teacherOneSections}
           initialView="timeGridDay"
           // initialDate={Date.now()}
           ref={calendarOneRef}
         />
         <AppFullCalendar
           leaves={teacherTwoLeaves}
-          lessons={teacherTwoLessons}
+          sections={teacherTwoSections}
           initialView="timeGridDay"
           // initialDate={Date.now()}
           ref={calendarTwoRef}
@@ -112,4 +112,4 @@ const CreateLessonPage = ({ lessonObject = defaultLesson, isUpdating }) => {
   );
 };
 
-export default CreateLessonPage;
+export default CreateSectionTab;

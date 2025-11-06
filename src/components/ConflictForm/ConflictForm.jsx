@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
 
-const ConflictForm = ({ conflictLeave, formData, setFormData, conflictLessons, subTeachers }) => {
+const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSections, subTeachers }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
@@ -45,19 +45,19 @@ const ConflictForm = ({ conflictLeave, formData, setFormData, conflictLessons, s
         />
       </Stack>
       <Stack direction="row" gap="1rem">
-        {/* selectedLessonId Input */}
-        {conflictLessons.length > 0 && (
+        {/* selectedSectionId Input */}
+        {conflictSections.length > 0 && (
           <TextField
             select
-            label="Conflicting Lesson"
-            onChange={handleChange("selectedLessonId")}
+            label="Conflicting Section"
+            onChange={handleChange("selectedSectionId")}
             required
             fullWidth
-            value={formData.selectedLessonId}
+            value={formData.selectedSectionId}
           >
-            {conflictLessons.map((lesson) => (
-              <MenuItem key={lesson.id} value={lesson.id}>
-                {`${lesson.subject.subject_code} ${lesson.start_time.substring(11, 16)} - ${lesson.end_time.substring(
+            {conflictSections.map((section) => (
+              <MenuItem key={section.id} value={section.id}>
+                {`${section.subject.subject_code} ${section.start_time.substring(11, 16)} - ${section.end_time.substring(
                   11,
                   16
                 )}`}

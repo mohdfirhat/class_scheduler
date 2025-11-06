@@ -9,17 +9,17 @@ import "@fontsource/roboto/700.css";
 import LeaveConflictPage from "./pages/LeaveConflictPage/LeaveConflictPage";
 import TeacherSchedulePage from "./pages/TeacherSchedulePage/TeacherSchedulePage";
 import TeachersOverviewPage from "./pages/TeachersOverviewPage";
-import LessonOverviewPage from "./pages/LessonOverviewPage";
+import SectionOverviewTab from "./components/Tabs/CourseOverviewTab";
 import LeaveOverviewPage from "./pages/LeaveOverviewPage";
-import CreateLessonPage from "./pages/CreateLessonPage/CreateLessonPage";
+import CreateSectionTab from "./components/Tabs/CreateSectionTab";
 import VenuePopup from "./components/VenuePopup/VenuePopup";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/schedules/2" replace />} />
-      <Route path="dashboard/courses" element={<LessonOverviewPage />} />
-      <Route path="/lessons/:lessonId?" element={<CreateLessonPage />} />
+      <Route path="dashboard/courses" element={<SectionOverviewTab />} />
+      <Route path="/sections/:sectionId?" element={<CreateSectionTab />} />
       <Route path="dashboard/leaves" element={<LeaveOverviewPage />} />
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />
       <Route path="/schedules/:teacherId" element={<TeacherSchedulePage />} />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./LeaveConflictPage.module.css";
-import { conflictAllLeaves, conflictAllLessons, conflictIdOne, conflictLessonsAndTeachers2 } from "../../fakedata/data";
+import { conflictAllLeaves, conflictAllSections, conflictIdOne, conflictSectionsAndTeachers2 } from "../../fakedata/data";
 import NavBar from "../../components/NavBar/NavBar";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import ConflictForm from "../../components/ConflictForm/ConflictForm";
@@ -13,13 +13,13 @@ const LeaveConflictPage = () => {
   const [conflictLeave, setConflictLeave] = useState(conflictIdOne);
   const [formData, setFormData] = useState({
     subTeacherId: "",
-    selectedLessonId: "",
+    selectedSectionId: "",
   });
   const [selectedTeacherId, setSelectedTeacherId] = useState(conflictIdOne.teacher.id); // TODO: Change to null
-  const [conflictLessonsAndTeachers, setConflictLessonsAndTeachers] = useState(conflictLessonsAndTeachers2);
-  const conflictLessons = conflictLessonsAndTeachers.map((item) => item.lesson);
-  const subTeachers = formData.selectedLessonId
-    ? conflictLessonsAndTeachers.find((item) => item.lesson.id === formData.selectedLessonId).availableTeachers
+  const [conflictSectionsAndTeachers, setConflictSectionsAndTeachers] = useState(conflictSectionsAndTeachers2);
+  const conflictSections = conflictSectionsAndTeachers.map((item) => item.section);
+  const subTeachers = formData.selectedSectionId
+    ? conflictSectionsAndTeachers.find((item) => item.section.id === formData.selectedSectionId).availableTeachers
     : [];
   // console.log(subTeachers);
 
@@ -30,20 +30,20 @@ const LeaveConflictPage = () => {
       <main>
         <ConflictForm
           conflictLeave={conflictLeave}
-          conflictLessons={conflictLessons}
+          conflictSections={conflictSections}
           subTeachers={subTeachers}
           formData={formData}
           setFormData={setFormData}
         />
         <div className={styles.calendarContainer}>
           <AppFullCalendar
-            lessons={conflictAllLessons}
+            sections={conflictAllSections}
             leaves={conflictAllLeaves}
             selectedTeacherId={selectedTeacherId}
             initialView="timeGridWeek"
             initialDate={conflictLeave.start_date}
             setFormData={setFormData}
-            conflictLessons={conflictLessons}
+            conflictSections={conflictSections}
           />
         </div>
       </main>

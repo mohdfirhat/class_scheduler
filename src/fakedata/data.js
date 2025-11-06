@@ -1,4 +1,4 @@
-export const lessons = [
+export const sections = [
   {
     id: 1,
     teacher: {
@@ -49,7 +49,7 @@ export const lessons = [
   },
 ];
 
-export const scheduleLessons = [
+export const scheduleSections = [
   {
     id: 1,
     teacher: {
@@ -142,9 +142,9 @@ export const scheduleLeaves = [
   },
 ];
 
-export const conflictLessonsAndTeachers2 = [
+export const conflictSectionsAndTeachers2 = [
   {
-    lesson: {
+    section: {
       id: 1,
       teacher: {
         id: 2,
@@ -178,7 +178,7 @@ export const conflictLessonsAndTeachers2 = [
     ],
   },
   {
-    lesson: {
+    section: {
       id: 2,
       teacher: {
         id: 2,
@@ -219,8 +219,8 @@ export const conflictLessonsAndTeachers2 = [
   },
 ];
 
-//get lessons and leaves of all subteachers+ leaveteacher id 2,3,4
-export const conflictAllLessons = [
+//get sections and leaves of all subteachers+ leaveteacher id 2,3,4
+export const conflictAllSections = [
   {
     id: 1,
     teacher: {

@@ -62,7 +62,7 @@ const rows = [
 const columns = [
   {
     field: "courseCode",
-    headerName: "Course Code",
+    headerName: "Code",
     headerClassName: "table-header",
     minWidth: 50,
     flex: 0.5,
@@ -124,8 +124,8 @@ const columns = [
 ];
 
 //Main table component
-const LessonTable = (props) => {
-  //set handleEditClick func from LessonTabsBar to button props
+const SectionTable = (props) => {
+  //set handleEditClick func from SectionTabsBar to button props
   columns.find((col) => col.field == "button").handleEditClick = props.handleEditClick;
   columns.find((col) => col.field == "button").handleCancelClick = props.handleCancelClick;
   return (
@@ -135,4 +135,4 @@ const LessonTable = (props) => {
     </div>
   );
 };
-export default LessonTable;
+export default SectionTable;

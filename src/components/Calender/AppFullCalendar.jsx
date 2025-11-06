@@ -7,13 +7,13 @@ import "tippy.js/dist/tippy.css";
 
 export default function AppFullCalendar({
   leaves,
-  lessons,
+  sections,
   selectedTeacherId,
   initialView,
   initialDate = undefined,
   ref = undefined,
   setFormData = undefined,
-  conflictLessons = undefined,
+  conflictSections = undefined,
 }) {
   function formatStartDate(date) {
     const start = new Date(date);
@@ -25,17 +25,17 @@ export default function AppFullCalendar({
     start.setHours(20, 0, 0, 0);
     return start;
   }
-  const createLessonEvent = (lesson) => ({
-    title: lesson.subject.subject_code,
-    start: lesson.start_time,
-    end: lesson.end_time,
-    color: lesson.teacher.id === selectedTeacherId ? "blue" : "darkorange",
+  const createSectionEvent = (section) => ({
+    title: section.subject.subject_code,
+    start: section.start_time,
+    end: section.end_time,
+    color: section.teacher.id === selectedTeacherId ? "blue" : "darkorange",
     extendedProps: {
-      type: "lesson",
-      teacher: `${lesson.teacher.first_name} ${lesson.teacher.last_name}`,
-      venueName: lesson.venue.name,
-      venueDesc: lesson.venue.description,
-      data: lesson,
+      type: "section",
+      teacher: `${section.teacher.first_name} ${section.teacher.last_name}`,
+      venueName: section.venue.name,
+      venueDesc: section.venue.description,
+      data: section,
     },
   });
   const createLeaveEvent = (leave) => ({
@@ -50,9 +50,9 @@ export default function AppFullCalendar({
       data: leave,
     },
   });
-  const lessonEvents = lessons.map((lesson) => createLessonEvent(lesson));
+  const sectionEvents = sections.map((section) => createSectionEvent(section));
   const leaveEvents = leaves.map((leave) => createLeaveEvent(leave));
-  const events = [...lessonEvents, ...leaveEvents];
+  const events = [...sectionEvents, ...leaveEvents];
 
   return (
     // <div style={{ width: "100vw", height: "100vh-6rem" }}>
@@ -80,7 +80,7 @@ export default function AppFullCalendar({
         // console.log(info.event);
         tippy(info.el, {
           content:
-            info.event.extendedProps.type === "lesson"
+            info.event.extendedProps.type === "section"
               ? `
             <strong>${info.event.title}</strong><br/>
             Teacher: ${info.event.extendedProps.teacher}<br/>
@@ -99,15 +99,15 @@ export default function AppFullCalendar({
       }}
       eventClick={(info) => {
         console.log(info.event._def);
-        console.log(`Clicked Lesson with id: ${info.event.extendedProps.data.id}`);
+        console.log(`Clicked Section with id: ${info.event.extendedProps.data.id}`);
         if (setFormData !== undefined) {
           if (
-            conflictLessons.find(
-              (lesson) => lesson.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "lesson"
+            conflictSections.find(
+              (section) => section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
             )
           ) {
-            console.log("It is a conflicting Lesson");
-            setFormData((oldData) => ({ ...oldData, selectedLessonId: info.event.extendedProps.data.id }));
+            console.log("It is a conflicting Section");
+            setFormData((oldData) => ({ ...oldData, selectedSectionId: info.event.extendedProps.data.id }));
           }
         }
       }}
