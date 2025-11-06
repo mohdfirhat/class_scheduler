@@ -1,6 +1,6 @@
 import { RenderButton, SetColumnMenu, RenderAvatar, rowSpanValueFunc } from '../../utils/TableFuncs';
 import Table from './Table'
-import './LessonTable.css'
+
 
 //See valueFormatter() for converting date/time without changing values
 //https://mui.com/x/react-data-grid/column-definition/#value-formatter

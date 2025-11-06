@@ -4,8 +4,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import LessonTable from "../components/Tables/LessonTable";
+import CourseTable from './Tables/CourseTable';
 import CreateLessonPage from '../pages/CreateLessonPage/CreateLessonPage';
-import { Home, Update, Add } from '@mui/icons-material';
+import { Home, Update, Add, People, MenuBook } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -16,7 +17,7 @@ const theme = createTheme({
 },
 });
 
-function CustomTabPanel(props) {
+const CustomTabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -38,27 +39,27 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
+const a11yProps = (index) => {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
-export default function LessonTabsBar() {
+const LessonTabsBar = () => {
   const [value, setValue] = React.useState(0);
   const [isUpdating, setisUpdating] = React.useState(false);
   const [lessonObject, setlessonObject] = React.useState();
   
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (newValue != 2){
+    if (newValue != 3){
       setisUpdating(false);
     }
   };
   const handleEditClick = (props) => {
     setisUpdating(true);
-    setValue(2);
+    setValue(3);
     setlessonObject(props);
   }
 
@@ -67,21 +68,27 @@ export default function LessonTabsBar() {
       <Box sx={{ borderBottom: 1, borderColor: 'transparent',  px: '1%' }}>
         <ThemeProvider theme = {theme}>
         <Tabs value={value} onChange={handleChange} aria-label="Tabs panel" textColor ='primary' indicatorColor='primary'>
-          <Tab icon = {<Home/>} iconPosition="end" label="Lesson Overview" {...a11yProps(0)} />
-          <Tab icon = {<Add/>} iconPosition="end" label="Create Lesson" {...a11yProps(1)} />
-          <Tab icon = {<Update/>} iconPosition="end" label="Edit Lesson" disabled={!isUpdating} {...a11yProps(2)} />
+          <Tab icon = {<MenuBook/>} iconPosition="end" label="Course Overview" {...a11yProps(0)} />
+          <Tab icon = {<People/>} iconPosition="end" label="Section Overview" {...a11yProps(1)} />
+          <Tab icon = {<Add/>} iconPosition="end" label="Create Section" {...a11yProps(2)} />
+          <Tab icon = {<Update/>} iconPosition="end" label="Edit Section" disabled={!isUpdating} {...a11yProps(3)} />
         </Tabs>
         </ThemeProvider>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LessonTable handleEditClick={handleEditClick}/>
+        <CourseTable handleEditClick={handleEditClick}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <CreateLessonPage />
+        <LessonTable handleEditClick={handleEditClick}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
+        <CreateLessonPage />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
         <CreateLessonPage lessonObject = {lessonObject} isUpdating = {isUpdating}/>
       </CustomTabPanel>
     </Box>
   );
 }
+
+export default LessonTabsBar;

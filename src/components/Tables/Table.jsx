@@ -45,6 +45,7 @@ const Table = (props)=>{
                     //set general styles
                     fontSize: 18,
                     borderColor: 'transparent',
+                    textAlign: 'center',
                     //padding top/bottom
                     pt: '1%',
                     //padding left/right

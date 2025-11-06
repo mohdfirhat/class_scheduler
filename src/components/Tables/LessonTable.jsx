@@ -1,6 +1,5 @@
 import { RenderStatus, RenderButton, SetColumnMenu } from '../../utils/TableFuncs';
 import Table from './Table';
-import './LessonTable.css';
 import dayjs from "dayjs";
 
 //function for displaying time in table with valueGetter
@@ -10,13 +9,14 @@ const getTimeRange = (value, row) => {
 
 //dummy data
 const rows = [
-    { id: 1, name: 'Algebra I: Intro to Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 10, venue: 'Room 101', class: 'Class 5A', classSize: 30, teacherId: 1, teacher:'Bob', status: 'confirmed', button: 'confirmed' },
-    { id: 2, name: 'Algebra II: Advanced Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 11, venue: 'Lab 2',class: 'Class 5C', classSize: 34, teacherId: 2, teacher:'Jim', status: 'cancelled', button: 'cancelled' },
-    { id: 3, name: 'Differentiation III: Differential Equations', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 12:00').toISOString(), endTime: dayjs('2025-09-30 14:00').toISOString(), venueId: 12, venue: 'Auditorium',class: 'Class 5A', classSize: 30, teacherId: 2, teacher:'Jim', status: 'pending', button: 'pending' },
+    { id: 1, course: 'Algebra I: Intro to Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 10, venue: 'Room 101', class: 'Class 5A', classSize: 30, teacherId: 1, teacher:'Bob', status: 'confirmed', button: 'confirmed' },
+    { id: 2, course: 'Algebra II: Advanced Algebra', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 08:00').toISOString(), endTime: dayjs('2025-09-30 10:00').toISOString(), venueId: 11, venue: 'Lab 2',class: 'Class 5C', classSize: 34, teacherId: 2, teacher:'Jim', status: 'cancelled', button: 'cancelled' },
+    { id: 3, course: 'Differentiation III: Differential Equations', date: dayjs('2025-09-30').toISOString(), startTime: dayjs('2025-09-30 12:00').toISOString(), endTime: dayjs('2025-09-30 14:00').toISOString(), venueId: 12, venue: 'Auditorium',class: 'Class 5A', classSize: 30, teacherId: 2, teacher:'Jim', status: 'pending', button: 'pending' },
 ];
 
 const columns = [
-    { field: 'name', headerName: 'Name', headerClassName:'table-header', minWidth: 200, flex: 2, fontWeight: 'bold' },
+    { field: 'id', headerName: 'ID', headerClassName:'table-header', minWidth: 50, flex: 0.5, fontWeight: 'bold' },
+    { field: 'course', headerName: 'Course', headerClassName:'table-header', minWidth: 200, flex: 2, fontWeight: 'bold' },
     { field: 'date', headerName: 'Date', headerClassName:'table-header',minWidth: 100, flex: 1 ,valueFormatter: (value)=>{return dayjs(value).format('DD-MMM-YYYY');}},
     { field: 'time', headerName: 'Time', headerClassName:'table-header',minWidth: 150, flex: 1.5, valueGetter: getTimeRange},
     { field: 'venue', headerName: 'Venue', headerClassName:'table-header',minWidth: 100, flex: 1 },
@@ -26,14 +26,14 @@ const columns = [
     { field: 'status', headerName: 'Status', headerClassName:'table-header',minWidth: 100, flex: 1, align: 'center', renderCell: RenderStatus},
     { field: 'button', headerName: '', minWidth: 200, flex: 2, disableColumnMenu: true, sortable: false, filterable: false, renderCell: RenderButton,
         confirmedBtnProps: [
-            {name: 'Edit Lesson', href: null, onclick},
-            {name: 'Cancel Lesson', href: null, onclick}
+            {name: 'Edit Section', href: null, onclick},
+            {name: 'Cancel Section', href: null, onclick}
         ],
         cancelledBtnProps: [
         ],
         pendingBtnProps: [
-            {name: 'Edit Lesson', href: null, onclick},
-            {name: 'Cancel Lesson', href: null, onclick}
+            {name: 'Edit Section', href: null, onclick},
+            {name: 'Cancel Section', href: null, onclick}
         ],
         handleEditClick:'',
         handleCancelClick:''
@@ -47,7 +47,7 @@ const LessonTable = (props)=>{
     columns.find(col => col.field == 'button').handleCancelClick= props.handleCancelClick;
     return (
         <div className='table'>
-            <h1 className="page-title">Lesson Overview</h1>
+            <h1 className="page-title">Section Overview</h1>
             <Table 
                 rows = {rows}
                 columns = {columns}

@@ -18,7 +18,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/schedules/2" replace />} />
-      <Route path="dashboard/lessons" element={<LessonOverviewPage />} />
+      <Route path="dashboard/courses" element={<LessonOverviewPage />} />
       <Route path="/lessons/:lessonId?" element={<CreateLessonPage />} />
       <Route path="dashboard/leaves" element={<LeaveOverviewPage />} />
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />

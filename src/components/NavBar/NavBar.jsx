@@ -7,7 +7,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import Avatar from '@mui/material/Avatar';
 
-const tabs = [{idx: 0, name: "Lessons", icon: <MenuBookIcon />}, {idx: 1, name: "Teachers", icon: <FaceIcon />},{idx: 2, name: "Leaves", icon: <FlightTakeoffIcon />}]
+const tabs = [{idx: 0, name: "Courses", icon: <MenuBookIcon />}, {idx: 1, name: "Teachers", icon: <FaceIcon />},{idx: 2, name: "Leaves", icon: <FlightTakeoffIcon />}]
 
 const NavBar = () => {
   return (

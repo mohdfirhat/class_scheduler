@@ -5,7 +5,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Avatar from '@mui/material/Avatar';
 
 //function used to display status icons
-export function RenderStatus(props) {
+export const RenderStatus = (props) => {
     if (props.value == 'confirmed'){
         return (
             <CheckCircle
@@ -31,7 +31,7 @@ export function RenderStatus(props) {
 }
 
 //function used to display buttons depending on status
-export function RenderButton(props){
+export const RenderButton = (props) => {
     
     
     const handleEditClick = ()=> {
@@ -61,8 +61,8 @@ export function RenderButton(props){
     switch (props.value) {
         case 'confirmed': 
             btnProps = props.colDef.confirmedBtnProps;
-            btnProps.find(btn => btn.name == 'Edit Lesson') ? btnProps.find(btn => btn.name == 'Edit Lesson').onclick = handleEditClick : null;
-            btnProps.find(btn => btn.name == 'Cancel Lesson') ? btnProps.find(btn => btn.name == 'Cancel Lesson').onclick = handleCancelClick : null;
+            btnProps.find(btn => btn.name == 'Edit Section') ? btnProps.find(btn => btn.name == 'Edit Section').onclick = handleEditClick : null;
+            btnProps.find(btn => btn.name == 'Cancel Section') ? btnProps.find(btn => btn.name == 'Cancel Section').onclick = handleCancelClick : null;
             btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleViewScheduleClick : null; 
             break;
         
@@ -73,8 +73,8 @@ export function RenderButton(props){
 
         case 'pending':
             btnProps = props.colDef.pendingBtnProps;
-            btnProps.find(btn => btn.name == 'Edit Lesson') ? btnProps.find(btn => btn.name == 'Edit Lesson').onclick = handleEditClick : null;
-            btnProps.find(btn => btn.name == 'Cancel Lesson') ? btnProps.find(btn => btn.name == 'Cancel Lesson').onclick = handleCancelClick : null;
+            btnProps.find(btn => btn.name == 'Edit Section') ? btnProps.find(btn => btn.name == 'Edit Section').onclick = handleEditClick : null;
+            btnProps.find(btn => btn.name == 'Cancel Section') ? btnProps.find(btn => btn.name == 'Cancel Section').onclick = handleCancelClick : null;
             btnProps.find(btn => btn.name == 'Approve') ? btnProps.find(btn => btn.name == 'Approve').onclick = handleApproveClick : null;
             btnProps.find(btn => btn.name == 'Reject') ? btnProps.find(btn => btn.name == 'Reject').onclick = handleRejectClick : null;
             break;
@@ -104,7 +104,7 @@ export function RenderButton(props){
 }
 
 //function to set table column menu props
-export function SetColumnMenu(props) {
+export const SetColumnMenu = (props) => {
   return (
     <GridColumnMenu
       {...props}
@@ -144,7 +144,7 @@ export const RenderAvatar = (props) => {
 }
 
 //function for creating default avatar when no img file is provided
-export function stringAvatar(fName, lName) {
+export const stringAvatar = (fName, lName) => {
     if (lName == ''||lName == undefined){
        return {
             sx: {
@@ -167,7 +167,7 @@ export function stringAvatar(fName, lName) {
 }
 
 // function for randomizing bg colour for avatars with no img files
-function stringToColor(string) {
+const stringToColor = (string) => {
   let hash = 0;
   let i;
 

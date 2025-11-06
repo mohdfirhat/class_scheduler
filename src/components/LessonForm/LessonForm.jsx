@@ -7,7 +7,7 @@ import { AlignHorizontalCenter } from "@mui/icons-material";
 
 const LessonForm = ({ teachers, venues, formData, setFormData, lessonId, isUpdating }) => {
   const handleChange = (field) => (event) => {
-    console.log(event.target.value);
+    console.log(field);
     setFormData({ ...formData, [field]: event.target.value });
   };
 
