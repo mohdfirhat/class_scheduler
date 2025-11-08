@@ -1,3 +1,4 @@
+import { useReducer, useEffect, useState } from "react";
 import { Box, TextField, Button, MenuItem, Typography, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -6,43 +7,84 @@ import VenuePopup from "../VenuePopup/VenuePopup";
 import { courses, timeslots } from "../../fakedata/data";
 
 const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
+  const [isComplete, setIsComplete] = useState(null);
+  const [venueState, setVenueState] = useState(false);
+  const initState = {formData: formData};
+  
+  const formReducerFunc = (prevState, action) =>{
+      return {...prevState,
+        formData: {
+          ...prevState.formData,
+          [action.type]: action.value,
+        } 
+      };
+    
+  };
+  const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
+  
+
   const handleChange = (field) => (event) => {
-    setFormData({ ...formData, [field]: event.target.value });
+    // setFormData({ ...formData, [field]: event.target.value });
+    dispatchFormData({type: field, value: event.target.value});
   };
 
   const handleDateChange = (newDate) => {
     if (!newDate) return;
-    setFormData({
-      ...formData,
-      date: newDate.toISOString(), // store as ISO
-    });
+    dispatchFormData({type: 'date', value: newDate.toISOString()});
+    // setFormData({
+    //   ...formData,
+    //   date: newDate.toISOString(), // store as ISO
+    // });
   };
 
-  const handleTimeChange = (field) => (newTime) => {
-    if (!newTime) return;
+  // const handleTimeChange = (field) => (newTime) => {
+  //   if (!newTime) return;
 
-    // Get the current date (if selected) or default to today
-    const baseDate = formData.date ? dayjs(formData.date) : dayjs();
+  //   // Get the current date (if selected) or default to today
+  //   const baseDate = formData.date ? dayjs(formData.date) : dayjs();
 
-    // Combine date + time into a full ISO datetime
-    const combined = baseDate.hour(newTime.hour()).minute(newTime.minute()).second(0).millisecond(0);
+  //   // Combine date + time into a full ISO datetime
+  //   const combined = baseDate.hour(newTime.hour()).minute(newTime.minute()).second(0).millisecond(0);
 
-    setFormData({
-      ...formData,
-      [field]: combined.toISOString(),
-    });
-  };
+  //   setFormData({
+  //     ...formData,
+  //     [field]: combined.toISOString(),
+  //   });
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submitted form data:", formData);
-
+    console.log(isComplete);
+    const {formData} = formState;
+    //removing unneeded fields to prepare to send back to DB
+    const {button, name, teacher, venue,... cleanedFormData} = formData;
+    console.log("Submitted form data:", cleanedFormData);
     if (sectionId) {
       //TODO: update to section
     } else {
       // create section
     }
   };
+
+  //Effect for checking if coursename, class size, date and timeslot are filled
+  useEffect(()=>{
+    // console.log(isComplete);
+    const {formData} = formState;
+    const {courseCode, classSize, date, timeslot, venueId} = formData;
+    // console.log(date.length);
+    if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 || timeslot.length == 0){
+      setIsComplete(false);}
+    else {setIsComplete(true);}
+  
+    //for VenuePopup state
+    if (venueId.toString().length > 0){setVenueState(true);}
+    console.log('venue' + venueId.length);
+
+    console.log(isComplete);
+  }, [formState]);
+
+
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
@@ -71,7 +113,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Course Name"
-            value={formData.courseCode}
+            defaultValue={formData.courseCode}
             onChange={handleChange("courseCode")}
             required
             fullWidth
@@ -87,7 +129,8 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             label="Class Size"
             type="number"
-            value={formData.classSize}
+            slotProps={{htmlInput:{min: 1}}}
+            defaultValue={formData.classSize}
             onChange={handleChange("classSize")}
             required
             fullWidth
@@ -103,7 +146,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           {/* Section Remarks Input */}
           <TextField
             label="Remarks"
-            value={formData.remarks}
+            defaultValue={formData.remarks}
             onChange={handleChange("remarks")}
             //limit the no. of input characters to 50
             slotProps={{htmlInput:{maxLength: 50}}}
@@ -127,7 +170,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Timeslot"
-            value={formData.timeslot}
+            defaultValue={formData.timeslot}
             onChange={handleChange("timeslot")}
             required
             fullWidth
@@ -146,11 +189,12 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Teacher"
-            value={formData.teacherId}
+            defaultValue={formData.teacherId ? formData.teacherId : '' }
             onChange={handleChange("teacherId")}
+            disabled={!isComplete}
             required
             fullWidth
-            defaultValue={teachers[0].id}
+           
           >
             {teachers.map((teacher) => (
               <MenuItem key={teacher.id} value={teacher.id}>
@@ -162,11 +206,12 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Venue"
-            value={formData.venueId}
+            defaultValue={formData.venueId ? formData.venueId : ''}
             onChange={handleChange("venueId")}
+            disabled={!isComplete}
             required
             fullWidth
-            defaultValue={venues[0].id}
+            
           >
             {venues.map((venue) => (
               <MenuItem key={venue.id} value={venue.id}>
@@ -175,7 +220,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             ))}
           </TextField>
         </Stack>
-        <VenuePopup sx={{ justifyContent: "center"}} formData={formData} venues={venues} />
+        <VenuePopup formState = {formState} venueState = {venueState} sx={{ justifyContent: "center"}} formData={formData} venues={venues} />
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" sx={{backgroundColor: '#00838f',}}>
