@@ -1,21 +1,26 @@
-import * as React from 'react';
+import {useState} from 'react';
 import { Grid, Button } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import './VenuePopup.css'
 
-const VenuePopup= ({formData, venues, venueState, formState})=> {
-  console.log(formState);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  let selectedVenue = {
+const VenuePopup= ({venues, isVenueFilled, formState})=> {
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedVenue, setSelectedVenue] = useState(
+    {
       name:"",
       occupancy:"",
       description:""
     }
+  );
+
   
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
      if (venues.find(venue => venue.id == formState.formData.venueId)){
-    selectedVenue = venues.find(venue => venue.id == formState.formData.venueId);
+      setSelectedVenue(venues.find(venue => venue.id == formState.formData.venueId));
+
+    // selectedVenue = venues.find(venue => venue.id == formState.formData.venueId);
     }
   };
 
@@ -41,7 +46,7 @@ const VenuePopup= ({formData, venues, venueState, formState})=> {
     <Grid className='test'container>
       <Grid size = {4.8}></Grid>
       <Grid size = {4}>
-          <Button disabled = {!venueState} aria-describedby={id} sx={{color: '#00838f',}} variant="text" onClick={handleClick}>
+          <Button disabled = {!isVenueFilled} aria-describedby={id} sx={{color: '#00838f',}} variant="text" onClick={handleClick}>
           <u>Venue Information</u>
         </Button>
         <Popover

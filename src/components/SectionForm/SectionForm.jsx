@@ -8,16 +8,57 @@ import { courses, timeslots } from "../../fakedata/data";
 
 const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
   const [isComplete, setIsComplete] = useState(null);
-  const [venueState, setVenueState] = useState(false);
-  const initState = {formData: formData};
+  const [isVenueFilled, setIsVenueFilled] = useState(false);
+  const [isFormComplete, setIsFormComplete] = useState(false);
+
+  const initState = {formData: formData, validClassSize: true};
   
   const formReducerFunc = (prevState, action) =>{
-      return {...prevState,
-        formData: {
-          ...prevState.formData,
-          [action.type]: action.value,
-        } 
-      };
+
+    switch(action.type){
+
+      case 'date':
+        return {...prevState,
+          formData: {
+            ...prevState.formData,
+            [action.type]: action.value.toISOString(),
+          } 
+        };
+      
+      case 'classSize':
+        //validation for class size field for non-number inputs and min/max class sizes
+        if ((/[^0-9]/g).test(action.value)|| action.value > 200|| action.value < 1){
+          return {
+            ...prevState,
+            formData: {
+            ...prevState.formData,
+            [action.type]: '',
+            },
+            validClassSize: false 
+          };
+        } else {
+          return {...prevState,
+          formData: {
+            ...prevState.formData,
+            [action.type]: action.value,
+          },
+          validClassSize: true
+        };
+        }
+      
+      default:
+        return {...prevState,
+          formData: {
+            ...prevState.formData,
+            [action.type]: action.value,
+          } 
+        };
+    }
+      
+
+    
+    
+    
     
   };
   const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
@@ -28,14 +69,14 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
     dispatchFormData({type: field, value: event.target.value});
   };
 
-  const handleDateChange = (newDate) => {
-    if (!newDate) return;
-    dispatchFormData({type: 'date', value: newDate.toISOString()});
-    // setFormData({
-    //   ...formData,
-    //   date: newDate.toISOString(), // store as ISO
-    // });
-  };
+  // const handleDateChange = (newDate) => {
+  //   if (!newDate) return;
+  //   dispatchFormData({type: 'date', value: newDate.toISOString()});
+  //   // setFormData({
+  //   //   ...formData,
+  //   //   date: newDate.toISOString(), // store as ISO
+  //   // });
+  // };
 
   // const handleTimeChange = (field) => (newTime) => {
   //   if (!newTime) return;
@@ -52,9 +93,10 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
   //   });
   // };
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(isComplete);
+    
     const {formData} = formState;
     //removing unneeded fields to prepare to send back to DB
     const {button, name, teacher, venue,... cleanedFormData} = formData;
@@ -68,21 +110,34 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
 
   //Effect for checking if coursename, class size, date and timeslot are filled
   useEffect(()=>{
-    // console.log(isComplete);
     const {formData} = formState;
-    const {courseCode, classSize, date, timeslot, venueId} = formData;
+    const {courseCode, classSize, date, timeslot} = formData;
     // console.log(date.length);
     if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 || timeslot.length == 0){
       setIsComplete(false);}
     else {setIsComplete(true);}
-  
-    //for VenuePopup state
-    if (venueId.toString().length > 0){setVenueState(true);}
-    console.log('venue' + venueId.length);
 
-    console.log(isComplete);
   }, [formState]);
 
+ //If current implementation is too laggy, find use-debounce and use debounce 
+  //Effect to check if all mandatory fields in form are filled
+  useEffect(()=>{
+    const {formData, validClassSize} = formState;
+    const {courseCode, classSize, date, timeslot, teacherId, venueId} = formData;
+
+    //check if venue slot is filled and set state to enable/disable VenuePopup
+    if (venueId.toString().length != 0){setIsVenueFilled(true);} 
+    else {setIsVenueFilled(false);}
+
+    if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 
+        || timeslot.length == 0 || teacherId.toString().length == 0 
+        || venueId.toString().length == 0  || !formState.validClassSize){
+          setIsFormComplete(false);
+    } else {
+      setIsFormComplete(true);
+    }
+
+  }, [formState]);
 
 
   return (
@@ -135,7 +190,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             required
             fullWidth
             onKeyDown={(e) => {
-              if (["-", "e"].includes(e.key)) {
+              if (["-", "e", "."].includes(e.key)) {
                 e.preventDefault();
               }
             }}
@@ -146,6 +201,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           {/* Section Remarks Input */}
           <TextField
             label="Remarks"
+            placeholder = "E.g. Class Test 1, Group Presentation Day "
             defaultValue={formData.remarks}
             onChange={handleChange("remarks")}
             //limit the no. of input characters to 50
@@ -162,7 +218,7 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             label="Section Date"
             inputFormat="DD/MM/YYYY"
             value={formData.date ? dayjs(formData.date) : null}
-            onChange={handleDateChange}
+            onChange={handleChange("date")}
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
@@ -220,10 +276,10 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             ))}
           </TextField>
         </Stack>
-        <VenuePopup formState = {formState} venueState = {venueState} sx={{ justifyContent: "center"}} formData={formData} venues={venues} />
+        <VenuePopup venues={venues} isVenueFilled = {isVenueFilled} formState = {formState} sx={{ justifyContent: "center"}}  />
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
-          <Button type="submit" variant="contained" sx={{backgroundColor: '#00838f',}}>
+          <Button type="submit" variant="contained" disabled = {!isFormComplete} sx={{backgroundColor: '#00838f',}}>
             {isUpdating ? "Edit" : "Create"} Section
           </Button>
         </Stack>
