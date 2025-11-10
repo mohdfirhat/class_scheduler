@@ -25,23 +25,24 @@ export default function AppFullCalendar({
     start.setHours(20, 0, 0, 0);
     return start;
   }
+
   const createSectionEvent = (section) => ({
-    title: section.subject.subject_code,
-    start: section.start_time,
-    end: section.end_time,
+    title: section.course.courseCode,
+    start: `${section.date}T${section.timeslot.startTime}`,
+    end: `${section.date}T${section.timeslot.endTime}`,
     color: section.teacher.id === selectedTeacherId ? "blue" : "darkorange",
     extendedProps: {
       type: "section",
-      teacher: `${section.teacher.first_name} ${section.teacher.last_name}`,
+      teacher: `${section.teacher.firstName} ${section.teacher.lastName}`,
       venueName: section.venue.name,
       venueDesc: section.venue.description,
       data: section,
     },
   });
   const createLeaveEvent = (leave) => ({
-    title: `${leave.teacher.first_name} ${leave.teacher.last_name} Leave`,
-    start: formatStartDate(leave.start_date),
-    end: formatEndDate(leave.end_date),
+    title: `${leave.teacher.firstName} ${leave.teacher.lastName} Leave`,
+    start: formatStartDate(leave.startDate),
+    end: formatEndDate(leave.endDate),
     color: leave.teacher.id === selectedTeacherId ? "lightblue" : "sandybrown",
     borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",
@@ -53,6 +54,8 @@ export default function AppFullCalendar({
   const sectionEvents = sections.map((section) => createSectionEvent(section));
   const leaveEvents = leaves.map((leave) => createLeaveEvent(leave));
   const events = [...sectionEvents, ...leaveEvents];
+  console.log("events");
+  console.log(events);
 
   return (
     // <div style={{ width: "100vw", height: "100vh-6rem" }}>
@@ -103,7 +106,8 @@ export default function AppFullCalendar({
         if (setFormData !== undefined) {
           if (
             conflictSections.find(
-              (section) => section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
+              (section) =>
+                section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
             )
           ) {
             console.log("It is a conflicting Section");

@@ -23,6 +23,7 @@
     "@mui/styled-engine": "^7.3.3",
     "@mui/x-data-grid": "^8.15.0",
     "@mui/x-date-pickers": "^8.16.0",
+    "axios": "^1.13.2",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.18",
     "react": "^19.1.1",
