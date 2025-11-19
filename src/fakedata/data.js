@@ -408,3 +408,111 @@ export const courses = [
     name: "Software Engineering",
   },
 ];
+
+[
+  {
+    id: 1,
+    name: "lesson 1",
+    description: null,
+    date: "2025-10-18",
+    timeslot: {
+      id: 1,
+      startTime: "08:00:00",
+      endTime: "10:00:00",
+    },
+    classSize: 10,
+    status: {
+      id: 1,
+      type: "pending",
+    },
+    availableTeachers: [
+      {
+        id: 4,
+        firstName: "Linus",
+        lastName: "Torvalds",
+        email: "linus.torvalds@gmail.com",
+        leaveDays: 14,
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "lesson 3",
+    description: null,
+    date: "2025-10-18",
+    timeslot: {
+      id: 2,
+      startTime: "10:00:00",
+      endTime: "12:00:00",
+    },
+    classSize: 10,
+    status: {
+      id: 1,
+      type: "pending",
+    },
+    availableTeachers: [
+      {
+        id: 4,
+        firstName: "Linus",
+        lastName: "Torvalds",
+        email: "linus.torvalds@gmail.com",
+        leaveDays: 14,
+      },
+    ],
+  },
+];
+
+const conflictingLessons = [
+  {
+    id: 1,
+    name: "lesson 1",
+    description: null,
+    date: "2025-10-18",
+    timeslot: {
+      id: 1,
+      startTime: "08:00:00",
+      endTime: "10:00:00",
+    },
+    classSize: 10,
+    status: {
+      id: 1,
+      type: "pending",
+    },
+  },
+  {
+    id: 3,
+    name: "lesson 3",
+    description: null,
+    date: "2025-10-18",
+    timeslot: {
+      id: 2,
+      startTime: "10:00:00",
+      endTime: "12:00:00",
+    },
+    classSize: 10,
+    status: {
+      id: 1,
+      type: "pending",
+    },
+  },
+];
+const availableTeachers = [
+  [
+    {
+      id: 4,
+      firstName: "Linus",
+      lastName: "Torvalds",
+      email: "linus.torvalds@gmail.com",
+      leaveDays: 14,
+    },
+  ],
+  [
+    {
+      id: 4,
+      firstName: "Linus",
+      lastName: "Torvalds",
+      email: "linus.torvalds@gmail.com",
+      leaveDays: 14,
+    },
+  ],
+];
