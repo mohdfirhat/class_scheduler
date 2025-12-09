@@ -65,11 +65,17 @@ const LeaveConflictPage = () => {
         console.log(e);
       }
     };
-    fetchLeave();
-    fetchConflictingSectionsWithAvailableTeacher();
-    fetchSectionsOfAllTeachersInvolved();
-    fetchLeavesOfAllTeachers();
-    setIsLoading(false);
+    const fetchAll = async () => {
+      try {
+        await fetchLeave();
+        await fetchConflictingSectionsWithAvailableTeacher();
+        await fetchSectionsOfAllTeachersInvolved();
+        await fetchLeavesOfAllTeachers();
+      } finally {
+        setIsLoading(false); // ✅ Only after everything is loaded
+      }
+    };
+    fetchAll();
   }, []);
 
   return (

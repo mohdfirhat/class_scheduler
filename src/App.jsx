@@ -17,14 +17,14 @@ import VenuePopup from "./components/VenuePopup/VenuePopup";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/schedules/2" replace />} />
+      <Route path="/" element={<Navigate to="dashboard/courses" replace />} />
       <Route path="dashboard/courses" element={<SectionOverviewTab />} />
       <Route path="/sections/:sectionId?" element={<CreateSectionTab />} />
       <Route path="dashboard/leaves" element={<LeaveOverviewPage />} />
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />
       <Route path="/schedules/:teacherId" element={<TeacherSchedulePage />} />
       <Route path="/conflicts/:leaveId" element={<LeaveConflictPage />} />
-      <Route path="/venue" element={<VenuePopup/>} />
+      <Route path="/venue" element={<VenuePopup />} />
     </Routes>
   );
 }
