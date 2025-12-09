@@ -7,7 +7,7 @@ import VenuePopup from "../VenuePopup/VenuePopup";
 import { courses, timeslots } from "../../fakedata/data";
 
 const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
-  const [isComplete, setIsComplete] = useState(null);
+  const [isBasicParamsFilled, setIsBasicParamsFilled] = useState(null);
   const [isVenueFilled, setIsVenueFilled] = useState(false);
   const [isFormComplete, setIsFormComplete] = useState(false);
 
@@ -114,12 +114,13 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
     const {courseCode, classSize, date, timeslot} = formData;
     // console.log(date.length);
     if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 || timeslot.length == 0){
-      setIsComplete(false);}
-    else {setIsComplete(true);}
+      setIsBasicParamsFilled(false);}
+    else {setIsBasicParamsFilled(true);}
 
   }, [formState]);
 
  //If current implementation is too laggy, find use-debounce and use debounce 
+
   //Effect to check if all mandatory fields in form are filled
   useEffect(()=>{
     const {formData, validClassSize} = formState;
@@ -170,6 +171,9 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             label="Course Name"
             defaultValue={formData.courseCode}
             onChange={handleChange("courseCode")}
+            error = {formState.formData.courseCode == ''}
+            id="outlined-error"
+            helperText={formState.formData.courseCode == '' ? "Field required":""}
             required
             fullWidth
           >
@@ -187,10 +191,13 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             slotProps={{htmlInput:{min: 1}}}
             defaultValue={formData.classSize}
             onChange={handleChange("classSize")}
+            error = {!formState.validClassSize|| formState.formData.classSize == ''}
+            id="outlined-error"
+            helperText={formState.validClassSize? "":"Invalid class size."}
             required
             fullWidth
             onKeyDown={(e) => {
-              if (["-", "e", "."].includes(e.key)) {
+              if (["-", "e", ".", "+"].includes(e.key)) {
                 e.preventDefault();
               }
             }}
@@ -228,6 +235,9 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             label="Timeslot"
             defaultValue={formData.timeslot}
             onChange={handleChange("timeslot")}
+            error = {formState.formData.timeslot == ''}
+            id="outlined-error"
+            helperText={formState.formData.timeslot == '' ? "Field required":""}
             required
             fullWidth
           >
@@ -247,7 +257,10 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             label="Teacher"
             defaultValue={formData.teacherId ? formData.teacherId : '' }
             onChange={handleChange("teacherId")}
-            disabled={!isComplete}
+            error = {formState.formData.teacherId == '' && isBasicParamsFilled}
+            id="outlined-error"
+            helperText={formState.formData.teacherId == '' ? "Field required":""}
+            disabled={!isBasicParamsFilled}
             required
             fullWidth
            
@@ -264,7 +277,10 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             label="Venue"
             defaultValue={formData.venueId ? formData.venueId : ''}
             onChange={handleChange("venueId")}
-            disabled={!isComplete}
+            error = {formState.formData.venueId == '' && isBasicParamsFilled}
+            id="outlined-error"
+            helperText={formState.formData.venueid == '' ? "Field required":""}
+            disabled={!isBasicParamsFilled}
             required
             fullWidth
             
