@@ -36,9 +36,24 @@ const columns = [
     flex: 1,
     fontWeight: "bold",
   },
-  { field: "department", headerName: "Department", headerClassName: "table-header", minWidth: 100, flex: 1 },
+  {
+    field: "department",
+    headerName: "Department",
+    headerClassName: "table-header",
+    minWidth: 100,
+    flex: 1,
+    valueGetter: (value, row) => {
+      return `${row.department.name}`;
+    },
+  },
   { field: "name", headerName: "Name", headerClassName: "table-header", minWidth: 200, flex: 2, fontWeight: "bold" },
-  //   { field: "description", headerName: "Description", headerClassName: "table-header", minWidth: 300, flex: 3 },
+  {
+    field: "description",
+    headerName: "Description",
+    headerClassName: "table-header",
+    minWidth: 300,
+    flex: 3,
+  },
 ];
 
 //Main table component
