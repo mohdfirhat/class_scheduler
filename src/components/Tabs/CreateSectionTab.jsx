@@ -1,111 +1,129 @@
-import { useParams } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import styles from "./CreateSectionTab.module.css";
 
 import SectionForm from "../../components/SectionForm/SectionForm";
-import AppFullCalendar from "../../components/Calender/AppFullCalendar";
-import { leaves, sections } from "../../fakedata/data";
 import dayjs from "dayjs";
+import ScheduleFullCalendar from "../Calender/ScheduleFullCalendar";
+import { BACKEND_URL } from "../../api/api";
+import axios from "axios";
 
 const defaultSection = {
   courseCode: "",
   remarks: "",
   classSize: "",
-  date: dayjs().toISOString(),
+  date: dayjs(),
   timeslot: "",
   teacherId: "",
   venueId: "",
 };
 
-const CreateSectionTab = ({ sectionObject = defaultSection, isUpdating }) => {
-  const { sectionId } = useParams();
+const CreateSectionTab = ({ isUpdating }) => {
+  const initState = { formData: defaultSection, validClassSize: true };
+
+  const formReducerFunc = (prevState, action) => {
+    switch (action.type) {
+      case "date":
+        return {
+          ...prevState,
+          formData: {
+            ...prevState.formData,
+            [action.type]: action.value,
+          },
+        };
+
+      case "classSize":
+        //validation for class size field for non-number inputs and min/max class sizes
+        if (/[^0-9]/g.test(action.value) || action.value > 200 || action.value < 1) {
+          return {
+            ...prevState,
+            formData: {
+              ...prevState.formData,
+              [action.type]: "",
+            },
+            validClassSize: false,
+          };
+        } else {
+          return {
+            ...prevState,
+            formData: {
+              ...prevState.formData,
+              [action.type]: action.value,
+            },
+            validClassSize: true,
+          };
+        }
+
+      default:
+        return {
+          ...prevState,
+          formData: {
+            ...prevState.formData,
+            [action.type]: action.value,
+          },
+        };
+    }
+  };
+  const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
 
   const calendarOneRef = useRef(null);
   const calendarTwoRef = useRef(null);
-  const [formData, setFormData] = useState(sectionObject);
-
-  const [teacherOneId, setTeacherOneId] = useState(2);
-  const [teacherTwoId, setTeacherTwoId] = useState(3);
-
-  const teacherOneLeaves = leaves.filter((leave) => leave.teacher.id === teacherOneId);
-  const teacherOneSections = sections.filter((section) => section.teacher.id === teacherOneId);
-  const teacherTwoLeaves = leaves.filter((leave) => leave.teacher.id === teacherTwoId);
-  const teacherTwoSections = sections.filter((section) => section.teacher.id === teacherTwoId);
-
-  // useEffect(() => {
-  //   //Fetch lesson details
-  //   //if does not exist? redirect to create
-  // }, []);
+  const [availTeacher, setAvailTeacher] = useState([]);
+  const [availVenues, setAvailVenues] = useState([]);
+  const [teacherOneId, setTeacherOneId] = useState(null);
+  const [teacherOneLeaves, setTeacherOneLeaves] = useState([]);
+  const [teacherOneSections, setTeacherOneSections] = useState([]);
+  const [teacherOne, setTeacherOne] = useState({});
 
   useEffect(() => {
     const calendarOneApi = calendarOneRef.current?.getApi();
     const calendarTwoApi = calendarTwoRef.current?.getApi();
     if (calendarOneApi) {
-      calendarOneApi.gotoDate(formData.date);
+      const date = formState.formData.date ? new Date(formState.formData.date) : new Date();
+      calendarOneApi.gotoDate(date);
     }
     if (calendarTwoApi) {
-      calendarTwoApi.gotoDate(formData.date);
+      const date = formState.formData.date ? new Date(formState.formData.date) : new Date();
+      calendarTwoApi.gotoDate(date);
     }
-  }, [formData.date]);
+  }, [formState.formData.date]);
 
-  // 🧑‍🏫 Fake teacher data (as if from DB)
-  const teachers = [
-    { id: 1, name: "Bob" },
-    { id: 2, name: "Jim" },
-    { id: 3, name: "Dr. Brown" },
-  ];
-
-  // 🏫 Fake venue data (as if from DB)
-  const venues = [
-    {
-      id: 10,
-      name: "Room 101",
-      occupancy: 30,
-      src: "https://uploads.teachablecdn.com/attachments/ci7bzIifRVqCgY7825cT_ivan-aleksic-PDRFeeDniCk-unsplash.jpg",
-      description: "brief classroom description",
-    },
-    {
-      id: 11,
-      name: "Lab 2",
-      occupancy: 50,
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7OxaAhMWB_HKPoEj0ra9oyrnMQ1BLCEDOrQ&s",
-      description: "brief lab description",
-    },
-    {
-      id: 12,
-      name: "Auditorium",
-      occupancy: 100,
-      src: "https://www.csctessensohn.sg/images/gather/gather_aud_left5.png",
-      description: "brief auditorium description",
-    },
-  ];
+  // fetch teacher schedule(sections and leaves)
+  useEffect(() => {
+    if (teacherOneId) {
+      const fetchTeacherSchedule = async () => {
+        const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherOneId}`);
+        console.log("🧑‍🏫Teacher Schedules");
+        console.log(res.data);
+        setTeacherOneLeaves(res.data.leaves);
+        setTeacherOneSections(res.data.sections);
+        setTeacherOne(res.data);
+      };
+      fetchTeacherSchedule();
+    }
+  }, [teacherOneId]);
 
   return (
     //TODO: Firhat
     <>
       <SectionForm
-        teachers={teachers}
-        venues={venues}
-        setFormData={setFormData}
-        formData={formData}
-        sectionId={sectionId}
+        formState={formState}
+        dispatchFormData={dispatchFormData}
         isUpdating={isUpdating}
+        availTeacher={availTeacher}
+        setAvailTeacher={setAvailTeacher}
+        availVenues={availVenues}
+        setAvailVenues={setAvailVenues}
+        setTeacherOneId={setTeacherOneId}
       />
       <div className={styles.calendarContainer}>
-        <AppFullCalendar
-          leaves={teacherOneLeaves}
+        <ScheduleFullCalendar
           selectedTeacherId={teacherOneId}
+          teacher={teacherOne}
+          leaves={teacherOneLeaves}
           sections={teacherOneSections}
           initialView="timeGridDay"
-          // initialDate={Date.now()}
+          initialDate={Date.now()}
           ref={calendarOneRef}
-        />
-        <AppFullCalendar
-          leaves={teacherTwoLeaves}
-          sections={teacherTwoSections}
-          initialView="timeGridDay"
-          // initialDate={Date.now()}
-          ref={calendarTwoRef}
         />
       </div>
     </>

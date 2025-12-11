@@ -1,106 +1,52 @@
-import { useReducer, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, TextField, Button, MenuItem, Typography, Stack } from "@mui/material";
 import dayjs from "dayjs";
-import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import VenuePopup from "../VenuePopup/VenuePopup";
-import { courses, timeslots } from "../../fakedata/data";
+import axios from "axios";
+import { BACKEND_URL } from "../../api/api";
 
-const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpdating }) => {
-  const [isBasicParamsFilled, setIsBasicParamsFilled] = useState(null);
+const SectionForm = ({
+  formState,
+  dispatchFormData,
+  sectionId,
+  isUpdating,
+  availTeacher,
+  setAvailTeacher,
+  availVenues,
+  setAvailVenues,
+  setTeacherOneId,
+}) => {
+  const [isBasicParamsFilled, setIsBasicParamsFilled] = useState(false);
   const [isVenueFilled, setIsVenueFilled] = useState(false);
   const [isFormComplete, setIsFormComplete] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [timeslots, setTimeslots] = useState([]);
 
-  const initState = {formData: formData, validClassSize: true};
-  
-  const formReducerFunc = (prevState, action) =>{
-
-    switch(action.type){
-
-      case 'date':
-        return {...prevState,
-          formData: {
-            ...prevState.formData,
-            [action.type]: action.value.toISOString(),
-          } 
-        };
-      
-      case 'classSize':
-        //validation for class size field for non-number inputs and min/max class sizes
-        if ((/[^0-9]/g).test(action.value)|| action.value > 200|| action.value < 1){
-          return {
-            ...prevState,
-            formData: {
-            ...prevState.formData,
-            [action.type]: '',
-            },
-            validClassSize: false 
-          };
-        } else {
-          return {...prevState,
-          formData: {
-            ...prevState.formData,
-            [action.type]: action.value,
-          },
-          validClassSize: true
-        };
-        }
-      
-      default:
-        return {...prevState,
-          formData: {
-            ...prevState.formData,
-            [action.type]: action.value,
-          } 
-        };
-    }
-      
-
-    
-    
-    
-    
-  };
-  const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
-  
+  const departmentId = 1;
+  const managerId = 1;
 
   const handleChange = (field) => (event) => {
     // setFormData({ ...formData, [field]: event.target.value });
-    dispatchFormData({type: field, value: event.target.value});
+    dispatchFormData({ type: field, value: event.target.value });
   };
 
-  // const handleDateChange = (newDate) => {
-  //   if (!newDate) return;
-  //   dispatchFormData({type: 'date', value: newDate.toISOString()});
-  //   // setFormData({
-  //   //   ...formData,
-  //   //   date: newDate.toISOString(), // store as ISO
-  //   // });
-  // };
-
-  // const handleTimeChange = (field) => (newTime) => {
-  //   if (!newTime) return;
-
-  //   // Get the current date (if selected) or default to today
-  //   const baseDate = formData.date ? dayjs(formData.date) : dayjs();
-
-  //   // Combine date + time into a full ISO datetime
-  //   const combined = baseDate.hour(newTime.hour()).minute(newTime.minute()).second(0).millisecond(0);
-
-  //   setFormData({
-  //     ...formData,
-  //     [field]: combined.toISOString(),
-  //   });
-  // };
-
+  const handleDateChange = (newDate) => {
+    if (!newDate) return;
+    dispatchFormData({ type: "date", value: newDate });
+    // setFormData({
+    //   ...formData,
+    //   date: newDate.toISOString(), // store as ISO
+    // });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    const {formData} = formState;
+
+    const { formData } = formState;
     //removing unneeded fields to prepare to send back to DB
-    const {button, name, teacher, venue,... cleanedFormData} = formData;
-    console.log("Submitted form data:", cleanedFormData);
+    const { button, name, teacher, venue, ...cleanedFormData } = formData;
     if (sectionId) {
       //TODO: update to section
     } else {
@@ -109,37 +55,93 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
   };
 
   //Effect for checking if coursename, class size, date and timeslot are filled
-  useEffect(()=>{
-    const {formData} = formState;
-    const {courseCode, classSize, date, timeslot} = formData;
-    // console.log(date.length);
-    if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 || timeslot.length == 0){
-      setIsBasicParamsFilled(false);}
-    else {setIsBasicParamsFilled(true);}
-
+  useEffect(() => {
+    const { formData } = formState;
+    const { courseCode, classSize, date, timeslot } = formData;
+    if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 || timeslot.length == 0) {
+      setIsBasicParamsFilled(false);
+    } else {
+      setIsBasicParamsFilled(true);
+    }
   }, [formState]);
 
- //If current implementation is too laggy, find use-debounce and use debounce 
+  //If current implementation is too laggy, find use-debounce and use debounce
 
   //Effect to check if all mandatory fields in form are filled
-  useEffect(()=>{
-    const {formData, validClassSize} = formState;
-    const {courseCode, classSize, date, timeslot, teacherId, venueId} = formData;
+  useEffect(() => {
+    const { formData, validClassSize } = formState;
+    const { courseCode, classSize, date, timeslot, teacherId, venueId } = formData;
 
     //check if venue slot is filled and set state to enable/disable VenuePopup
-    if (venueId.toString().length != 0){setIsVenueFilled(true);} 
-    else {setIsVenueFilled(false);}
+    if (venueId.toString().length != 0) {
+      setIsVenueFilled(true);
+    } else {
+      setIsVenueFilled(false);
+    }
 
-    if (courseCode.length == 0 || classSize.length == 0 || date.length == 0 
-        || timeslot.length == 0 || teacherId.toString().length == 0 
-        || venueId.toString().length == 0  || !formState.validClassSize){
-          setIsFormComplete(false);
+    if (teacherId.toString().length != 0) {
+      true;
+      setTeacherOneId(teacherId);
+    } else {
+      setTeacherOneId(null);
+    }
+
+    if (
+      courseCode.length == 0 ||
+      classSize.length == 0 ||
+      date.length == 0 ||
+      timeslot.length == 0 ||
+      teacherId.toString().length == 0 ||
+      venueId.toString().length == 0 ||
+      !formState.validClassSize
+    ) {
+      setIsFormComplete(false);
     } else {
       setIsFormComplete(true);
     }
-
   }, [formState]);
 
+  //fetch the available teachers and venues after basic params filled
+  useEffect(() => {
+    if (isBasicParamsFilled) {
+      const fetchAvailableTeachersWithSchedule = async () => {
+        console.log(formState);
+        console.log(formState.formData.date.format("YYY-MM-DD"));
+        const url = new URL(`${BACKEND_URL}/api/teachers/${managerId}/available`);
+        url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
+        url.searchParams.append("timeslotId", formState.formData.timeslot);
+        url.searchParams.append("courseId", formState.formData.courseCode);
+        const res = await axios.get(url.href);
+        setAvailTeacher(res.data);
+      };
+
+      const fetchAvailableVenues = async () => {
+        const url = new URL(`${BACKEND_URL}/api/venues`);
+        url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
+        url.searchParams.append("timeslotId", formState.formData.timeslot);
+        url.searchParams.append("classSize", formState.formData.classSize);
+        const res = await axios.get(url.href);
+        setAvailVenues(res.data);
+      };
+
+      fetchAvailableTeachersWithSchedule();
+      fetchAvailableVenues();
+    }
+  }, [isBasicParamsFilled, formState]);
+
+  //fetch the course name based on department Id
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const res = await axios.get(`${BACKEND_URL}/api/courses/${departmentId}`);
+      setCourses(res.data);
+    };
+    const fetchTimeslots = async () => {
+      const res = await axios.get(`${BACKEND_URL}/api/timeslots`);
+      setTimeslots(res.data);
+    };
+    fetchCourses();
+    fetchTimeslots();
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -169,31 +171,31 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Course Name"
-            defaultValue={formData.courseCode}
+            defaultValue={formState.formData.courseCode}
             onChange={handleChange("courseCode")}
-            error = {formState.formData.courseCode == ''}
+            error={formState.formData.courseCode == ""}
             id="outlined-error"
-            helperText={formState.formData.courseCode == '' ? "Field required":""}
+            helperText={formState.formData.courseCode == "" ? "Field required" : ""}
             required
             fullWidth
           >
             {courses.map((course) => (
-              <MenuItem key={course.courseCode} value={course.courseCode}>
+              <MenuItem key={course.courseCode} value={course.id}>
                 {course.name}
               </MenuItem>
             ))}
           </TextField>
-          
+
           {/* Class Size Input */}
           <TextField
             label="Class Size"
             type="number"
-            slotProps={{htmlInput:{min: 1}}}
-            defaultValue={formData.classSize}
+            slotProps={{ htmlInput: { min: 1 } }}
+            defaultValue={formState.formData.classSize}
             onChange={handleChange("classSize")}
-            error = {!formState.validClassSize|| formState.formData.classSize == ''}
+            error={!formState.validClassSize || formState.formData.classSize == ""}
             id="outlined-error"
-            helperText={formState.validClassSize? "":"Invalid class size."}
+            helperText={formState.validClassSize ? "" : "Invalid class size."}
             required
             fullWidth
             onKeyDown={(e) => {
@@ -203,29 +205,29 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
             }}
           />
         </Stack>
-        
+
         <Stack>
           {/* Section Remarks Input */}
           <TextField
             label="Remarks"
-            placeholder = "E.g. Class Test 1, Group Presentation Day "
-            defaultValue={formData.remarks}
+            placeholder="E.g. Class Test 1, Group Presentation Day "
+            defaultValue={formState.formData.remarks}
             onChange={handleChange("remarks")}
             //limit the no. of input characters to 50
-            slotProps={{htmlInput:{maxLength: 50}}}
+            slotProps={{ htmlInput: { maxLength: 50 } }}
             multiline
             rows={1}
             fullWidth
           />
         </Stack>
-        {/* Date + Time Pickers */}
+        {/* Date + Timeslot Pickers */}
         <Stack direction="row" spacing={2}>
           {/* Date on top */}
           <DatePicker
             label="Section Date"
             inputFormat="DD/MM/YYYY"
-            value={formData.date ? dayjs(formData.date) : null}
-            onChange={handleChange("date")}
+            defaultValue={formState.formData.date ? dayjs(formState.formData.date) : null}
+            onChange={handleDateChange}
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
@@ -233,11 +235,11 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Timeslot"
-            defaultValue={formData.timeslot}
+            defaultValue={formState.formData.timeslot}
             onChange={handleChange("timeslot")}
-            error = {formState.formData.timeslot == ''}
+            error={formState.formData.timeslot == ""}
             id="outlined-error"
-            helperText={formState.formData.timeslot == '' ? "Field required":""}
+            helperText={formState.formData.timeslot == "" ? "Field required" : ""}
             required
             fullWidth
           >
@@ -255,19 +257,18 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Teacher"
-            defaultValue={formData.teacherId ? formData.teacherId : '' }
+            defaultValue={formState.formData.teacherId ? formState.formData.teacherId : ""}
             onChange={handleChange("teacherId")}
-            error = {formState.formData.teacherId == '' && isBasicParamsFilled}
+            error={formState.formData.teacherId == "" && isBasicParamsFilled}
             id="outlined-error"
-            helperText={formState.formData.teacherId == '' ? "Field required":""}
+            helperText={formState.formData.teacherId == "" ? "Field required" : ""}
             disabled={!isBasicParamsFilled}
             required
             fullWidth
-           
           >
-            {teachers.map((teacher) => (
+            {availTeacher.map((teacher) => (
               <MenuItem key={teacher.id} value={teacher.id}>
-                {teacher.name}
+                {teacher.firstName} {teacher.lastName}
               </MenuItem>
             ))}
           </TextField>
@@ -275,27 +276,31 @@ const SectionForm = ({ teachers, venues, formData, setFormData, sectionId, isUpd
           <TextField
             select
             label="Venue"
-            defaultValue={formData.venueId ? formData.venueId : ''}
+            defaultValue={formState.formData.venueId ? formState.formData.venueId : ""}
             onChange={handleChange("venueId")}
-            error = {formState.formData.venueId == '' && isBasicParamsFilled}
+            error={formState.formData.venueId == "" && isBasicParamsFilled}
             id="outlined-error"
-            helperText={formState.formData.venueid == '' ? "Field required":""}
+            helperText={formState.formData.venueid == "" ? "Field required" : ""}
             disabled={!isBasicParamsFilled}
             required
             fullWidth
-            
           >
-            {venues.map((venue) => (
+            {availVenues.map((venue) => (
               <MenuItem key={venue.id} value={venue.id}>
                 {venue.name}
               </MenuItem>
             ))}
           </TextField>
         </Stack>
-        <VenuePopup venues={venues} isVenueFilled = {isVenueFilled} formState = {formState} sx={{ justifyContent: "center"}}  />
+        <VenuePopup
+          venues={availVenues}
+          isVenueFilled={isVenueFilled}
+          formState={formState}
+          sx={{ justifyContent: "center" }}
+        />
         {/* Submit Button */}
         <Stack direction="row" justifyContent="center" mt={2}>
-          <Button type="submit" variant="contained" disabled = {!isFormComplete} sx={{backgroundColor: '#00838f',}}>
+          <Button type="submit" variant="contained" disabled={!isFormComplete} sx={{ backgroundColor: "#00838f" }}>
             {isUpdating ? "Edit" : "Create"} Section
           </Button>
         </Stack>

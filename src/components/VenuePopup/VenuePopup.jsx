@@ -1,26 +1,22 @@
-import {useState} from 'react';
+import { useState } from "react";
 import { Grid, Button } from "@mui/material";
-import Popover from '@mui/material/Popover';
-import './VenuePopup.css'
+import Popover from "@mui/material/Popover";
+import "./VenuePopup.css";
 
-const VenuePopup= ({venues, isVenueFilled, formState})=> {
-
+const VenuePopup = ({ venues, isVenueFilled, formState }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedVenue, setSelectedVenue] = useState(
-    {
-      name:"",
-      occupancy:"",
-      description:""
-    }
-  );
+  const [selectedVenue, setSelectedVenue] = useState({
+    name: "",
+    occupancy: "",
+    description: "",
+  });
 
-  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-     if (venues.find(venue => venue.id == formState.formData.venueId)){
-      setSelectedVenue(venues.find(venue => venue.id == formState.formData.venueId));
+    if (venues.find((venue) => venue.id == formState.formData.venueId)) {
+      setSelectedVenue(venues.find((venue) => venue.id == formState.formData.venueId));
 
-    // selectedVenue = venues.find(venue => venue.id == formState.formData.venueId);
+      // selectedVenue = venues.find(venue => venue.id == formState.formData.venueId);
     }
   };
 
@@ -29,8 +25,8 @@ const VenuePopup= ({venues, isVenueFilled, formState})=> {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-  
+  const id = open ? "simple-popover" : undefined;
+
   // let selectedVenue;
   // if (venues.find(venue => venue.id == formData.venueId)){
   //   selectedVenue = venues.find(venue => venue.id == formData.venueId);
@@ -41,12 +37,18 @@ const VenuePopup= ({venues, isVenueFilled, formState})=> {
   //     description:""
   //   }
   // }
-  
+
   return (
-    <Grid className='test'container>
-      <Grid size = {4.8}></Grid>
-      <Grid size = {4}>
-          <Button disabled = {!isVenueFilled} aria-describedby={id} sx={{color: '#00838f',}} variant="text" onClick={handleClick}>
+    <Grid className="test" container>
+      <Grid size={4.8}></Grid>
+      <Grid size={4}>
+        <Button
+          disabled={!isVenueFilled}
+          aria-describedby={id}
+          sx={{ color: "#00838f" }}
+          variant="text"
+          onClick={handleClick}
+        >
           <u>Venue Information</u>
         </Button>
         <Popover
@@ -55,37 +57,36 @@ const VenuePopup= ({venues, isVenueFilled, formState})=> {
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: "bottom",
+            horizontal: "left",
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left'
+            vertical: "top",
+            horizontal: "left",
           }}
           sx={{
-            '& .MuiPaper-root': {
-              width: '40%',
-              alignItems: 'center',
-            } 
+            "& .MuiPaper-root": {
+              width: "40%",
+              alignItems: "center",
+            },
           }}
         >
-          <div className='venueWindow'>
-              <p className='venueDetails'>
-                <span>
-                  Name: {selectedVenue.name}<br/>
-                  Occupancy: {selectedVenue.occupancy}<br/>
-                  Description: {selectedVenue.description}
-                </span>
-                
-              </p>
-        
-              <img className= 'venueImg' src= {selectedVenue.src}/>
+          <div className="venueWindow">
+            <p className="venueDetails">
+              <span>
+                Name: {selectedVenue.name}
+                <br />
+                Occupancy: {selectedVenue.occupancy}
+                <br />
+                Description: {selectedVenue.description}
+              </span>
+            </p>
+
+            <img className="venueImg" src={selectedVenue.imgUrl} />
           </div>
         </Popover>
       </Grid>
-      
     </Grid>
-    
   );
-}
+};
 export default VenuePopup;
