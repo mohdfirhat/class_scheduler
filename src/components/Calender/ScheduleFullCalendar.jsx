@@ -31,7 +31,7 @@ export default function ScheduleFullCalendar({
     title: section.course.courseCode,
     start: `${section.date}T${section.timeslot.startTime}`,
     end: `${section.date}T${section.timeslot.endTime}`,
-    color: teacher.id === selectedTeacherId ? "blue" : "darkorange",
+    color: teacher.id == selectedTeacherId ? "blue" : "darkorange",
     extendedProps: {
       type: "section",
       teacher: `${teacher.firstName} ${teacher.lastName}`,
@@ -44,7 +44,7 @@ export default function ScheduleFullCalendar({
     title: `${teacher.firstName} ${teacher.lastName} Leave`,
     start: formatStartDate(leave.startDate),
     end: formatEndDate(leave.endDate),
-    color: teacher.id === selectedTeacherId ? "lightblue" : "sandybrown",
+    color: teacher.id == selectedTeacherId ? "lightblue" : "sandybrown",
     borderColor: teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",
     extendedProps: {
