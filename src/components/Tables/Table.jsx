@@ -19,6 +19,7 @@ const Table = (props)=>{
                 rows={props.rows} 
                 columns={props.columns}
                 slots={props.slots}
+                getRowId={props.getRowId}
                 getRowHeight={() => 'auto'}
                 rowSpanning = {props.rowSpanning}
                 showToolbar

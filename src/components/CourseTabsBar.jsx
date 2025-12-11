@@ -76,7 +76,7 @@ const CourseTabsBar = () => {
         </ThemeProvider>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <CourseTable handleEditClick={handleEditClick}/>
+        <CourseTable />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <SectionTable handleEditClick={handleEditClick}/>

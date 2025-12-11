@@ -1,19 +1,19 @@
 import { GridColumnMenu } from '@mui/x-data-grid';
-import { CheckCircle, Cancel, Pending } from '@mui/icons-material';
+import { CheckCircle, Cancel, Pending, Error } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Avatar from '@mui/material/Avatar';
 
 //function used to display status icons
 export const RenderStatus = (props) => {
-    if (props.value == 'confirmed'){
+    if (props.value == 'approved'){
         return (
             <CheckCircle
                 sx={{ color: 'success.main' }}
                 fontSize="large"
             />
         )
-    } else if (props.value =='cancelled'){
+    } else if (props.value =='rejected'){
         return (
             <Cancel
                 sx={{ color: 'error.main' }}
@@ -27,7 +27,14 @@ export const RenderStatus = (props) => {
                 fontSize="large"
             />
         )
-    }   
+    } else if (props.value =='conflict'){
+        return (
+            <Error
+                sx={{ color: 'error.main' }}
+                fontSize="large"
+            />
+        )
+    }     
 }
 
 //function used to display buttons depending on status
@@ -59,15 +66,15 @@ export const RenderButton = (props) => {
     //Switch case for mapping handlers to button onClicks depending on status
     let btnProps;
     switch (props.value) {
-        case 'confirmed': 
-            btnProps = props.colDef.confirmedBtnProps;
+        case 'approved': 
+            btnProps = props.colDef.approvedBtnProps;
             btnProps.find(btn => btn.name == 'Edit Section') ? btnProps.find(btn => btn.name == 'Edit Section').onclick = handleEditClick : null;
             btnProps.find(btn => btn.name == 'Cancel Section') ? btnProps.find(btn => btn.name == 'Cancel Section').onclick = handleCancelClick : null;
             btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleViewScheduleClick : null; 
             break;
         
-        case 'cancelled':
-            btnProps = props.colDef.cancelledBtnProps;
+        case 'rejected':
+            btnProps = props.colDef.rejectedBtnProps;
             btnProps.find(btn => btn.name == 'View Schedule') ? btnProps.find(btn => btn.name == 'View Schedule').onclick = handleViewScheduleClick : null; 
             break;    
 

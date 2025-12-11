@@ -65,7 +65,6 @@ const CourseTable = (props) => {
   useEffect(() => {
     const fetchCourses = async () => {
       const res = await axios.get(`${BACKEND_URL}/api/courses/${departmentId}`);
-      console.log(res.data);
       setCourses(res.data);
     };
     fetchCourses();
