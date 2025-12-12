@@ -10,7 +10,8 @@ export default function ScheduleFullCalendar({
   sections,
   teacher,
   selectedTeacherId,
-  initialView,
+  initialView = "timeGridWeek",
+  tentitiveSection = undefined,
   initialDate = undefined,
   ref = undefined,
   setFormData = undefined,
@@ -40,6 +41,19 @@ export default function ScheduleFullCalendar({
       data: section,
     },
   });
+  const createTentitiveSectionEvent = (section, teacher) => ({
+    title: section.course.courseCode,
+    start: `${section.date.format("YYYY-MM-DD")}T${section.timeslot.startTime}`,
+    end: `${section.date.format("YYYY-MM-DD")}T${section.timeslot.endTime}`,
+    color: "darkblue",
+    extendedProps: {
+      type: "section",
+      teacher: `${teacher.firstName} ${teacher.lastName}`,
+      venueName: section.venue.name | "",
+      venueDesc: section.venue.description | "",
+      data: section,
+    },
+  });
   const createLeaveEvent = (leave, teacher) => ({
     title: `${teacher.firstName} ${teacher.lastName} Leave`,
     start: formatStartDate(leave.startDate),
@@ -52,11 +66,20 @@ export default function ScheduleFullCalendar({
       data: leave,
     },
   });
+
   const sectionEvents = sections ? sections.map((section) => createSectionEvent(section, teacher)) : [];
   const leaveEvents = leaves ? leaves.map((leave) => createLeaveEvent(leave, teacher)) : [];
   const events = [...sectionEvents, ...leaveEvents];
-  console.log("events");
-  console.log(events);
+  // if there is tentitveSection with date and time, add to events
+  if (tentitiveSection && teacher && tentitiveSection.date && tentitiveSection.timeslot.id) {
+    const createdTentitiveEvent = createTentitiveSectionEvent(tentitiveSection, teacher);
+
+    console.log("Tentitive Section");
+    console.log(tentitiveSection);
+    console.log("Creating tentitive event");
+    console.log(createdTentitiveEvent);
+    events.push(createdTentitiveEvent);
+  }
 
   return (
     // <div style={{ width: "100vw", height: "100vh-6rem" }}>
@@ -81,7 +104,6 @@ export default function ScheduleFullCalendar({
       eventOverlap={true}
       weekends={false}
       eventDidMount={(info) => {
-        // console.log(info.event);
         tippy(info.el, {
           content:
             info.event.extendedProps.type === "section"

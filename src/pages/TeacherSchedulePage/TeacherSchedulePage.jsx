@@ -36,7 +36,7 @@ const TeacherSchedulePage = () => {
             teacher={teacher}
             leaves={leaves}
             sections={sections}
-            initialView="timeGridDay"
+            initialView="timeGridWeek"
             initialDate={Date.now()}
             ref={calRef}
           />

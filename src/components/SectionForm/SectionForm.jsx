@@ -17,6 +17,7 @@ const SectionForm = ({
   availVenues,
   setAvailVenues,
   setTeacherOneId,
+  setTentitiveSection,
 }) => {
   const [isBasicParamsFilled, setIsBasicParamsFilled] = useState(false);
   const [isVenueFilled, setIsVenueFilled] = useState(false);
@@ -30,11 +31,24 @@ const SectionForm = ({
   const handleChange = (field) => (event) => {
     // setFormData({ ...formData, [field]: event.target.value });
     dispatchFormData({ type: field, value: event.target.value });
+    if (field == "courseCode") {
+      setTentitiveSection((prevState) => ({
+        ...prevState,
+        course: courses.find((course) => course.id == event.target.value),
+      }));
+    }
+    if (field == "timeslot") {
+      setTentitiveSection((prevState) => ({
+        ...prevState,
+        timeslot: timeslots.find((timeslot) => timeslot.id == event.target.value),
+      }));
+    }
   };
 
   const handleDateChange = (newDate) => {
     if (!newDate) return;
     dispatchFormData({ type: "date", value: newDate });
+    setTentitiveSection((prevState) => ({ ...prevState, date: newDate }));
     // setFormData({
     //   ...formData,
     //   date: newDate.toISOString(), // store as ISO
@@ -105,8 +119,6 @@ const SectionForm = ({
   useEffect(() => {
     if (isBasicParamsFilled) {
       const fetchAvailableTeachersWithSchedule = async () => {
-        console.log(formState);
-        console.log(formState.formData.date.format("YYY-MM-DD"));
         const url = new URL(`${BACKEND_URL}/api/teachers/${managerId}/available`);
         url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
         url.searchParams.append("timeslotId", formState.formData.timeslot);
@@ -211,7 +223,8 @@ const SectionForm = ({
           <TextField
             label="Remarks"
             placeholder="E.g. Class Test 1, Group Presentation Day "
-            defaultValue={formState.formData.remarks}
+            // defaultValue={formState.formData.remarks}
+            value={formState.formData.remarks}
             onChange={handleChange("remarks")}
             //limit the no. of input characters to 50
             slotProps={{ htmlInput: { maxLength: 50 } }}
@@ -226,7 +239,8 @@ const SectionForm = ({
           <DatePicker
             label="Section Date"
             inputFormat="DD/MM/YYYY"
-            defaultValue={formState.formData.date ? dayjs(formState.formData.date) : null}
+            // defaultValue={formState.formData.date ? dayjs(formState.formData.date) : null}
+            value={formState.formData.date ? dayjs(formState.formData.date) : null}
             onChange={handleDateChange}
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />
@@ -235,7 +249,8 @@ const SectionForm = ({
           <TextField
             select
             label="Timeslot"
-            defaultValue={formState.formData.timeslot}
+            // defaultValue={formState.formData.timeslot}
+            value={formState.formData.timeslot}
             onChange={handleChange("timeslot")}
             error={formState.formData.timeslot == ""}
             id="outlined-error"
@@ -257,7 +272,8 @@ const SectionForm = ({
           <TextField
             select
             label="Teacher"
-            defaultValue={formState.formData.teacherId ? formState.formData.teacherId : ""}
+            // defaultValue={formState.formData.teacherId ? formState.formData.teacherId : ""}
+            value={formState.formData.teacherId ? formState.formData.teacherId : ""}
             onChange={handleChange("teacherId")}
             error={formState.formData.teacherId == "" && isBasicParamsFilled}
             id="outlined-error"
@@ -276,7 +292,8 @@ const SectionForm = ({
           <TextField
             select
             label="Venue"
-            defaultValue={formState.formData.venueId ? formState.formData.venueId : ""}
+            // defaultValue={formState.formData.venueId ? formState.formData.venueId : ""}
+            value={formState.formData.venueId ? formState.formData.venueId : ""}
             onChange={handleChange("venueId")}
             error={formState.formData.venueId == "" && isBasicParamsFilled}
             id="outlined-error"

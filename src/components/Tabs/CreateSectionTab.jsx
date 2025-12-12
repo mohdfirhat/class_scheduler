@@ -16,10 +16,22 @@ const defaultSection = {
   teacherId: "",
   venueId: "",
 };
+const defaultTentitiveSection = {
+  course: {
+    courseCode: "",
+  },
+  date: dayjs(),
+  timeslot: {
+    startTime: "",
+    endTime: "",
+  },
+  venue: {
+    name: "",
+    description: "",
+  },
+};
 
-const CreateSectionTab = ({ isUpdating }) => {
-  const initState = { formData: defaultSection, validClassSize: true };
-
+const CreateSectionTab = ({ sectionId, isUpdating }) => {
   const formReducerFunc = (prevState, action) => {
     switch (action.type) {
       case "date":
@@ -52,7 +64,11 @@ const CreateSectionTab = ({ isUpdating }) => {
             validClassSize: true,
           };
         }
-
+      case "setData":
+        return {
+          ...prevState,
+          formData: action.value,
+        };
       default:
         return {
           ...prevState,
@@ -63,27 +79,49 @@ const CreateSectionTab = ({ isUpdating }) => {
         };
     }
   };
+  const initState = { formData: defaultSection, validClassSize: true };
   const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
 
   const calendarOneRef = useRef(null);
-  const calendarTwoRef = useRef(null);
   const [availTeacher, setAvailTeacher] = useState([]);
   const [availVenues, setAvailVenues] = useState([]);
   const [teacherOneId, setTeacherOneId] = useState(null);
   const [teacherOneLeaves, setTeacherOneLeaves] = useState([]);
   const [teacherOneSections, setTeacherOneSections] = useState([]);
   const [teacherOne, setTeacherOne] = useState({});
+  const [tentitiveSection, setTentitiveSection] = useState(defaultTentitiveSection);
+
+  // console.log("sectionId");
+  // console.log(sectionId);
+  // console.log(formState);
+
+  // // Fetch section if sectionId exist
+  // useEffect(() => {
+  //   if (sectionId) {
+  //     const fetchSection = async () => {
+  //       const res = await axios.get(`${BACKEND_URL}/api/sections/${sectionId}`);
+  //       console.log(res.data);
+  //       const newFormData = {
+  //         courseCode: res.data.course.id,
+  //         remarks: res.data.description | "",
+  //         classSize: res.data.classSize,
+  //         date: dayjs(res.data.date),
+  //         timeslot: res.data.timeslot.id,
+  //         teacherId: res.data.teacher.id,
+  //         venueId: res.data.venue.id,
+  //       };
+  //       console.log(newFormData);
+  //       dispatchFormData({ type: "setData", value: newFormData });
+  //     };
+  //     fetchSection();
+  //   }
+  // }, [sectionId]);
 
   useEffect(() => {
     const calendarOneApi = calendarOneRef.current?.getApi();
-    const calendarTwoApi = calendarTwoRef.current?.getApi();
     if (calendarOneApi) {
       const date = formState.formData.date ? new Date(formState.formData.date) : new Date();
       calendarOneApi.gotoDate(date);
-    }
-    if (calendarTwoApi) {
-      const date = formState.formData.date ? new Date(formState.formData.date) : new Date();
-      calendarTwoApi.gotoDate(date);
     }
   }, [formState.formData.date]);
 
@@ -114,6 +152,7 @@ const CreateSectionTab = ({ isUpdating }) => {
         availVenues={availVenues}
         setAvailVenues={setAvailVenues}
         setTeacherOneId={setTeacherOneId}
+        setTentitiveSection={setTentitiveSection}
       />
       <div className={styles.calendarContainer}>
         <ScheduleFullCalendar
@@ -121,7 +160,8 @@ const CreateSectionTab = ({ isUpdating }) => {
           teacher={teacherOne}
           leaves={teacherOneLeaves}
           sections={teacherOneSections}
-          initialView="timeGridDay"
+          tentitiveSection={tentitiveSection}
+          initialView="timeGridWeek"
           initialDate={Date.now()}
           ref={calendarOneRef}
         />
