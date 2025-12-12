@@ -54,6 +54,14 @@ import { BACKEND_URL } from "../../api/api";
 
 const columns = [
   {
+    field: "id",
+    headerName: "ID",
+    headerClassName: "table-header",
+    minWidth: 50,
+    flex: 0.5,
+    fontWeight: "bold",
+  },
+  {
     field: "courseCode",
     headerName: "Code",
     headerClassName: "table-header",
@@ -148,9 +156,9 @@ const columns = [
 //Main table component
 const SectionTable = (props) => {
   const [sections, setSections] = useState([]);
-
+  
   useEffect(() => {
-          const fetchSections = async () => {
+    const fetchSections = async () => {
             const res = await axios.get(`${BACKEND_URL}/api/sections/all`);
             const processedArr = [];
 

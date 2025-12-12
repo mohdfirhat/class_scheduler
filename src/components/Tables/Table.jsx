@@ -18,6 +18,8 @@ const Table = (props)=>{
             <DataGrid 
                 rows={props.rows} 
                 columns={props.columns}
+                columnVisibilityModel={props.columnVisibilityModel}
+                initialState={props.initialState}
                 slots={props.slots}
                 getRowId={props.getRowId}
                 getRowHeight={() => 'auto'}

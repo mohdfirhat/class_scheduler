@@ -1,4 +1,5 @@
 import NavBar from "../../components/NavBar/NavBar";
+// import { scheduleLeaves, scheduleSections, teacherSchedule } from "../../fakedata/data";
 import styles from "./TeacherSchedulePage.module.css";
 import { useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";

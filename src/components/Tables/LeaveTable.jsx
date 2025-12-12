@@ -1,10 +1,10 @@
-import axios from "axios";
+
 import dayjs from "dayjs";
-import { RenderAvatar, RenderStatus, RenderButton, SetColumnMenu, rowSpanValueFunc } from '../../utils/TableFuncs';
+import { RenderAvatar, RenderStatus, RenderButton, SetColumnMenu, rowSpanValueFunc, fetchPendingLeaves, fetchNonPendingLeaves, fetchAllLeaves } from '../../utils/TableFuncs';
 import Table from './Table'
 import {Fragment} from 'react';
 import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../../api/api";
+
 
 //dummy data
 // const rows = [
@@ -15,7 +15,7 @@ import { BACKEND_URL } from "../../api/api";
 // ]
 const columns = [
     { field: 'avatar', 
-        headerName: 'Avatar', 
+        headerName: '', 
         headerClassName:'table-header', 
         minWidth: 100, 
         flex: 1, 
@@ -60,7 +60,7 @@ const columns = [
         renderCell: RenderStatus
     },
     { field: 'affectedSection', 
-        headerName: 'Affected Section', 
+        headerName: 'Affected Section (s)', 
         headerClassName:'table-header', 
         minWidth: 300, 
         flex: 3 
@@ -92,56 +92,48 @@ const columns = [
 ];
 
 //Main table component
-const LeaveTable = ()=>{
-      const [pendingLeaves, setPendingLeaves] = useState([]);
-    
+const LeaveTable = (props)=>{
+      const [leaves, setLeaves] = useState([]);
+      const [showAffectedSections, setShowAffectedSections] = useState(true);
       useEffect(() => {
-              const fetchPendingLeaves = async () => {           
-                const conflictingLeaves = await axios.get(`${BACKEND_URL}/api/leaves/pending/conflicting`);
-                const nonConflictingLeaves = await axios.get(`${BACKEND_URL}/api/leaves/pending/non_conflicting`);
-                const processedArr = [];
-                console.log(conflictingLeaves.data);
-                conflictingLeaves.data.forEach((conflictingLeave) => {
-                    const entry = new Object();
-                    entry.avatar = conflictingLeave.teacher.avatar;
-                    entry.id = conflictingLeave.id;
-                    entry.name = conflictingLeave.teacher.firstName + ' ' + conflictingLeave.teacher.lastName;
-                    entry.startDate = conflictingLeave.startDate;
-                    entry.endDate = conflictingLeave.endDate;
-                    entry.status = 'conflict';
-                    entry.affectedSection = null;
-                    entry.button = 'conflict';
+        switch(props.table){
+            case 'pending':
+                fetchPendingLeaves().then((dataArray)=>{
+                setLeaves(dataArray);
+            });
+            break;
 
-                    processedArr.push(entry);
-                });
-                
-                nonConflictingLeaves.data.forEach((nonConflictingLeave) => {
-                    const entry = new Object();
-                    entry.avatar = nonConflictingLeave.teacher.avatar;
-                    entry.id = nonConflictingLeave.id;
-                    entry.name = nonConflictingLeave.teacher.firstName + ' ' + nonConflictingLeave.teacher.lastName;
-                    entry.startDate = nonConflictingLeave.startDate;
-                    entry.endDate = nonConflictingLeave.endDate;
-                    entry.status = nonConflictingLeave.status.type;
-                    entry.affectedSection = 'NA';
-                    entry.button = 'pending';
+            case 'nonPending':
+                fetchNonPendingLeaves().then((dataArray)=>{
+                setLeaves(dataArray);
+                setShowAffectedSections(false);
+            });
+            break;
 
-                    processedArr.push(entry);
-                });
+            case 'all':
+                fetchAllLeaves().then((dataArray)=>{
+                setLeaves(dataArray);
+            });
+            break;
+        }
+      }, []);
 
-                console.log(processedArr);
-                setPendingLeaves(processedArr);
-            
-
-              };
-              fetchPendingLeaves();
-            }, []);
+      
 
     return (
         <Fragment>
+            <h1 className="page-title">Leave Overview</h1>
             <Table
-                rows = {pendingLeaves}
+                rows = {leaves}
                 columns = {columns}
+                columnVisibilityModel = {{
+                    affectedSection: showAffectedSections
+                }}
+                initialState={{
+                    sorting: {
+                        sortModel: [{ field: 'startDate', sort: 'asc' }],
+                    },
+                }}
                 rowSpacingVals = {[0,30]}
                 slots={{ columnMenu: SetColumnMenu }}
             />

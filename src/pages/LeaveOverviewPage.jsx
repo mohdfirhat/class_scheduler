@@ -1,4 +1,5 @@
 import LeaveTable from "../components/Tables/LeaveTable";
+import LeaveTabsBar from "../components/LeaveTabsBar";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer";
 import Box from '@mui/material/Box';
@@ -8,9 +9,8 @@ const LeaveOverviewPage = ()=>{
     return (
     <Box sx={{display: 'flex',flexDirection: 'column',minHeight: '100vh'}}>
       <NavBar />
-      <h1 className="page-title">Leave Overview</h1>
+      <LeaveTabsBar />
       <Box sx= {{flexGrow: 1}}>
-        <LeaveTable />
       </Box>
       <Footer/>
     </Box>

@@ -19,7 +19,7 @@ import { BACKEND_URL } from "../../api/api";
 
 const columns = [
     { field: 'avatar', 
-        headerName: 'Avatar', 
+        headerName: '', 
         headerClassName:'table-header', 
         minWidth: 100, 
         flex: 1, 

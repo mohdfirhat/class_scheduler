@@ -1,8 +1,11 @@
+import axios from "axios";
+import { BACKEND_URL } from "../api/api";
 import { GridColumnMenu } from '@mui/x-data-grid';
 import { CheckCircle, Cancel, Pending, Error } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Avatar from '@mui/material/Avatar';
+import { data } from "react-router";
 
 //function used to display status icons
 export const RenderStatus = (props) => {
@@ -16,7 +19,7 @@ export const RenderStatus = (props) => {
     } else if (props.value =='rejected'){
         return (
             <Cancel
-                sx={{ color: 'error.main' }}
+                sx={{ color: '"disabled"' }}
                 fontSize="large"
             />
         )
@@ -195,3 +198,94 @@ const stringToColor = (string) => {
 }
 ////////////////////////////////////
 
+////////////// Leave Table Functions///////////////
+
+// Pending Leaves tab
+// function for fetching all leaves with pending status, and sorting them into conflicting and non-conflicting leaves
+export const fetchPendingLeaves = async () => {           
+    const conflictingLeaves = await axios.get(`${BACKEND_URL}/api/leaves/pending/conflicting`);
+    const nonConflictingLeaves = await axios.get(`${BACKEND_URL}/api/leaves/pending/non_conflicting`);
+    const processedArr = [];
+    
+    conflictingLeaves.data.forEach((conflictingLeave) => {
+        const entry = new Object();
+        entry.avatar = conflictingLeave.teacher.avatar;
+        entry.id = conflictingLeave.id;
+        entry.firstName = conflictingLeave.teacher.firstName;
+        entry.lastName = conflictingLeave.teacher.lastName;
+        entry.name = conflictingLeave.teacher.firstName + ' ' + conflictingLeave.teacher.lastName;
+        entry.startDate = conflictingLeave.startDate;
+        entry.endDate = conflictingLeave.endDate;
+        entry.status = 'conflict';
+        entry.affectedSection = printAffectedSections(conflictingLeave.conflictingSections);
+        entry.button = 'conflict';
+
+        processedArr.push(entry);
+    });
+
+    nonConflictingLeaves.data.forEach((nonConflictingLeave) => {
+        const entry = new Object();
+        entry.avatar = nonConflictingLeave.teacher.avatar;
+        entry.id = nonConflictingLeave.id;
+        entry.firstName = nonConflictingLeave.teacher.firstName;
+        entry.lastName = nonConflictingLeave.teacher.lastName;
+        entry.name = nonConflictingLeave.teacher.firstName + ' ' + nonConflictingLeave.teacher.lastName;
+        entry.startDate = nonConflictingLeave.startDate;
+        entry.endDate = nonConflictingLeave.endDate;
+        entry.status = nonConflictingLeave.status.type;
+        entry.affectedSection = 'NA';
+        entry.button = 'pending';
+
+        processedArr.push(entry);
+    });
+    // console.log(processedArr);
+    return processedArr;
+}
+
+// Non Pending Leaves tab
+// function for fetching all non leaves with approved and rejected status
+export const fetchNonPendingLeaves = async () => {           
+    const nonPendingLeaves = await axios.get(`${BACKEND_URL}/api/leaves/non_pending`);
+
+    const processedArr = [];
+    nonPendingLeaves.data.forEach((leave) => {
+        const entry = new Object();
+        entry.avatar = leave.teacher.avatar;
+        entry.id = leave.id;
+        entry.firstName = leave.teacher.firstName;
+        entry.lastName = leave.teacher.lastName;
+        entry.name = leave.teacher.firstName + ' ' + leave.teacher.lastName;
+        entry.startDate = leave.startDate;
+        entry.endDate = leave.endDate;
+        entry.status = leave.status.type;
+        entry.affectedSection = 'NA';
+        entry.button = leave.status.type;
+
+        processedArr.push(entry);
+    });
+    
+    return processedArr;
+}
+
+
+// All Leaves tab
+// function for fetching all leaves, combining both pending and non pending leaves
+export const fetchAllLeaves = async () => {
+    const pendingLeavesArr = await fetchPendingLeaves();
+    const nonPendingLeavesArr = await fetchNonPendingLeaves();
+
+    const combinedArr = [...pendingLeavesArr, ...nonPendingLeavesArr];
+    return combinedArr;
+}
+
+const printAffectedSections = (sectionArr) => {
+    let str = '';
+    for (let i = 0; i < sectionArr.length; i++){
+        str += '[' + sectionArr[i].id + '] ';
+        str += sectionArr[i].course.courseCode;
+        if (i != sectionArr.length-1){
+            str+=', ';
+        }
+    }
+    return str;
+}
