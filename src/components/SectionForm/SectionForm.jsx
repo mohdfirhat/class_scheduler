@@ -6,6 +6,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import VenuePopup from "../VenuePopup/VenuePopup";
 import axios from "axios";
 import { BACKEND_URL } from "../../api/api";
+import toast from "react-hot-toast";
 
 const SectionForm = ({
   formState,
@@ -29,12 +30,17 @@ const SectionForm = ({
   const managerId = 1;
 
   const handleChange = (field) => (event) => {
-    // setFormData({ ...formData, [field]: event.target.value });
     dispatchFormData({ type: field, value: event.target.value });
     if (field == "courseCode") {
       setTentitiveSection((prevState) => ({
         ...prevState,
         course: courses.find((course) => course.id == event.target.value),
+      }));
+    }
+    if (field == "venueId") {
+      setTentitiveSection((prevState) => ({
+        ...prevState,
+        venue: availVenues.find((venue) => venue.id == event.target.value),
       }));
     }
     if (field == "timeslot") {
@@ -49,22 +55,34 @@ const SectionForm = ({
     if (!newDate) return;
     dispatchFormData({ type: "date", value: newDate });
     setTentitiveSection((prevState) => ({ ...prevState, date: newDate }));
-    // setFormData({
-    //   ...formData,
-    //   date: newDate.toISOString(), // store as ISO
-    // });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    // prevent refresh of page
     event.preventDefault();
 
     const { formData } = formState;
-    //removing unneeded fields to prepare to send back to DB
-    const { button, name, teacher, venue, ...cleanedFormData } = formData;
-    if (sectionId) {
-      //TODO: update to section
-    } else {
-      // create section
+
+    // creating section Object for POST
+    const sectionObject = {
+      remark: formData.remarks,
+      date: formData.date.format("YYYY-MM-DD"),
+      classSize: formData.classSize,
+      timeslotId: formData.timeslot,
+      venueId: formData.venueId,
+      courseId: formData.courseCode,
+      teacherId: formData.teacherId,
+    };
+
+    // creating section Object
+    const toastId = toast.loading("Creating Section...");
+    try {
+      await axios.post(`${BACKEND_URL}/api/sections`, sectionObject);
+      toast.dismiss(toastId);
+      toast.success("Successfully Created Section");
+    } catch (e) {
+      toast.dismiss(toastId);
+      toast.error(e.response.data);
     }
   };
 
@@ -144,12 +162,20 @@ const SectionForm = ({
   //fetch the course name based on department Id
   useEffect(() => {
     const fetchCourses = async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/courses/${departmentId}`);
-      setCourses(res.data);
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/courses/${departmentId}`);
+        setCourses(res.data);
+      } catch (e) {
+        toast.error(e.response.data);
+      }
     };
     const fetchTimeslots = async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/timeslots`);
-      setTimeslots(res.data);
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/timeslots`);
+        setTimeslots(res.data);
+      } catch (e) {
+        toast.error(e.response.data);
+      }
     };
     fetchCourses();
     fetchTimeslots();
