@@ -149,7 +149,8 @@ const columns = [
       { name: "Cancel Section", href: null, onclick },
     ],
     handleEditClick: "",
-    handleCancelClick: "",
+    handleCancelClick: "test",
+    testprop: 'test'
   },
 ];
 

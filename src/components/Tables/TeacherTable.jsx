@@ -1,8 +1,9 @@
 import axios from "axios";
 import { RenderButton, SetColumnMenu, RenderAvatar, rowSpanValueFunc } from '../../utils/TableFuncs';
 import Table from './Table'
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";;
 import { BACKEND_URL } from "../../api/api";
+import { useNavigate } from "react-router";
 
 
 //See valueFormatter() for converting date/time without changing values
@@ -82,12 +83,20 @@ const columns = [
         rowSpanValueGetter: rowSpanValueFunc,
         teacherBtnProps: [
             {name: 'View Schedule', href: null}
-        ]
+        ],
     }      
 ];
 
 //Main table component
 const TeacherTable = ()=>{
+
+    //handler(s) for table buttons with useNavigate hook, 
+    //defined here to be passed down to DataGrid via props 
+    const navigate = useNavigate();
+    const handleTeacherScheduleClick = (rowData) => {
+        navigate(`/schedules/${rowData.id}`);
+    };
+
     // useEffect for retrieving all teacher records from back end
     // manager ID set to 1 for now as user login is not implemented
     //   const { managerId } = useParams();
@@ -126,6 +135,7 @@ const TeacherTable = ()=>{
                 rowSpacingVals = {[0,30]}
                 slots={{ columnMenu: SetColumnMenu}}
                 rowSpanning = {true}
+                handleTeacherScheduleClick = {handleTeacherScheduleClick}
             />
         </div>
     )

@@ -1,10 +1,11 @@
-
 import dayjs from "dayjs";
-import { RenderAvatar, RenderStatus, RenderButton, SetColumnMenu, rowSpanValueFunc, fetchPendingLeaves, fetchNonPendingLeaves, fetchAllLeaves } from '../../utils/TableFuncs';
+import axios from "axios";
+import { RenderAvatar, RenderStatus, RenderButton, SetColumnMenu, rowSpanValueFunc, fetchPendingLeaves, fetchNonPendingLeaves, fetchAllLeaves} from '../../utils/TableFuncs';
 import Table from './Table'
-import {Fragment} from 'react';
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, Fragment } from "react";
+import { useNavigate } from "react-router";
+import { BACKEND_URL } from "../../api/api";
+import toast from "react-hot-toast";
 
 //dummy data
 // const rows = [
@@ -14,6 +15,14 @@ import { useEffect, useState } from "react";
 //     { id: 4, name: 'Jim', startDate: '5 Oct 2025', endDate:'8 Oct 2025', duration: '3', affectedSection: 'NA', status:'rejected', button: 'rejected' }    
 // ]
 const columns = [
+    {
+    field: "id",
+    headerName: "Leave ID",
+    headerClassName: "table-header",
+    minWidth: 100,
+    flex: 1,
+    fontWeight: "bold",
+    },
     { field: 'avatar', 
         headerName: '', 
         headerClassName:'table-header', 
@@ -28,7 +37,7 @@ const columns = [
         headerName: 'Name', 
         headerClassName:'table-header', 
         minWidth: 100, 
-        flex: 3 
+        flex: 2 
     },
     { field: 'startDate', 
         headerName: 'Start Date', 
@@ -45,10 +54,10 @@ const columns = [
     { field: 'duration', 
         headerName: 'Duration (days)', 
         headerClassName:'table-header', 
-        minWidth: 100, 
-        flex: 1,
+        minWidth: 150, 
+        flex: 1.5,
         valueGetter: (value, row) => {
-            return `${dayjs(row.endDate).diff(dayjs(row.startDate), 'day')}`;
+            return `${dayjs(row.endDate).diff(dayjs(row.startDate).subtract(1, 'day'), 'day')}`;
         },
     },
     { field: 'status', 
@@ -93,42 +102,82 @@ const columns = [
 
 //Main table component
 const LeaveTable = (props)=>{
-      const [leaves, setLeaves] = useState([]);
-      const [showAffectedSections, setShowAffectedSections] = useState(true);
-      useEffect(() => {
-        switch(props.table){
-            case 'pending':
-                fetchPendingLeaves().then((dataArray)=>{
-                setLeaves(dataArray);
-            });
-            break;
+    const [leaves, setLeaves] = useState([]);
+    const [showAffectedSections, setShowAffectedSections] = useState(true);
+   
+    //handler(s) for table buttons with useNavigate hook, 
+    //defined here to be passed down to DataGrid via props
+    const navigate = useNavigate();
+    const handleViewScheduleClick = (rowData) => {
+        navigate(`/schedules/${rowData.teacherId}`);
+    };
 
-            case 'nonPending':
-                fetchNonPendingLeaves().then((dataArray)=>{
+    const handleTeacherScheduleClick = (rowData) => {
+        navigate(`/schedules/${rowData.teacherId}`);
+    };
+    const handleViewConflict = (rowData) => {
+        navigate(`/conflicts/${rowData.id}`);
+    };
+    const handleApproveClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
+            toast.success(res.data.message);
+
+        } catch (error){
+            toast.error(error.response.data);
+        }
+    };
+    const handleRejectClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/leaves/reject/${rowData.id}`);
+            toast.success(res.data.message);
+
+        } catch (error){
+            toast.error(error.response.data);
+        }
+        
+    };
+    
+    //useEffect to fetch data and generate table depending on the Leave tab selected
+    useEffect(() => {
+    switch(props.table){
+        case 'pending':
+            fetchPendingLeaves()
+            .then((dataArray)=>{
+                setLeaves(dataArray);
+            })
+            .catch((error) => console.error('Error:', error.message));
+        break;
+
+        case 'nonPending':
+            fetchNonPendingLeaves()
+            .then((dataArray)=>{
                 setLeaves(dataArray);
                 setShowAffectedSections(false);
-            });
-            break;
+            })
+            .catch((error) => console.error('Error:', error.message));
+        break;
 
-            case 'all':
-                fetchAllLeaves().then((dataArray)=>{
+        case 'all':
+            fetchAllLeaves()
+            .then((dataArray)=>{
                 setLeaves(dataArray);
-            });
-            break;
+            })
+            .catch((error) => console.error('Error:', error.message));
+        break;
         }
-      }, []);
+    }, []);
 
       
 
     return (
         <Fragment>
             <h1 className="page-title">Leave Overview</h1>
+
             <Table
                 rows = {leaves}
                 columns = {columns}
-                columnVisibilityModel = {{
-                    affectedSection: showAffectedSections
-                }}
+                columnVisibilityModel = {{affectedSection: showAffectedSections}}
                 initialState={{
                     sorting: {
                         sortModel: [{ field: 'startDate', sort: 'asc' }],
@@ -136,6 +185,11 @@ const LeaveTable = (props)=>{
                 }}
                 rowSpacingVals = {[0,30]}
                 slots={{ columnMenu: SetColumnMenu }}
+                handleViewScheduleClick = {handleViewScheduleClick}
+                handleTeacherScheduleClick = {handleTeacherScheduleClick}
+                handleViewConflict = {handleViewConflict}
+                handleApproveClick = {handleApproveClick}
+                handleRejectClick = {handleRejectClick}
             />
         </Fragment>
     )

@@ -11,7 +11,39 @@ const getTogglableColumns = (columns) => {
 };
 
 const Table = (props)=>{
-
+    //passing handlers passed down in props to the columns props 
+    //so that the RenderButton function can access them
+    
+    if(props.handleEditClick){
+        props.columns.find((col) => col.field == "button")
+        .handleEditClick = props.handleEditClick;
+    }
+    if(props.handleCancelClick){
+        props.columns.find((col) => col.field == "button")
+        .handleCancelClick = props.handleCancelClick;
+    }
+    if(props.handleViewScheduleClick){
+        props.columns.find((col) => col.field == "button")
+        .handleViewScheduleClick = props.handleViewScheduleClick;
+    }
+    if(props.handleApproveClick){
+        props.columns.find((col) => col.field == "button")
+        .handleApproveClick = props.handleApproveClick;
+    }
+    if(props.handleRejectClick){
+        props.columns.find((col) => col.field == "button")
+        .handleRejectClick = props.handleRejectClick;
+    }
+    if(props.handleTeacherScheduleClick){
+        props.columns.find((col) => col.field == "button")
+        .handleTeacherScheduleClick = props.handleTeacherScheduleClick;
+    }
+    if(props.handleViewConflict){
+        props.columns.find((col) => col.field == "button")
+        .handleViewConflict = props.handleViewConflict;
+    }
+    
+    // console.log(props);
     return (
 
         <Typography component='div'>

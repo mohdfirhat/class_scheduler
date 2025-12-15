@@ -42,28 +42,30 @@ export const RenderStatus = (props) => {
 
 //function used to display buttons depending on status
 export const RenderButton = (props) => {
-    
-    
+
+    //mapping handlers passed down by props to functions for
+    //switchcase below to access 
     const handleEditClick = ()=> {
         props.colDef.handleEditClick(props.row);
     };
     const handleCancelClick = ()=> {
-        
+        props.colDef.handleCancelClick(props.row);
     };
     const handleViewScheduleClick = ()=> {
-
+        props.colDef.handleViewScheduleClick(props.row);
     };
     const handleApproveClick = ()=> {
-        
+        props.colDef.handleApproveClick(props.row);
     };
     const handleRejectClick = ()=> {
-        
+        props.colDef.handleRejectClick(props.row);
     };
     const handleTeacherScheduleClick = ()=> {
-        
+        props.colDef.handleTeacherScheduleClick(props.row);
     };
+       
     const handleViewConflict = ()=> {
-    
+        props.colDef.handleViewConflict(props.row);
     };
 
     //Switch case for mapping handlers to button onClicks depending on status
@@ -211,6 +213,7 @@ export const fetchPendingLeaves = async () => {
         const entry = new Object();
         entry.avatar = conflictingLeave.teacher.avatar;
         entry.id = conflictingLeave.id;
+        entry.teacherId = conflictingLeave.teacher.id;
         entry.firstName = conflictingLeave.teacher.firstName;
         entry.lastName = conflictingLeave.teacher.lastName;
         entry.name = conflictingLeave.teacher.firstName + ' ' + conflictingLeave.teacher.lastName;
@@ -227,6 +230,7 @@ export const fetchPendingLeaves = async () => {
         const entry = new Object();
         entry.avatar = nonConflictingLeave.teacher.avatar;
         entry.id = nonConflictingLeave.id;
+        entry.teacherId = nonConflictingLeave.teacher.id;
         entry.firstName = nonConflictingLeave.teacher.firstName;
         entry.lastName = nonConflictingLeave.teacher.lastName;
         entry.name = nonConflictingLeave.teacher.firstName + ' ' + nonConflictingLeave.teacher.lastName;
@@ -252,6 +256,7 @@ export const fetchNonPendingLeaves = async () => {
         const entry = new Object();
         entry.avatar = leave.teacher.avatar;
         entry.id = leave.id;
+        entry.teacherId = leave.teacher.id;
         entry.firstName = leave.teacher.firstName;
         entry.lastName = leave.teacher.lastName;
         entry.name = leave.teacher.firstName + ' ' + leave.teacher.lastName;
