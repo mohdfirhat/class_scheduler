@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
 import ScheduleFullCalendar from "../../components/Calender/ScheduleFullCalendar";
+import toast from "react-hot-toast";
 
 const TeacherSchedulePage = () => {
   const { teacherId } = useParams();
@@ -16,12 +17,15 @@ const TeacherSchedulePage = () => {
 
   useEffect(() => {
     const fetchTeacherSchedule = async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherId}`);
-      console.log("🧑‍🏫Teacher Schedules");
-      console.log(res.data);
-      setLeaves(res.data.leaves);
-      setSections(res.data.sections);
-      setTeacher(res.data);
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherId}`);
+        setLeaves(res.data.leaves);
+        setSections(res.data.sections);
+        setTeacher(res.data);
+      } catch (e) {
+        console.log(e);
+        toast.error("Error fetching teacher schedules.");
+      }
     };
     fetchTeacherSchedule();
   }, [teacherId]);

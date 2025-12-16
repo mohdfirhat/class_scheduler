@@ -73,11 +73,6 @@ export default function ScheduleFullCalendar({
   // if there is tentitveSection with date and time, add to events
   if (tentitiveSection && teacher && tentitiveSection.date && tentitiveSection.timeslot.id) {
     const createdTentitiveEvent = createTentitiveSectionEvent(tentitiveSection, teacher);
-
-    console.log("Tentitive Section");
-    console.log(tentitiveSection);
-    console.log("Creating tentitive event");
-    console.log(createdTentitiveEvent);
     events.push(createdTentitiveEvent);
   }
 
@@ -124,8 +119,6 @@ export default function ScheduleFullCalendar({
         });
       }}
       eventClick={(info) => {
-        console.log(info.event._def);
-        console.log(`Clicked Section with id: ${info.event.extendedProps.data.id}`);
         if (setFormData !== undefined) {
           if (
             conflictSections.find(
@@ -133,7 +126,6 @@ export default function ScheduleFullCalendar({
                 section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
             )
           ) {
-            console.log("It is a conflicting Section");
             setFormData((oldData) => ({ ...oldData, selectedSectionId: info.event.extendedProps.data.id }));
           }
         }

@@ -1,13 +1,32 @@
 import { Box, Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../api/api";
+import axios from "axios";
 
-const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAndTeachers }) => {
-  const handleSubmit = (e) => {
+const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAndTeachers, setRefetchData }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const requestBody = {
+      sectionId: formData.selectedSectionId,
+      teacherId: formData.subTeacherId,
+    };
+
+    const toastId = toast.loading("Substituting Teacher...");
+    try {
+      const res = await axios.put(`${BACKEND_URL}/api/sections/sub_teacher`, requestBody);
+      toast.dismiss(toastId);
+      toast.success("Successfully Substituted Section");
+      setFormData({
+        subTeacherId: "",
+        selectedSectionId: "",
+      });
+      setRefetchData(true);
+    } catch (e) {
+      toast.dismiss(toastId);
+      toast.error(e.response.data);
+    }
   };
-  console.log("conflictLeave");
-  console.log(conflictLeave);
-  console.log(conflictSectionsAndTeachers);
 
   const handleChange = (field) => (event) => {
     setFormData((oldForm) => ({
@@ -19,16 +38,12 @@ const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAn
 
   // Extract conflictingLessons
   const conflictSections = conflictSectionsAndTeachers.map(({ availableTeachers, ...section }) => section);
-  console.log("conflictSections");
-  console.log(conflictSections);
 
   // Extract availableTeachers
   // const availableTeachers = conflictSectionsAndTeachers.map((lesson) => lesson.availableTeachers);
   const availableTeachers = formData.selectedSectionId
     ? conflictSectionsAndTeachers.find((lesson) => lesson.id == formData.selectedSectionId).availableTeachers
     : [];
-  console.log("availableTeachers");
-  console.log(availableTeachers);
 
   return (
     <Box
@@ -75,7 +90,7 @@ const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAn
           required={conflictSections.length > 0}
           fullWidth
           disabled={conflictSections.length === 0}
-          value={formData.selectedSectionId || ""} // ✅ always defined
+          value={formData.selectedSectionId || ""}
         >
           <MenuItem key="empty" value=""></MenuItem>
 
