@@ -1,7 +1,7 @@
 import NavBar from "../../components/NavBar/NavBar";
 // import { scheduleLeaves, scheduleSections, teacherSchedule } from "../../fakedata/data";
 import styles from "./TeacherSchedulePage.module.css";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
@@ -9,6 +9,8 @@ import ScheduleFullCalendar from "../../components/Calender/ScheduleFullCalendar
 import toast from "react-hot-toast";
 
 const TeacherSchedulePage = () => {
+  const { state } = useLocation();
+  console.log(state);
   const { teacherId } = useParams();
   const calRef = useRef(null);
   const [leaves, setLeaves] = useState([]);
@@ -42,7 +44,8 @@ const TeacherSchedulePage = () => {
             leaves={leaves}
             sections={sections}
             initialView="timeGridWeek"
-            initialDate={Date.now()}
+            initialDate={state === null ? Date.now() : state.initialDate}
+            // initialDate={Date.now()}
             ref={calRef}
           />
         </div>

@@ -28,17 +28,63 @@ export default function ScheduleFullCalendar({
     return start;
   }
 
+  console.log(sections);
+
+  const sectionColour = (section, teacher) => {
+    if (teacher.id == selectedTeacherId) {
+      if (section.status.type == "pending") {
+        return "#89CFF0"; //selected teacher and pending color(baby blue)
+      } else if (section.status.type == "approved") {
+        return "#0000FF"; //selected teacher and approved color(blue)
+      } else {
+        return "#6F8FAF"; //selected teacher and rejected color(Denim)
+      }
+    } else {
+      if (section.status.type == "pending") {
+        // https://htmlcolorcodes.com/colors/shades-of-orange/
+        return "#FFC000"; //other teacher and pending color(Golden Yellow)
+      } else if (section.status.type == "approved") {
+        return "#CC5500"; //other teacher and approved color(Burnt Orange)
+      } else {
+        return "	#FFE5B4"; //other teacher and rejected color(Peach)
+      }
+    }
+  };
+
+  const leaveColor = (leave, teacher) => {
+    if (teacher.id == selectedTeacherId) {
+      // https://htmlcolorcodes.com/colors/shades-of-orange/
+      if (leave.status.type == "pending") {
+        return "#89CFF0"; //selected teacher and pending color(baby blue)
+      } else if (leave.status.type == "approved") {
+        return "#0000FF"; //selected teacher and approved color(blue)
+      } else {
+        return "#6F8FAF"; //selected teacher and rejected color(Denim)
+      }
+    } else {
+      if (leave.status.type == "pending") {
+        // https://htmlcolorcodes.com/colors/shades-of-orange/
+        return "#FFC000"; //other teacher and pending color(Golden Yellow)
+      } else if (leave.status.type == "approved") {
+        return "	#CC5500"; //other teacher and approved color(Burnt Orange)
+      } else {
+        return "	#FFE5B4"; //other teacher and rejected color(Peach)
+      }
+    }
+  };
+
   const createSectionEvent = (section, teacher) => ({
-    title: section.course.courseCode,
+    title: `${section.course.courseCode} (${section.status.type.toUpperCase()})`,
     start: `${section.date}T${section.timeslot.startTime}`,
     end: `${section.date}T${section.timeslot.endTime}`,
-    color: teacher.id == selectedTeacherId ? "blue" : "darkorange",
+    color: sectionColour(section, teacher),
     extendedProps: {
       type: "section",
       teacher: `${teacher.firstName} ${teacher.lastName}`,
       venueName: section.venue.name,
       venueDesc: section.venue.description,
       data: section,
+      notes: section.remark,
     },
   });
   const createTentitiveSectionEvent = (section, teacher) => ({
@@ -55,10 +101,10 @@ export default function ScheduleFullCalendar({
     },
   });
   const createLeaveEvent = (leave, teacher) => ({
-    title: `${teacher.firstName} ${teacher.lastName} Leave`,
+    title: `${teacher.firstName} ${teacher.lastName} Leave (${leave.status.type.toUpperCase()})`,
     start: formatStartDate(leave.startDate),
     end: formatEndDate(leave.endDate),
-    color: teacher.id == selectedTeacherId ? "lightblue" : "sandybrown",
+    color: leaveColor(leave, teacher),
     borderColor: teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",
     extendedProps: {
@@ -106,7 +152,7 @@ export default function ScheduleFullCalendar({
             <strong>${info.event.title}</strong><br/>
             Teacher: ${info.event.extendedProps.teacher}<br/>
             Venue: ${info.event.extendedProps.venueName}<br/>
-            Remarks:${info.event.extendedProps.notes || ""}
+            Remarks: ${info.event.extendedProps.notes || ""}
           `
               : `<strong>${info.event.title}</strong><br/>`,
           allowHTML: true,

@@ -89,6 +89,7 @@ export default function AppFullCalendar({
       venueName: section.venue.name,
       venueDesc: section.venue.description,
       data: section,
+      notes: section.remark,
     },
   });
 
@@ -145,7 +146,7 @@ export default function AppFullCalendar({
             <strong>${info.event.title}</strong><br/>
             Teacher: ${info.event.extendedProps.teacher}<br/>
             Venue: ${info.event.extendedProps.venueName}<br/>
-            Remarks:${info.event.extendedProps.notes || ""}
+            Remarks: ${info.event.extendedProps.notes || ""}
           `
               : `<strong>${info.event.title}</strong><br/>`,
           allowHTML: true,
