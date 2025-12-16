@@ -61,7 +61,6 @@ const CourseTabsBar = () => {
     setisUpdating(true);
     setValue(3);
     setSectionId(props.id);
-    console.log(props);
   };
 
   return (

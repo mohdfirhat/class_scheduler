@@ -1,3 +1,9 @@
+.calendarMainContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
 .calendarContainer {
   padding-top: 2rem;
 }

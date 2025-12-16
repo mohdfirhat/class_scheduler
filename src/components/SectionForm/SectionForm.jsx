@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const SectionForm = ({
   formState,
   dispatchFormData,
-  sectionId,
+  // sectionId,
   isUpdating,
   availTeacher,
   setAvailTeacher,
@@ -19,6 +19,7 @@ const SectionForm = ({
   setAvailVenues,
   setTeacherOneId,
   setTentitiveSection,
+  setRefreshSchedule,
 }) => {
   const [isBasicParamsFilled, setIsBasicParamsFilled] = useState(false);
   const [isVenueFilled, setIsVenueFilled] = useState(false);
@@ -80,7 +81,9 @@ const SectionForm = ({
       await axios.post(`${BACKEND_URL}/api/sections`, sectionObject);
       toast.dismiss(toastId);
       toast.success("Successfully Created Section");
+      setRefreshSchedule(true);
     } catch (e) {
+      console.log(e);
       toast.dismiss(toastId);
       toast.error(e.response.data);
     }
@@ -101,7 +104,7 @@ const SectionForm = ({
 
   //Effect to check if all mandatory fields in form are filled
   useEffect(() => {
-    const { formData, validClassSize } = formState;
+    const { formData } = formState;
     const { courseCode, classSize, date, timeslot, teacherId, venueId } = formData;
 
     //check if venue slot is filled and set state to enable/disable VenuePopup
@@ -141,8 +144,13 @@ const SectionForm = ({
         url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
         url.searchParams.append("timeslotId", formState.formData.timeslot);
         url.searchParams.append("courseId", formState.formData.courseCode);
-        const res = await axios.get(url.href);
-        setAvailTeacher(res.data);
+        try {
+          const res = await axios.get(url.href);
+          setAvailTeacher(res.data);
+        } catch (e) {
+          console.log(e);
+          toast.error("Error fetching available teachers");
+        }
       };
 
       const fetchAvailableVenues = async () => {
@@ -150,8 +158,13 @@ const SectionForm = ({
         url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
         url.searchParams.append("timeslotId", formState.formData.timeslot);
         url.searchParams.append("classSize", formState.formData.classSize);
-        const res = await axios.get(url.href);
-        setAvailVenues(res.data);
+        try {
+          const res = await axios.get(url.href);
+          setAvailVenues(res.data);
+        } catch (e) {
+          console.log(e);
+          toast.error("Error fetching available venues");
+        }
       };
 
       fetchAvailableTeachersWithSchedule();

@@ -9,6 +9,9 @@ export default function AppFullCalendar({
   leaves,
   sections,
   selectedTeacherId,
+  otherTeacherId,
+  conflictingLeaveId,
+  selectedConflictSection,
   initialView,
   initialDate = undefined,
   ref = undefined,
@@ -26,11 +29,60 @@ export default function AppFullCalendar({
     return start;
   }
 
+  const sectionColour = (section) => {
+    if (section.id == selectedConflictSection) {
+      return "#A52A2A"; //selected teacher and pending color(red)
+    }
+    if (section.teacher.id === selectedTeacherId) {
+      if (section.status.type == "pending") {
+        return "#89CFF0"; //selected teacher and pending color(baby blue)
+      } else if (section.status.type == "approved") {
+        return "#0000FF"; //selected teacher and approved color(blue)
+      } else {
+        return "#6F8FAF"; //selected teacher and rejected color(Denim)
+      }
+    } else {
+      if (section.status.type == "pending") {
+        // https://htmlcolorcodes.com/colors/shades-of-orange/
+        return "#FFC000"; //other teacher and pending color(Golden Yellow)
+      } else if (section.status.type == "approved") {
+        return "#CC5500"; //other teacher and approved color(Burnt Orange)
+      } else {
+        return "	#FFE5B4"; //other teacher and rejected color(Peach)
+      }
+    }
+  };
+
+  const leaveColor = (leave, conflictingLeaveId) => {
+    if (leave.id == conflictingLeaveId) {
+      return "#FF0000"; //conflicting leave (red)
+    }
+    if (leave.teacher.id === selectedTeacherId) {
+      // https://htmlcolorcodes.com/colors/shades-of-orange/
+      if (leave.status.type == "pending") {
+        return "#89CFF0"; //selected teacher and pending color(baby blue)
+      } else if (leave.status.type == "approved") {
+        return "#0000FF"; //selected teacher and approved color(blue)
+      } else {
+        return "#6F8FAF"; //selected teacher and rejected color(Denim)
+      }
+    } else {
+      if (leave.status.type == "pending") {
+        // https://htmlcolorcodes.com/colors/shades-of-orange/
+        return "#FFC000"; //other teacher and pending color(Golden Yellow)
+      } else if (leave.status.type == "approved") {
+        return "	#CC5500"; //other teacher and approved color(Burnt Orange)
+      } else {
+        return "	#FFE5B4"; //other teacher and rejected color(Peach)
+      }
+    }
+  };
+
   const createSectionEvent = (section) => ({
-    title: section.course.courseCode,
+    title: `${section.course.courseCode} (${section.status.type.toUpperCase()})`,
     start: `${section.date}T${section.timeslot.startTime}`,
     end: `${section.date}T${section.timeslot.endTime}`,
-    color: section.teacher.id === selectedTeacherId ? "blue" : "darkorange",
+    color: sectionColour(section),
     extendedProps: {
       type: "section",
       teacher: `${section.teacher.firstName} ${section.teacher.lastName}`,
@@ -39,23 +91,29 @@ export default function AppFullCalendar({
       data: section,
     },
   });
+
   const createLeaveEvent = (leave) => ({
-    title: `${leave.teacher.firstName} ${leave.teacher.lastName} Leave`,
+    title: `${leave.teacher.firstName} ${leave.teacher.lastName} Leave (${leave.status.type.toUpperCase()})`,
     start: formatStartDate(leave.startDate),
     end: formatEndDate(leave.endDate),
-    color: leave.teacher.id === selectedTeacherId ? "lightblue" : "sandybrown",
-    borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
-    borderStyle: "dashed",
+    // allDay: true,
+    color: leaveColor(leave, conflictingLeaveId),
+    // leave.teacher.id === selectedTeacherId ? (leave.status.type === "pending" ? "lightblue" : "blue") : "sandybrown",
+    // borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     extendedProps: {
       type: "leave",
       data: leave,
     },
   });
-  const sectionEvents = sections.map((section) => createSectionEvent(section));
-  const leaveEvents = leaves.map((leave) => createLeaveEvent(leave));
+  const filteredEvents = sections.filter(
+    (section) => section.teacher.id == selectedTeacherId || section.teacher.id == otherTeacherId
+  );
+  const sectionEvents = filteredEvents.map((section) => createSectionEvent(section));
+  const filteredLeaveEvents = leaves.filter(
+    (leave) => leave.teacher.id == selectedTeacherId || leave.teacher.id == otherTeacherId
+  );
+  const leaveEvents = filteredLeaveEvents.map((leave) => createLeaveEvent(leave));
   const events = [...sectionEvents, ...leaveEvents];
-  console.log("events");
-  console.log(events);
 
   return (
     // <div style={{ width: "100vw", height: "100vh-6rem" }}>
@@ -80,7 +138,6 @@ export default function AppFullCalendar({
       eventOverlap={true}
       weekends={false}
       eventDidMount={(info) => {
-        // console.log(info.event);
         tippy(info.el, {
           content:
             info.event.extendedProps.type === "section"
@@ -101,8 +158,6 @@ export default function AppFullCalendar({
         });
       }}
       eventClick={(info) => {
-        console.log(info.event._def);
-        console.log(`Clicked Section with id: ${info.event.extendedProps.data.id}`);
         if (setFormData !== undefined) {
           if (
             conflictSections.find(
@@ -110,7 +165,6 @@ export default function AppFullCalendar({
                 section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
             )
           ) {
-            console.log("It is a conflicting Section");
             setFormData((oldData) => ({ ...oldData, selectedSectionId: info.event.extendedProps.data.id }));
           }
         }

@@ -3,15 +3,14 @@ import styles from "./LeaveConflictPage.module.css";
 import NavBar from "../../components/NavBar/NavBar";
 import AppFullCalendar from "../../components/Calender/AppFullCalendar";
 import ConflictForm from "../../components/ConflictForm/ConflictForm";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const LeaveConflictPage = () => {
-  //TODO: Firhat
   const { leaveId } = useParams();
-
-  //TODO: get leave by leaveId and setConflictLeave(data)
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [conflictLeave, setConflictLeave] = useState(null);
   const [formData, setFormData] = useState({
@@ -21,48 +20,52 @@ const LeaveConflictPage = () => {
   const [allTeacherSections, SetAllTeacherSections] = useState([]);
   const [allTeacherLeaves, setAllTeacherLeaves] = useState([]);
   const [conflictSectionsAndTeachers, setConflictSectionsAndTeachers] = useState([]);
+  const [refetchData, setRefetchData] = useState(true);
 
   const conflictSections = conflictSectionsAndTeachers.map(({ availableTeachers, ...section }) => section);
-
   useEffect(() => {
     const fetchLeave = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/leaves/${leaveId}/teachers`);
-        console.log("🗓️Leave Details:");
-        console.log(res.data);
         setConflictLeave(res.data);
       } catch (e) {
         console.log(e);
+        toast.error("Error fetching Leave");
       }
     };
     const fetchConflictingSectionsWithAvailableTeacher = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/sections/conflict_leave/${leaveId}/available_teachers`);
-        console.log("🗓️🧑‍🏫Available Teachers for conflicting sections:");
-        console.log(res.data);
+        if (res.data.length == 0) {
+          toast.error("No Conflicting Section Found.");
+          const toastId = toast.loading("Redirecting to Leave tab.");
+          setTimeout(() => {
+            navigate("/dashboard/leaves");
+            toast.dismiss(toastId);
+          }, 5000);
+        }
         setConflictSectionsAndTeachers(res.data);
       } catch (e) {
         console.log(e);
+        toast.error("Error fetching available teachers for sections");
       }
     };
     const fetchSectionsOfAllTeachersInvolved = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/sections/conflict_leave/${leaveId}/all_sections`);
-        console.log("📝🧑‍🏫All Sections of all teacher involved (3 months):");
-        console.log(res.data);
         SetAllTeacherSections(res.data);
       } catch (e) {
         console.log(e);
+        toast.error("Error Fetching Sections of all teacher involved");
       }
     };
     const fetchLeavesOfAllTeachers = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/leaves/conflict_leave/${leaveId}/all_leaves`);
-        console.log("🗓️🧑‍🏫All Leaves of all teacher involved (3 months):");
-        console.log(res.data);
         setAllTeacherLeaves(res.data);
       } catch (e) {
         console.log(e);
+        toast.error("Error Fetching Leaves of all teacher involved");
       }
     };
     const fetchAll = async () => {
@@ -75,8 +78,11 @@ const LeaveConflictPage = () => {
         setIsLoading(false); // ✅ Only after everything is loaded
       }
     };
-    fetchAll();
-  }, []);
+    if (refetchData) {
+      fetchAll();
+      setRefetchData(false);
+    }
+  }, [refetchData, leaveId]);
 
   return (
     //TODO: Firhat
@@ -89,19 +95,40 @@ const LeaveConflictPage = () => {
             conflictSectionsAndTeachers={conflictSectionsAndTeachers}
             formData={formData}
             setFormData={setFormData}
+            setRefetchData={setRefetchData}
           />
         )}
         {!isLoading && (
-          <div className={styles.calendarContainer}>
-            <AppFullCalendar
-              sections={allTeacherSections}
-              leaves={allTeacherLeaves}
-              selectedTeacherId={conflictLeave ? conflictLeave.teacher.id : 0}
-              initialView="timeGridWeek"
-              initialDate={conflictLeave ? conflictLeave.startDate : new Date().toISOString()}
-              setFormData={setFormData}
-              conflictSections={conflictSections}
-            />
+          <div className={styles.calendarMainContainer}>
+            <div className={styles.calendarContainer}>
+              <AppFullCalendar
+                sections={allTeacherSections}
+                leaves={allTeacherLeaves}
+                conflictingLeaveId={leaveId}
+                // otherTeacherId={formData.subTeacherId}
+                selectedTeacherId={conflictLeave ? conflictLeave.teacher.id : 0}
+                initialView="timeGridWeek"
+                initialDate={conflictLeave ? conflictLeave.startDate : new Date().toISOString()}
+                setFormData={setFormData}
+                conflictSections={conflictSections}
+                selectedConflictSection={formData.selectedSectionId}
+              />
+            </div>
+
+            <div className={styles.calendarContainer}>
+              <AppFullCalendar
+                sections={allTeacherSections}
+                leaves={allTeacherLeaves}
+                conflictingLeaveId={leaveId}
+                otherTeacherId={formData.subTeacherId}
+                selectedTeacherId={0}
+                initialView="timeGridWeek"
+                initialDate={conflictLeave ? conflictLeave.startDate : new Date().toISOString()}
+                setFormData={setFormData}
+                conflictSections={conflictSections}
+                selectedConflictSection={formData.selectedSectionId}
+              />
+            </div>
           </div>
         )}
       </main>

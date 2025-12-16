@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import ScheduleFullCalendar from "../Calender/ScheduleFullCalendar";
 import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const defaultSection = {
   courseCode: "",
@@ -90,32 +91,7 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
   const [teacherOneSections, setTeacherOneSections] = useState([]);
   const [teacherOne, setTeacherOne] = useState({});
   const [tentitiveSection, setTentitiveSection] = useState(defaultTentitiveSection);
-
-  // console.log("sectionId");
-  // console.log(sectionId);
-  // console.log(formState);
-
-  // // Fetch section if sectionId exist
-  // useEffect(() => {
-  //   if (sectionId) {
-  //     const fetchSection = async () => {
-  //       const res = await axios.get(`${BACKEND_URL}/api/sections/${sectionId}`);
-  //       console.log(res.data);
-  //       const newFormData = {
-  //         courseCode: res.data.course.id,
-  //         remarks: res.data.description | "",
-  //         classSize: res.data.classSize,
-  //         date: dayjs(res.data.date),
-  //         timeslot: res.data.timeslot.id,
-  //         teacherId: res.data.teacher.id,
-  //         venueId: res.data.venue.id,
-  //       };
-  //       console.log(newFormData);
-  //       dispatchFormData({ type: "setData", value: newFormData });
-  //     };
-  //     fetchSection();
-  //   }
-  // }, [sectionId]);
+  const [refreshSchedule, setRefreshSchedule] = useState(true);
 
   useEffect(() => {
     const calendarOneApi = calendarOneRef.current?.getApi();
@@ -127,18 +103,23 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
 
   // fetch teacher schedule(sections and leaves)
   useEffect(() => {
-    if (teacherOneId) {
+    if (teacherOneId && refreshSchedule) {
       const fetchTeacherSchedule = async () => {
-        const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherOneId}`);
-        console.log("🧑‍🏫Teacher Schedules");
-        console.log(res.data);
-        setTeacherOneLeaves(res.data.leaves);
-        setTeacherOneSections(res.data.sections);
-        setTeacherOne(res.data);
+        try {
+          const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherOneId}`);
+          setTeacherOneLeaves(res.data.leaves);
+          setTeacherOneSections(res.data.sections);
+          setTeacherOne(res.data);
+        } catch (e) {
+          console.log(e);
+          toast.error("Error fetching Teacher Schedules");
+        } finally {
+          setRefreshSchedule(false);
+        }
       };
       fetchTeacherSchedule();
     }
-  }, [teacherOneId]);
+  }, [teacherOneId, refreshSchedule]);
 
   return (
     //TODO: Firhat
@@ -153,6 +134,7 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
         setAvailVenues={setAvailVenues}
         setTeacherOneId={setTeacherOneId}
         setTentitiveSection={setTentitiveSection}
+        setRefreshSchedule={setRefreshSchedule}
       />
       <div className={styles.calendarContainer}>
         <ScheduleFullCalendar
