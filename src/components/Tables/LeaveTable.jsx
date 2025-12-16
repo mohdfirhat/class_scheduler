@@ -116,33 +116,30 @@ const LeaveTable = (props)=>{
     //useNavigate hook used for routing to other urls
     const navigate = useNavigate();
     const handleViewScheduleClick = (rowData) => {
-        navigate(`/schedules/${rowData.teacherId}`);
+        navigate(`/schedules/${rowData.teacherId}`, {initialDate: rowData.startDate});
     };
 
-    const handleTeacherScheduleClick = (rowData) => {
-        navigate(`/schedules/${rowData.teacherId}`);
-    };
     const handleViewConflict = (rowData) => {
         navigate(`/conflicts/${rowData.id}`);
     };
     const handleApproveClick = async (rowData) => {
         try {
             const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
-            toast.success(res.data.message);
+            toast.success(res.data.message, {position: 'top-center',});
             setLatestUpdate(res.data.message);
 
         } catch (error){
-            toast.error(error.response.data);
+            toast.error(error.response.data,{position: 'top-center',});
         }
     };
     const handleRejectClick = async (rowData) => {
         try {
             const res = await axios.put(`${BACKEND_URL}/api/leaves/reject/${rowData.id}`);
-            toast.success(res.data.message);
+            toast.success(res.data.message,{position: 'top-center',});
             setLatestUpdate(res.data.message);
 
         } catch (error){
-            toast.error(error.response.data);
+            toast.error(error.response.data,{position: 'top-center',});
         }
         
     };
@@ -190,6 +187,9 @@ const LeaveTable = (props)=>{
                     sorting: {
                         sortModel: [{ field: 'startDate', sort: 'asc' }],
                     },
+                    pagination: {
+                        paginationModel: { pageSize: 25, page: 0 },
+                    },
                 }}
                 rowSpacingVals = {[0,30]}
                 slots={{ 
@@ -197,7 +197,6 @@ const LeaveTable = (props)=>{
                     noRowsOverlay: ()=><Box p={5}>No leaves to display</Box>, 
                 }}
                 handleViewScheduleClick = {handleViewScheduleClick}
-                handleTeacherScheduleClick = {handleTeacherScheduleClick}
                 handleViewConflict = {handleViewConflict}
                 handleApproveClick = {handleApproveClick}
                 handleRejectClick = {handleRejectClick}

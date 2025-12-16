@@ -6,10 +6,6 @@ import { BACKEND_URL } from "../../api/api";
 import { useNavigate } from "react-router";
 import Box from '@mui/material/Box';
 
-
-//See valueFormatter() for converting date/time without changing values
-//https://mui.com/x/react-data-grid/column-definition/#value-formatter
-
 //dummy data
 // const rows = [
 //     { id: 1, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Biology', email: 'bob@gmail.com', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
@@ -138,6 +134,11 @@ const TeacherTable = ()=>{
                     columnMenu: SetColumnMenu,
                     noRowsOverlay: ()=><Box p={5}>No teachers to display</Box>, 
                 }}
+                initialState={{
+                    pagination: {
+                        paginationModel: { pageSize: 25, page: 0 },
+                    },
+                      }}
                 rowSpanning = {true}
                 handleTeacherScheduleClick = {handleTeacherScheduleClick}
             />

@@ -267,6 +267,7 @@ const SectionForm = ({
             inputFormat="DD/MM/YYYY"
             // defaultValue={formState.formData.date ? dayjs(formState.formData.date) : null}
             value={formState.formData.date ? dayjs(formState.formData.date) : null}
+            shouldDisableDate={(date) => (date.day() ===0 || date.day() ===6)}
             onChange={handleDateChange}
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />

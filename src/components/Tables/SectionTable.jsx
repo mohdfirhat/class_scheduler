@@ -163,50 +163,54 @@ const SectionTable = (props) => {
   const handleApproveClick = async (rowData) => {
         try {
             const res = await axios.put(`${BACKEND_URL}/api/sections/approve/${rowData.id}`);
-            toast.success(res.data);
+            toast.success(res.data,{position: 'top-center',});
             setLatestUpdate(res.data);
 
         } catch (error){
-            toast.error(error.response.data);
+            toast.error(error.response.data,{position: 'top-center',});
         }
     };
     const handleCancelClick = async (rowData) => {
         try {
             const res = await axios.put(`${BACKEND_URL}/api/sections/cancel/${rowData.id}`);
-            toast.success(res.data);
+            toast.success(res.data,{position: 'top-center',});
             setLatestUpdate(res.data);
 
         } catch (error){
-            toast.error(error.response.data);
+            toast.error(error.response.data,{position: 'top-center',});
         }    
     };
 
   useEffect(() => {
     const fetchSections = async () => {
+      try {
             const res = await axios.get(`${BACKEND_URL}/api/sections/all`);
-            const processedArr = [];
+      const processedArr = [];
 
-            res.data.forEach((section) => {
-              const entry = new Object();
-              entry.id = section.id;
-              entry.courseCode = section.course.courseCode;
-              entry.name = section.course.name;
-              entry.date = section.date;
-              entry.timeslot = section.timeslot.startTime.slice(0, -3) + ' - ' + section.timeslot.endTime.slice(0, -3);
-              entry.venue = section.venue.name;
-              entry.classSize = section.classSize;
-              entry.teacher = section.teacher.firstName + ' ' + section.teacher.lastName;
-              entry.remarks = section.description;
-              entry.status = section.status.type;
-              entry.button = section.status.type; 
-            
-              processedArr.push(entry);
-            });
-            
-            setSections(processedArr);
-          };
-          fetchSections();
-        }, [latestUpdate]);
+      res.data.forEach((section) => {
+        const entry = new Object();
+        entry.id = section.id;
+        entry.courseCode = section.course.courseCode;
+        entry.name = section.course.name;
+        entry.date = section.date;
+        entry.timeslot = section.timeslot.startTime.slice(0, -3) + ' - ' + section.timeslot.endTime.slice(0, -3);
+        entry.venue = section.venue.name;
+        entry.classSize = section.classSize;
+        entry.teacher = section.teacher.firstName + ' ' + section.teacher.lastName;
+        entry.remarks = section.description;
+        entry.status = section.status.type;
+        entry.button = section.status.type; 
+      
+        processedArr.push(entry);
+      });
+      
+      setSections(processedArr);
+      } catch (error){
+      toast.error(error.response.data,{position: 'top-center',});
+      }
+    };
+    fetchSections();
+  }, [latestUpdate]);
 
   return (
     <div className="table">
@@ -219,6 +223,14 @@ const SectionTable = (props) => {
                 columnMenu: SetColumnMenu,
                 noRowsOverlay: ()=><Box p={5}>No sections to display</Box>, 
               }}
+        initialState={{
+              sorting: {
+                        sortModel: [{ field: 'status', sort: 'desc' }],
+              },      
+              pagination: {
+                  paginationModel: { pageSize: 25, page: 0 },
+              },
+                      }}
         handleApproveClick = {handleApproveClick}
         handleCancelClick = {handleCancelClick} 
       />
