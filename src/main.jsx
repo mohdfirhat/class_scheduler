@@ -10,9 +10,9 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <App />
       <Toaster
+        position="bottom-center"
         toastOptions={{
           style: {
-            
             maxWidth: '500px', // Overrides the default 350px limit
           },
   }}

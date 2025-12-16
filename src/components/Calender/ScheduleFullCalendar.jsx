@@ -49,8 +49,8 @@ export default function ScheduleFullCalendar({
     extendedProps: {
       type: "section",
       teacher: `${teacher.firstName} ${teacher.lastName}`,
-      venueName: section.venue.name | "",
-      venueDesc: section.venue.description | "",
+      venueName: section.venue.name,
+      venueDesc: section.venue.description,
       data: section,
     },
   });
