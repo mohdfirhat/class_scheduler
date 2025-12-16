@@ -76,13 +76,13 @@ const CourseTabsBar = () => {
         </ThemeProvider>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LeaveTable table='all'/>
+        <LeaveTable table='all' title='Leave Overview'/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <LeaveTable table='pending'/>
+        <LeaveTable table='pending' title='Pending Leaves'/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <LeaveTable table='nonPending'/>
+        <LeaveTable table='nonPending' title='Approved/Rejected Leaves'/>
       </CustomTabPanel>
     </Box>
   );

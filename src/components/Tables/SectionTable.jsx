@@ -4,6 +4,8 @@ import Table from "./Table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
+import toast from "react-hot-toast";
+import Box from '@mui/material/Box';
 
 //dummy data
 // const rows = [
@@ -146,18 +148,39 @@ const columns = [
     rejectedBtnProps: [],
     pendingBtnProps: [
       { name: "Edit Section", href: null, onclick },
+      {name: 'Approve', href: null, onclick },
       { name: "Cancel Section", href: null, onclick },
-    ],
-    handleEditClick: "",
-    handleCancelClick: "test",
-    testprop: 'test'
-  },
+    ]
+  }
 ];
 
 //Main table component
 const SectionTable = (props) => {
   const [sections, setSections] = useState([]);
-  
+  const [latestUpdate, setLatestUpdate] = useState([]);
+
+  //handler(s) for table buttons defined here to be passed down to DataGrid via props
+  const handleApproveClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/sections/approve/${rowData.id}`);
+            toast.success(res.data);
+            setLatestUpdate(res.data);
+
+        } catch (error){
+            toast.error(error.response.data);
+        }
+    };
+    const handleCancelClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/sections/cancel/${rowData.id}`);
+            toast.success(res.data);
+            setLatestUpdate(res.data);
+
+        } catch (error){
+            toast.error(error.response.data);
+        }    
+    };
+
   useEffect(() => {
     const fetchSections = async () => {
             const res = await axios.get(`${BACKEND_URL}/api/sections/all`);
@@ -183,15 +206,22 @@ const SectionTable = (props) => {
             setSections(processedArr);
           };
           fetchSections();
-        }, []);
+        }, [latestUpdate]);
 
-  //set handleEditClick func from SectionTabsBar to button props
-  columns.find((col) => col.field == "button").handleEditClick = props.handleEditClick;
-  columns.find((col) => col.field == "button").handleCancelClick = props.handleCancelClick;
   return (
     <div className="table">
       <h1 className="page-title">Section Overview</h1>
-      <Table rows={sections} columns={columns} rowSpacingVals={[0, 30]} slots={{ columnMenu: SetColumnMenu }} />
+      <Table 
+        rows={sections} 
+        columns={columns} 
+        rowSpacingVals={[0, 30]} 
+        slots={{ 
+                columnMenu: SetColumnMenu,
+                noRowsOverlay: ()=><Box p={5}>No sections to display</Box>, 
+              }}
+        handleApproveClick = {handleApproveClick}
+        handleCancelClick = {handleCancelClick} 
+      />
     </div>
   );
 };

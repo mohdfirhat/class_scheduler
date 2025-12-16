@@ -3,7 +3,7 @@ import { SetColumnMenu } from "../../utils/TableFuncs";
 import Table from "./Table";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
-import { useParams } from "react-router";
+import Box from '@mui/material/Box';
 
 //dummy data
 const rows = [
@@ -73,7 +73,15 @@ const CourseTable = (props) => {
   return (
     <div className="table">
       <h1 className="page-title">Course Overview</h1>
-      <Table rows={courses} columns={columns} rowSpacingVals={[0, 30]} slots={{ columnMenu: SetColumnMenu }} />
+      <Table 
+        rows={courses} 
+        columns={columns} 
+        rowSpacingVals={[0, 30]} 
+        slots={{ 
+                columnMenu: SetColumnMenu,
+                noRowsOverlay: ()=><Box p={5}>No courses to display</Box>, 
+              }}
+      />
     </div>
   );
 };

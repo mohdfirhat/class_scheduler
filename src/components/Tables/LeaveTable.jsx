@@ -6,6 +6,7 @@ import { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router";
 import { BACKEND_URL } from "../../api/api";
 import toast from "react-hot-toast";
+import Box from '@mui/material/Box';
 
 //dummy data
 // const rows = [
@@ -43,13 +44,19 @@ const columns = [
         headerName: 'Start Date', 
         headerClassName:'table-header', 
         minWidth: 100, 
-        flex: 1 
+        flex: 1,
+        valueFormatter: (value) => {
+            return dayjs(value).format("DD-MMM-YYYY");
+        }
     },
     { field: 'endDate', 
         headerName: 'End Date', 
         headerClassName:'table-header', 
         minWidth: 100, 
-        flex: 1 
+        flex: 1,
+        valueFormatter: (value) => {
+            return dayjs(value).format("DD-MMM-YYYY");
+        } 
     },
     { field: 'duration', 
         headerName: 'Duration (days)', 
@@ -94,7 +101,6 @@ const columns = [
         ],
         conflictBtnProps: [
             {name: 'View Conflict', href: null},
-            {name: 'Approve', href: null},
             {name: 'Reject', href: null}
         ]
      }        
@@ -104,9 +110,10 @@ const columns = [
 const LeaveTable = (props)=>{
     const [leaves, setLeaves] = useState([]);
     const [showAffectedSections, setShowAffectedSections] = useState(true);
+    const [latestUpdate, setLatestUpdate] = useState([]);
    
-    //handler(s) for table buttons with useNavigate hook, 
-    //defined here to be passed down to DataGrid via props
+    //handler(s) for table buttons defined here to be passed down to DataGrid via props
+    //useNavigate hook used for routing to other urls
     const navigate = useNavigate();
     const handleViewScheduleClick = (rowData) => {
         navigate(`/schedules/${rowData.teacherId}`);
@@ -122,6 +129,7 @@ const LeaveTable = (props)=>{
         try {
             const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
             toast.success(res.data.message);
+            setLatestUpdate(res.data.message);
 
         } catch (error){
             toast.error(error.response.data);
@@ -131,6 +139,7 @@ const LeaveTable = (props)=>{
         try {
             const res = await axios.put(`${BACKEND_URL}/api/leaves/reject/${rowData.id}`);
             toast.success(res.data.message);
+            setLatestUpdate(res.data.message);
 
         } catch (error){
             toast.error(error.response.data);
@@ -140,39 +149,38 @@ const LeaveTable = (props)=>{
     
     //useEffect to fetch data and generate table depending on the Leave tab selected
     useEffect(() => {
-    switch(props.table){
-        case 'pending':
-            fetchPendingLeaves()
-            .then((dataArray)=>{
-                setLeaves(dataArray);
-            })
-            .catch((error) => console.error('Error:', error.message));
-        break;
+        switch(props.table){
+            case 'pending':
+                fetchPendingLeaves()
+                .then((dataArray)=>{
+                    setLeaves(dataArray);
+                })
+                .catch((error) => console.error('Error:', error.message));
+            break;
 
-        case 'nonPending':
-            fetchNonPendingLeaves()
-            .then((dataArray)=>{
-                setLeaves(dataArray);
-                setShowAffectedSections(false);
-            })
-            .catch((error) => console.error('Error:', error.message));
-        break;
+            case 'nonPending':
+                fetchNonPendingLeaves()
+                .then((dataArray)=>{
+                    setLeaves(dataArray);
+                    setShowAffectedSections(false);
+                })
+                .catch((error) => console.error('Error:', error.message));
+            break;
 
-        case 'all':
-            fetchAllLeaves()
-            .then((dataArray)=>{
-                setLeaves(dataArray);
-            })
-            .catch((error) => console.error('Error:', error.message));
-        break;
+            case 'all':
+                fetchAllLeaves()
+                .then((dataArray)=>{
+                    setLeaves(dataArray);
+                })
+                .catch((error) => console.error('Error:', error.message));
+            break;
         }
-    }, []);
+    }, [latestUpdate]);
 
       
-
     return (
         <Fragment>
-            <h1 className="page-title">Leave Overview</h1>
+            <h1 className="page-title">{props.title}</h1>
 
             <Table
                 rows = {leaves}
@@ -184,7 +192,10 @@ const LeaveTable = (props)=>{
                     },
                 }}
                 rowSpacingVals = {[0,30]}
-                slots={{ columnMenu: SetColumnMenu }}
+                slots={{ 
+                    columnMenu: SetColumnMenu,
+                    noRowsOverlay: ()=><Box p={5}>No leaves to display</Box>, 
+                }}
                 handleViewScheduleClick = {handleViewScheduleClick}
                 handleTeacherScheduleClick = {handleTeacherScheduleClick}
                 handleViewConflict = {handleViewConflict}

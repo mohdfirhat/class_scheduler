@@ -4,6 +4,7 @@ import Table from './Table'
 import { useEffect, useState } from "react";;
 import { BACKEND_URL } from "../../api/api";
 import { useNavigate } from "react-router";
+import Box from '@mui/material/Box';
 
 
 //See valueFormatter() for converting date/time without changing values
@@ -133,7 +134,10 @@ const TeacherTable = ()=>{
                 columns = {columns}
                 getRowId ={(row) => row.internalId}
                 rowSpacingVals = {[0,30]}
-                slots={{ columnMenu: SetColumnMenu}}
+                slots={{ 
+                    columnMenu: SetColumnMenu,
+                    noRowsOverlay: ()=><Box p={5}>No teachers to display</Box>, 
+                }}
                 rowSpanning = {true}
                 handleTeacherScheduleClick = {handleTeacherScheduleClick}
             />
