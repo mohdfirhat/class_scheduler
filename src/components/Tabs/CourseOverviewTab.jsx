@@ -3,6 +3,7 @@ import CourseTabsBar from "../CourseTabsBar";
 import Footer from "../Footer";
 import Box from '@mui/material/Box';
 
+//Component for rendering sub tabs in Course tab
 const CourseOverviewTab = () => {
   return (
     <Box sx={{display: 'flex',flexDirection: 'column',minHeight: '100vh'}}>

@@ -242,7 +242,7 @@ export const fetchPendingLeaves = async () => {
 
         processedArr.push(entry);
     });
-    // console.log(processedArr);
+
     return processedArr;
 }
 

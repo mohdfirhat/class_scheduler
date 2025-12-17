@@ -5,28 +5,7 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
 import Box from '@mui/material/Box';
 
-//dummy data
-const rows = [
-  {
-    id: "CS101",
-    name: "Programming Fundamentals",
-    department: "Computer Science",
-    description: "Introduction class to Programming Fundamentals",
-  },
-  {
-    id: "CS102",
-    name: "Object-Oriented Programming",
-    department: "Computer Science",
-    description: "Basics of Object Oriented Programming",
-  },
-  {
-    id: "CS103",
-    name: "Data Structures and Algorithms",
-    department: "Computer Science",
-    description: "Basics of Data Structures and Algorithms",
-  },
-];
-
+//Column properties and formatting to be passed to DataGrid in the Table component
 const columns = [
   {
     field: "courseCode",
@@ -58,10 +37,13 @@ const columns = [
 
 //Main table component
 const CourseTable = (props) => {
-  //   const { departmentId } = useParams();
+
+  //department hard coded to id 1 
   const departmentId = 1;
   const [courses, setCourses] = useState([]);
 
+  //useEffect for fetching all course data on page load 
+  //and sending data to DataGrid in Table component
   useEffect(() => {
     const fetchCourses = async () => {
       const res = await axios.get(`${BACKEND_URL}/api/courses/${departmentId}`);

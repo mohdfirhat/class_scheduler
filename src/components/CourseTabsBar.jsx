@@ -48,19 +48,9 @@ const a11yProps = (index) => {
 
 const CourseTabsBar = () => {
   const [value, setValue] = React.useState(0);
-  const [isUpdating, setisUpdating] = React.useState(false);
-  const [sectionId, setSectionId] = React.useState();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (newValue != 3) {
-      setisUpdating(false);
-    }
-  };
-  const handleEditClick = (props) => {
-    setisUpdating(true);
-    setValue(3);
-    setSectionId(props.id);
   };
 
   return (
@@ -77,7 +67,6 @@ const CourseTabsBar = () => {
             <Tab icon={<MenuBook />} iconPosition="end" label="Course Overview" {...a11yProps(0)} />
             <Tab icon={<People />} iconPosition="end" label="Section Overview" {...a11yProps(1)} />
             <Tab icon={<Add />} iconPosition="end" label="Create Section" {...a11yProps(2)} />
-            <Tab icon={<Update />} iconPosition="end" label="Edit Section" disabled={!isUpdating} {...a11yProps(3)} />
           </Tabs>
         </ThemeProvider>
       </Box>
@@ -85,13 +74,10 @@ const CourseTabsBar = () => {
         <CourseTable />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SectionTable handleEditClick={handleEditClick} />
+        <SectionTable />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <CreateSectionTab />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <CreateSectionTab sectionId={sectionId} isUpdating={isUpdating} />
       </CustomTabPanel>
     </Box>
   );

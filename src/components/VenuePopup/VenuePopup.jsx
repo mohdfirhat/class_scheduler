@@ -3,6 +3,7 @@ import { Grid, Button } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import "./VenuePopup.css";
 
+//Component for rendering venue popup in CreateSectionTab
 const VenuePopup = ({ venues, isVenueFilled, formState }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedVenue, setSelectedVenue] = useState({
@@ -11,12 +12,12 @@ const VenuePopup = ({ venues, isVenueFilled, formState }) => {
     description: "",
   });
 
+  //handlers for clicking VENUE INFORMATION button. handleClick retrieves venue data based
+  //venue selected in dropdown menu, and renders venue data in the popup
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     if (venues.find((venue) => venue.id == formState.formData.venueId)) {
       setSelectedVenue(venues.find((venue) => venue.id == formState.formData.venueId));
-
-      // selectedVenue = venues.find(venue => venue.id == formState.formData.venueId);
     }
   };
 
@@ -26,17 +27,6 @@ const VenuePopup = ({ venues, isVenueFilled, formState }) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
-  // let selectedVenue;
-  // if (venues.find(venue => venue.id == formData.venueId)){
-  //   selectedVenue = venues.find(venue => venue.id == formData.venueId);
-  // } else{
-  //   selectedVenue = {
-  //     name:"",
-  //     occupancy:"",
-  //     description:""
-  //   }
-  // }
 
   return (
     <Grid className="test" container>

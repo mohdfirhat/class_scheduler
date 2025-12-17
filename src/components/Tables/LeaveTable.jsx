@@ -17,13 +17,6 @@ import { BACKEND_URL } from "../../api/api";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 
-//dummy data
-// const rows = [
-//     { id: 1, name: 'Bob', startDate: '30 Sep 2025', endDate:'1 Oct 2025', duration: '1', affectedSection: 'Algebra I: Intro to Algebra', status:'pending', button: 'conflict' },
-//     { id: 2, name: 'Jim', startDate: '1 Oct 2025', endDate:'2 Oct 2025', duration: '1', affectedSection: 'NA', status:'pending', button: 'pending' },
-//     { id: 3, name: 'Jim', startDate: '3 Oct 2025', endDate:'7 Oct 2025', duration: '3', affectedSection: 'NA', status:'approved', button: 'approved' },
-//     { id: 4, name: 'Jim', startDate: '5 Oct 2025', endDate:'8 Oct 2025', duration: '3', affectedSection: 'NA', status:'rejected', button: 'rejected' }
-// ]
 const columns = [
   {
     field: "id",
@@ -126,38 +119,42 @@ const LeaveTable = (props) => {
     navigate(`/schedules/${rowData.teacherId}`, { state: { initialDate: rowData.startDate } });
   };
 
-  const handleViewConflict = (rowData) => {
-    navigate(`/conflicts/${rowData.id}`);
-  };
-  const handleApproveClick = async (rowData) => {
-    try {
-      const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
-      toast.success(res.data.message, { position: "top-center" });
-      setLatestUpdate(res.data.message);
-    } catch (error) {
-      toast.error(error.response.data, { position: "top-center" });
-    }
-  };
-  const handleRejectClick = async (rowData) => {
-    try {
-      const res = await axios.put(`${BACKEND_URL}/api/leaves/reject/${rowData.id}`);
-      toast.success(res.data.message, { position: "top-center" });
-      setLatestUpdate(res.data.message);
-    } catch (error) {
-      toast.error(error.response.data, { position: "top-center" });
-    }
-  };
+    const handleViewConflict = (rowData) => {
+        navigate(`/conflicts/${rowData.id}`);
+    };
+    const handleApproveClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
+            console.log(res);
+            toast.success(res.data, {position: 'top-center',});
+            setLatestUpdate(res.data);
 
-  //useEffect to fetch data and generate table depending on the Leave tab selected
-  useEffect(() => {
-    switch (props.table) {
-      case "pending":
-        fetchPendingLeaves()
-          .then((dataArray) => {
-            setLeaves(dataArray);
-          })
-          .catch((error) => console.error("Error:", error.message));
-        break;
+        } catch (error){
+            toast.error(error.response.data,{position: 'top-center',});
+        }
+    };
+    const handleRejectClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/leaves/reject/${rowData.id}`);
+            toast.success(res.data,{position: 'top-center',});
+            setLatestUpdate(res.data);
+
+        } catch (error){
+            toast.error(error.response.data,{position: 'top-center',});
+        }
+        
+    };
+    
+    //useEffect to fetch data and generate table depending on the Leave tab selected
+    useEffect(() => {
+        switch(props.table){
+            case "pending":
+                fetchPendingLeaves()
+                .then((dataArray) => {
+                    setLeaves(dataArray);
+                })
+                .catch((error) => console.error('Error:', error.message));
+            break;
 
       case "nonPending":
         fetchNonPendingLeaves()

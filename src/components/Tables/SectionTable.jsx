@@ -7,53 +7,7 @@ import { BACKEND_URL } from "../../api/api";
 import toast from "react-hot-toast";
 import Box from '@mui/material/Box';
 
-//dummy data
-// const rows = [
-//   {
-//     id: 1,
-//     courseCode: "CS101",
-//     name: "Programming Fundamentals",
-//     date: dayjs("2025-09-30").toISOString(),
-//     timeslot: 1,
-//     venueId: 10,
-//     venue: "Room 101",
-//     classSize: 30,
-//     teacherId: 1,
-//     teacher: "Bob",
-//     remarks: 'Class test 1',
-//     status: "confirmed",
-//     button: "confirmed",
-//   },
-//   {
-//     id: 2,
-//     courseCode: "CS102",
-//     name: "Object-Oriented Programming",
-//     date: dayjs("2025-09-30").toISOString(),
-//     timeslot: 1,
-//     venueId: 11,
-//     venue: "Lab 2",
-//     classSize: 34,
-//     teacherId: 2,
-//     teacher: "Jim",
-//     status: "cancelled",
-//     button: "cancelled",
-//   },
-//   {
-//     id: 3,
-//     courseCode: "CS103",
-//     name: "Data Structures and Algorithms",
-//     date: dayjs("2025-09-30").toISOString(),
-//     timeslot: 3,
-//     venueId: 12,
-//     venue: "Auditorium",
-//     classSize: 30,
-//     teacherId: 2,
-//     teacher: "Jim",
-//     status: "pending",
-//     button: "pending",
-//   },
-// ];
-
+//Column properties and formatting to be passed to DataGrid in the Table component
 const columns = [
   {
     field: "id",
@@ -142,12 +96,10 @@ const columns = [
     filterable: false,
     renderCell: RenderButton,
     approvedBtnProps: [
-      { name: "Edit Section", href: null, onclick },
       { name: "Cancel Section", href: null, onclick },
     ],
     rejectedBtnProps: [],
     pendingBtnProps: [
-      { name: "Edit Section", href: null, onclick },
       {name: 'Approve', href: null, onclick },
       { name: "Cancel Section", href: null, onclick },
     ]
@@ -156,7 +108,10 @@ const columns = [
 
 //Main table component
 const SectionTable = (props) => {
+  //State used for "saving" section data
   const [sections, setSections] = useState([]);
+
+  //State used for re-rendering table when changes are made to any section
   const [latestUpdate, setLatestUpdate] = useState([]);
 
   //handler(s) for table buttons defined here to be passed down to DataGrid via props
@@ -180,31 +135,35 @@ const SectionTable = (props) => {
             toast.error(error.response.data,{position: 'top-center',});
         }    
     };
-
+  
+  // useEffect for retrieving all section records on page load
+  //and sending data to DataGrid in Table component
   useEffect(() => {
     const fetchSections = async () => {
       try {
-            const res = await axios.get(`${BACKEND_URL}/api/sections/all`);
-      const processedArr = [];
+        const res = await axios.get(`${BACKEND_URL}/api/sections`);
+        const processedArr = [];
 
-      res.data.forEach((section) => {
-        const entry = new Object();
-        entry.id = section.id;
-        entry.courseCode = section.course.courseCode;
-        entry.name = section.course.name;
-        entry.date = section.date;
-        entry.timeslot = section.timeslot.startTime.slice(0, -3) + ' - ' + section.timeslot.endTime.slice(0, -3);
-        entry.venue = section.venue.name;
-        entry.classSize = section.classSize;
-        entry.teacher = section.teacher.firstName + ' ' + section.teacher.lastName;
-        entry.remarks = section.description;
-        entry.status = section.status.type;
-        entry.button = section.status.type; 
+        //useEffect receives section data, and modifies it to suit the columns 
+        //in SectionTable
+        res.data.forEach((section) => {
+          const entry = new Object();
+          entry.id = section.id;
+          entry.courseCode = section.course.courseCode;
+          entry.name = section.course.name;
+          entry.date = section.date;
+          entry.timeslot = section.timeslot.startTime.slice(0, -3) + ' - ' + section.timeslot.endTime.slice(0, -3);
+          entry.venue = section.venue.name;
+          entry.classSize = section.classSize;
+          entry.teacher = section.teacher.firstName + ' ' + section.teacher.lastName;
+          entry.remarks = section.description;
+          entry.status = section.status.type;
+          entry.button = section.status.type; 
+        
+          processedArr.push(entry);
+        });
       
-        processedArr.push(entry);
-      });
-      
-      setSections(processedArr);
+        setSections(processedArr);
       } catch (error){
       toast.error(error.response.data,{position: 'top-center',});
       }

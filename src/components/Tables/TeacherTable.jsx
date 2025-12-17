@@ -6,15 +6,7 @@ import { BACKEND_URL } from "../../api/api";
 import { useNavigate } from "react-router";
 import Box from '@mui/material/Box';
 
-//dummy data
-// const rows = [
-//     { id: 1, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Biology', email: 'bob@gmail.com', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
-//     { id: 2, firstName: 'Bob', lastName: 'Marley', dept: 'Science', subject:'Chemistry', email: 'bob@gmail.com', leave: '17', button: 'teacher', avatar:'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg' },
-//     { id: 3, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Elementary Mathematics', email: 'jim@gmail.com', leave: '24', button: 'teacher' },
-//     { id: 4, firstName: 'Jim', lastName: 'Carrey', dept: 'Mathematics', subject:'Additional Mathematics', email: 'jim@gmail.com', leave: '24', button: 'teacher' },
-//     { id: 5, firstName: 'Daisy', dept: 'English', subject:'Additional Mathematics', email: 'daisy@gmail.com', leave: '24', button: 'teacher' },
-// ];
-
+//Column properties and formatting to be passed to DataGrid in the Table component
 const columns = [
     { field: 'avatar', 
         headerName: '', 
@@ -94,15 +86,16 @@ const TeacherTable = ()=>{
         navigate(`/schedules/${rowData.id}`);
     };
 
-    // useEffect for retrieving all teacher records from back end
-    // manager ID set to 1 for now as user login is not implemented
-    //   const { managerId } = useParams();
-      const managerId = 1;
-      const [teachers, setTeachers] = useState([]);
+    //State used for "saving" section data
+    const [teachers, setTeachers] = useState([]);
 
+    // useEffect for retrieving all teacher records on page load
+    //and sending data to DataGrid in Table component
+    //useEffect clones teacher data, and modifies it to suit the columns 
+    //in TeacherTable
     useEffect(() => {
         const fetchTeachers = async () => {
-          const res = await axios.get(`${BACKEND_URL}/api/teachers/${managerId}/courses`);
+          const res = await axios.get(`${BACKEND_URL}/api/teachers`);
           const processedArr = [];
           let idCounter = 0;
           res.data.forEach((teacher) => {
@@ -115,7 +108,9 @@ const TeacherTable = ()=>{
                     entry.internalId = idCounter;
                     entry.button = 'teacher';
                     processedArr.push(entry);
+                    ;
                 })
+                
           });
 
           setTeachers(processedArr);
@@ -136,7 +131,7 @@ const TeacherTable = ()=>{
                 }}
                 initialState={{
                     pagination: {
-                        paginationModel: { pageSize: 25, page: 0 },
+                        paginationModel: { pageSize: 50, page: 0 },
                     },
                       }}
                 rowSpanning = {true}

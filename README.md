@@ -1,16 +1,47 @@
-# React + Vite
+# Lesson Scheduler Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Table of Content
 
-Currently, two official plugins are available:
+- [Description](#description)
+- [Technology Used](#technology-used)
+- [Requirement](#requirements)
+- [Local Setup](#local-setup)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Description
 
-## React Compiler
+The backend for TFIP to manage teachers schedules such as leaves and sections. Managers are able to login and carry out the following features:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- View teacher details
+- View leave details
+- View section details
+- View teacher schedules
+- Create sections
+- Approve/Reject Leaves
+- Resolve teacher leave conflict (with sections) by reassigning teachers
 
-## Expanding the ESLint configuration
+## Technology Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- [React](https://react.dev/)
+
+## Requirements
+
+- [React v19.1.1 ](https://nodejs.org/en)
+- [Node.js v22](https://nodejs.org/en)
+
+## Local Setup
+
+Run the following codes in the terminal to set up the project.
+
+```bash
+# Step 1: Create a copy of the .env file
+cp .env.example .env
+
+# Step 2: Install application dependencies using npm
+npm install
+
+# Step 3: Ensure that backend (class_scheduler_be) is running. (Refer to README.md in class_scheduler_be for set up)
+
+# Step 4: Run application using npm
+npm run dev
+
+```

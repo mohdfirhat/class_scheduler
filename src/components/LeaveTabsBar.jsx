@@ -47,22 +47,16 @@ const a11yProps = (index) => {
   };
 }
 
+//Main table component
+//Component used to render sub tabs in the Course Tab
 const CourseTabsBar = () => {
   const [value, setValue] = React.useState(0);
-  const [isUpdating, setisUpdating] = React.useState(false);
-  const [sectionObject, setSectionObject] = React.useState();
   
+  //handler used to render tab whenever a tab is selected
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (newValue != 3){
-      setisUpdating(false);
-    }
   };
-  const handleEditClick = (props) => {
-    setisUpdating(true);
-    setValue(3);
-    setSectionObject(props);
-  }
+
 
   return (
     <Box sx={{ width: '100%' }}>

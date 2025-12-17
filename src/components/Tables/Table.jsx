@@ -10,6 +10,7 @@ const getTogglableColumns = (columns) => {
     .map((column) => column.field);
 };
 
+//Main table component
 const Table = (props)=>{
     //passing handlers passed down in props to the columns props 
     //so that the RenderButton function can access them
