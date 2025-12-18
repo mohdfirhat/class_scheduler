@@ -1,5 +1,4 @@
 import NavBar from "../../components/NavBar/NavBar";
-// import { scheduleLeaves, scheduleSections, teacherSchedule } from "../../fakedata/data";
 import styles from "./TeacherSchedulePage.module.css";
 import { useLocation, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
@@ -10,18 +9,18 @@ import toast from "react-hot-toast";
 
 const TeacherSchedulePage = () => {
   const { state } = useLocation();
-  console.log(state);
   const { teacherId } = useParams();
   const calRef = useRef(null);
   const [leaves, setLeaves] = useState([]);
   const [sections, setSections] = useState([]);
-  const [teacher, setTeacher] = useState([]);
+  const [teacher, setTeacher] = useState(null);
 
   useEffect(() => {
     const fetchTeacherSchedule = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherId}`);
-        setLeaves(res.data.leaves);
+        console.log(res);
+        setLeaves(res.data.teacherLeaves);
         setSections(res.data.sections);
         setTeacher(res.data);
       } catch (e) {

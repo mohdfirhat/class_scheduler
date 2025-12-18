@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, TextField, Button, MenuItem, Typography, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -7,6 +7,7 @@ import VenuePopup from "../VenuePopup/VenuePopup";
 import axios from "axios";
 import { BACKEND_URL } from "../../api/api";
 import toast from "react-hot-toast";
+import { UserContext } from "../../provider/UserProvider";
 
 const SectionForm = ({
   formState,
@@ -27,8 +28,9 @@ const SectionForm = ({
   const [courses, setCourses] = useState([]);
   const [timeslots, setTimeslots] = useState([]);
 
-  const departmentId = 1;
-  const managerId = 1;
+  const { user } = useContext(UserContext);
+  const departmentId = user.department.id;
+  const managerId = user.id;
 
   const handleChange = (field) => (event) => {
     dispatchFormData({ type: field, value: event.target.value });
@@ -48,6 +50,13 @@ const SectionForm = ({
       setTentitiveSection((prevState) => ({
         ...prevState,
         timeslot: timeslots.find((timeslot) => timeslot.id == event.target.value),
+      }));
+    }
+
+    if (field == "remarks") {
+      setTentitiveSection((prevState) => ({
+        ...prevState,
+        remark: event.target.value,
       }));
     }
   };
@@ -117,6 +126,7 @@ const SectionForm = ({
     if (teacherId.toString().length != 0) {
       true;
       setTeacherOneId(teacherId);
+      setRefreshSchedule(true);
     } else {
       setTeacherOneId(null);
     }
@@ -280,7 +290,7 @@ const SectionForm = ({
             inputFormat="DD/MM/YYYY"
             // defaultValue={formState.formData.date ? dayjs(formState.formData.date) : null}
             value={formState.formData.date ? dayjs(formState.formData.date) : null}
-            shouldDisableDate={(date) => (date.day() ===0 || date.day() ===6)}
+            shouldDisableDate={(date) => date.day() === 0 || date.day() === 6}
             onChange={handleDateChange}
             slotProps={{ textField: { fullWidth: true, required: true } }}
           />

@@ -4,19 +4,22 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router";
 import { Toaster } from "react-hot-toast";
+import { UserProvider } from "./provider/UserProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
-      <Toaster
-        position="bottom-center"
-        toastOptions={{
-          style: {
-            maxWidth: '500px', // Overrides the default 350px limit
-          },
-  }}
-      />
+      <UserProvider>
+        <App />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              maxWidth: "500px", // Overrides the default 350px limit
+            },
+          }}
+        />
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>
 );

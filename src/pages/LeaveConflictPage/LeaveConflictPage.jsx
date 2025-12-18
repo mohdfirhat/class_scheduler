@@ -21,6 +21,22 @@ const LeaveConflictPage = () => {
   const [allTeacherLeaves, setAllTeacherLeaves] = useState([]);
   const [conflictSectionsAndTeachers, setConflictSectionsAndTeachers] = useState([]);
   const [refetchData, setRefetchData] = useState(true);
+  const teacherOne = conflictLeave ? conflictLeave.teacher : null;
+  console.log(conflictSectionsAndTeachers);
+  // console.log(teacherOne);
+  // const teacherTwo = allTeacherSections.find((section) => section.teacher.id == formData.subTeacherId)
+  //   ? allTeacherSections.find((section) => section.teacher.id == formData.subTeacherId).teacher
+  //   : null;
+  const getTeacherTwo = () => {
+    if (formData.selectedSectionId === "") return null;
+    const section = conflictSectionsAndTeachers.find((section) => section.id == formData.selectedSectionId);
+    if (formData.subTeacherId === "") return null;
+    const teacherTwo = section.availableTeachers.find((teacher) => teacher.id == formData.subTeacherId);
+    return teacherTwo;
+  };
+  const teacherTwo = getTeacherTwo();
+  console.log(teacherTwo);
+  // console.log(teacherTwo);
 
   const conflictSections = conflictSectionsAndTeachers.map(({ availableTeachers, ...section }) => section);
   useEffect(() => {
@@ -104,6 +120,7 @@ const LeaveConflictPage = () => {
               <AppFullCalendar
                 sections={allTeacherSections}
                 leaves={allTeacherLeaves}
+                teacher={teacherOne}
                 conflictingLeaveId={leaveId}
                 // otherTeacherId={formData.subTeacherId}
                 selectedTeacherId={conflictLeave ? conflictLeave.teacher.id : 0}
@@ -119,6 +136,7 @@ const LeaveConflictPage = () => {
               <AppFullCalendar
                 sections={allTeacherSections}
                 leaves={allTeacherLeaves}
+                teacher={teacherTwo}
                 conflictingLeaveId={leaveId}
                 otherTeacherId={formData.subTeacherId}
                 selectedTeacherId={0}

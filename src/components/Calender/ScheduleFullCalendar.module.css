@@ -1,0 +1,16 @@
+.titleContainer {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  padding-bottom: 3rem;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.avatar {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 50%;
+}

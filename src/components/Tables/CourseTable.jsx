@@ -1,9 +1,10 @@
 import axios from "axios";
 import { SetColumnMenu } from "../../utils/TableFuncs";
 import Table from "./Table";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BACKEND_URL } from "../../api/api";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
+import { UserContext } from "../../provider/UserProvider";
 
 //Column properties and formatting to be passed to DataGrid in the Table component
 const columns = [
@@ -37,12 +38,11 @@ const columns = [
 
 //Main table component
 const CourseTable = (props) => {
-
-  //department hard coded to id 1 
-  const departmentId = 1;
+  const { user } = useContext(UserContext);
+  const departmentId = user.department.id;
   const [courses, setCourses] = useState([]);
 
-  //useEffect for fetching all course data on page load 
+  //useEffect for fetching all course data on page load
   //and sending data to DataGrid in Table component
   useEffect(() => {
     const fetchCourses = async () => {
@@ -55,14 +55,14 @@ const CourseTable = (props) => {
   return (
     <div className="table">
       <h1 className="page-title">Course Overview</h1>
-      <Table 
-        rows={courses} 
-        columns={columns} 
-        rowSpacingVals={[0, 30]} 
-        slots={{ 
-                columnMenu: SetColumnMenu,
-                noRowsOverlay: ()=><Box p={5}>No courses to display</Box>, 
-              }}
+      <Table
+        rows={courses}
+        columns={columns}
+        rowSpacingVals={[0, 30]}
+        slots={{
+          columnMenu: SetColumnMenu,
+          noRowsOverlay: () => <Box p={5}>No courses to display</Box>,
+        }}
       />
     </div>
   );

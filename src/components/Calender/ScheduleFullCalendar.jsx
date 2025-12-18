@@ -3,7 +3,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import tippy from "tippy.js";
+import styles from "./ScheduleFullCalendar.module.css";
 import "tippy.js/dist/tippy.css";
+import { RenderTeacherAvatar } from "../../utils/TableFuncs";
 
 export default function ScheduleFullCalendar({
   leaves,
@@ -27,8 +29,6 @@ export default function ScheduleFullCalendar({
     start.setHours(20, 0, 0, 0);
     return start;
   }
-
-  console.log(sections);
 
   const sectionColour = (section, teacher) => {
     if (teacher.id == selectedTeacherId) {
@@ -55,9 +55,9 @@ export default function ScheduleFullCalendar({
     if (teacher.id == selectedTeacherId) {
       // https://htmlcolorcodes.com/colors/shades-of-orange/
       if (leave.status.type == "pending") {
-        return "#89CFF0"; //selected teacher and pending color(baby blue)
+        return "#B6D0E2"; //selected teacher and pending color(powder blue)
       } else if (leave.status.type == "approved") {
-        return "#0000FF"; //selected teacher and approved color(blue)
+        return "#4682B4"; //selected teacher and approved color(steel blue)
       } else {
         return "#6F8FAF"; //selected teacher and rejected color(Denim)
       }
@@ -98,6 +98,7 @@ export default function ScheduleFullCalendar({
       venueName: section.venue.name,
       venueDesc: section.venue.description,
       data: section,
+      notes: section.remark,
     },
   });
   const createLeaveEvent = (leave, teacher) => ({
@@ -121,62 +122,71 @@ export default function ScheduleFullCalendar({
     const createdTentitiveEvent = createTentitiveSectionEvent(tentitiveSection, teacher);
     events.push(createdTentitiveEvent);
   }
+  console.log(teacher);
 
   return (
-    // <div style={{ width: "100vw", height: "100vh-6rem" }}>
-    <FullCalendar
-      ref={ref}
-      initialDate={initialDate}
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-      headerToolbar={{
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay",
-      }}
-      initialView={initialView}
-      events={events}
-      editable={false}
-      selectable
-      eventBackgroundColor="red"
-      slotMinTime="08:00:00"
-      slotMaxTime="20:00:00"
-      slotDuration="00:30:00"
-      height="auto"
-      eventOverlap={true}
-      weekends={false}
-      eventDidMount={(info) => {
-        tippy(info.el, {
-          content:
-            info.event.extendedProps.type === "section"
-              ? `
+    <div>
+      {teacher && (
+        <div className={styles.titleContainer}>
+          {RenderTeacherAvatar(teacher)}
+          <h1>
+            {teacher.firstName} {teacher.lastName} Schedule
+          </h1>
+        </div>
+      )}
+      <FullCalendar
+        ref={ref}
+        initialDate={initialDate}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        initialView={initialView}
+        events={events}
+        editable={false}
+        selectable
+        eventBackgroundColor="red"
+        slotMinTime="08:00:00"
+        slotMaxTime="20:00:00"
+        slotDuration="00:30:00"
+        height="auto"
+        eventOverlap={true}
+        weekends={false}
+        eventDidMount={(info) => {
+          tippy(info.el, {
+            content:
+              info.event.extendedProps.type === "section"
+                ? `
             <strong>${info.event.title}</strong><br/>
             Teacher: ${info.event.extendedProps.teacher}<br/>
             Venue: ${info.event.extendedProps.venueName}<br/>
             Remarks: ${info.event.extendedProps.notes || ""}
           `
-              : `<strong>${info.event.title}</strong><br/>`,
-          allowHTML: true,
-          animation: "scale",
-          theme: "light-border",
-          delay: [100, 50],
-          // interactive: true,
-          // placement: "top",
-          maxWidth: 250,
-        });
-      }}
-      eventClick={(info) => {
-        if (setFormData !== undefined) {
-          if (
-            conflictSections.find(
-              (section) =>
-                section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
-            )
-          ) {
-            setFormData((oldData) => ({ ...oldData, selectedSectionId: info.event.extendedProps.data.id }));
+                : `<strong>${info.event.title}</strong><br/>`,
+            allowHTML: true,
+            animation: "scale",
+            theme: "light-border",
+            delay: [100, 50],
+            // interactive: true,
+            // placement: "top",
+            maxWidth: 250,
+          });
+        }}
+        eventClick={(info) => {
+          if (setFormData !== undefined) {
+            if (
+              conflictSections.find(
+                (section) =>
+                  section.id === info.event.extendedProps.data.id && info.event.extendedProps.type === "section"
+              )
+            ) {
+              setFormData((oldData) => ({ ...oldData, selectedSectionId: info.event.extendedProps.data.id }));
+            }
           }
-        }
-      }}
-    />
-    // </div>
+        }}
+      />
+    </div>
   );
 }
