@@ -14,8 +14,10 @@ export default function AppFullCalendar({
   selectedTeacherId,
   otherTeacherId,
   conflictingLeaveId,
+  conflictingSectionId,
   selectedConflictSection,
   initialView,
+  displayConflictingSection = false,
   initialDate = undefined,
   ref = undefined,
   setFormData = undefined,
@@ -58,7 +60,7 @@ export default function AppFullCalendar({
 
   const leaveColor = (leave, conflictingLeaveId) => {
     if (leave.id == conflictingLeaveId) {
-      return "#FF0000"; //conflicting leave (red)
+      return "#FF9D8A"; //conflicting leave (red)
     }
     if (leave.teacher.id === selectedTeacherId) {
       // https://htmlcolorcodes.com/colors/shades-of-orange/
@@ -109,13 +111,22 @@ export default function AppFullCalendar({
       data: leave,
     },
   });
-  const filteredEvents = sections.filter(
+  const filteredSections = sections.filter(
     (section) => section.teacher.id == selectedTeacherId || section.teacher.id == otherTeacherId
   );
-  const sectionEvents = filteredEvents.map((section) => createSectionEvent(section));
+  if (displayConflictingSection) {
+    //add conflicting section
+    const conflictingSection = sections.find((section) => section.id == conflictingSectionId);
+    console.log(conflictingSection);
+    if (conflictingSection != undefined) {
+      filteredSections.push(conflictingSection);
+    }
+  }
+  const sectionEvents = filteredSections.map((section) => createSectionEvent(section));
   const filteredLeaveEvents = leaves.filter(
     (leave) => leave.teacher.id == selectedTeacherId || leave.teacher.id == otherTeacherId
   );
+
   const leaveEvents = filteredLeaveEvents.map((leave) => createLeaveEvent(leave));
   const events = [...sectionEvents, ...leaveEvents];
 

@@ -107,7 +107,8 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
       const fetchTeacherSchedule = async () => {
         try {
           const res = await axios.get(`${BACKEND_URL}/api/teachers/schedules/${teacherOneId}`);
-          setTeacherOneLeaves(res.data.leaves);
+          console.log(res.data);
+          setTeacherOneLeaves(res.data.teacherLeaves);
           setTeacherOneSections(res.data.sections);
           setTeacherOne(res.data);
         } catch (e) {

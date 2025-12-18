@@ -91,7 +91,7 @@ export default function ScheduleFullCalendar({
     title: section.course.courseCode,
     start: `${section.date.format("YYYY-MM-DD")}T${section.timeslot.startTime}`,
     end: `${section.date.format("YYYY-MM-DD")}T${section.timeslot.endTime}`,
-    color: "darkblue",
+    color: "red",
     extendedProps: {
       type: "section",
       teacher: `${teacher.firstName} ${teacher.lastName}`,
@@ -101,10 +101,12 @@ export default function ScheduleFullCalendar({
       notes: section.remark,
     },
   });
+  console.log(leaves);
   const createLeaveEvent = (leave, teacher) => ({
     title: `${teacher.firstName} ${teacher.lastName} Leave (${leave.status.type.toUpperCase()})`,
     start: formatStartDate(leave.startDate),
     end: formatEndDate(leave.endDate),
+    // allDay: true,
     color: leaveColor(leave, teacher),
     borderColor: teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     borderStyle: "dashed",

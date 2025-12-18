@@ -15,6 +15,11 @@ const TeacherSchedulePage = () => {
   const [sections, setSections] = useState([]);
   const [teacher, setTeacher] = useState(null);
 
+  // change document title on new page
+  useEffect(() => {
+    document.title = "Schedules | Lesson Scheduler";
+  }, []);
+
   useEffect(() => {
     const fetchTeacherSchedule = async () => {
       try {

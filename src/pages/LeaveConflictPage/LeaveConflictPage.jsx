@@ -22,11 +22,12 @@ const LeaveConflictPage = () => {
   const [conflictSectionsAndTeachers, setConflictSectionsAndTeachers] = useState([]);
   const [refetchData, setRefetchData] = useState(true);
   const teacherOne = conflictLeave ? conflictLeave.teacher : null;
-  console.log(conflictSectionsAndTeachers);
-  // console.log(teacherOne);
-  // const teacherTwo = allTeacherSections.find((section) => section.teacher.id == formData.subTeacherId)
-  //   ? allTeacherSections.find((section) => section.teacher.id == formData.subTeacherId).teacher
-  //   : null;
+
+  // change document title on new page
+  useEffect(() => {
+    document.title = "Leave Conflict | Lesson Scheduler";
+  }, []);
+
   const getTeacherTwo = () => {
     if (formData.selectedSectionId === "") return null;
     const section = conflictSectionsAndTeachers.find((section) => section.id == formData.selectedSectionId);
@@ -35,8 +36,6 @@ const LeaveConflictPage = () => {
     return teacherTwo;
   };
   const teacherTwo = getTeacherTwo();
-  console.log(teacherTwo);
-  // console.log(teacherTwo);
 
   const conflictSections = conflictSectionsAndTeachers.map(({ availableTeachers, ...section }) => section);
   useEffect(() => {
@@ -137,7 +136,9 @@ const LeaveConflictPage = () => {
                 sections={allTeacherSections}
                 leaves={allTeacherLeaves}
                 teacher={teacherTwo}
+                conflictingSectionId={formData.selectedSectionId}
                 conflictingLeaveId={leaveId}
+                displayConflictingSection={true}
                 otherTeacherId={formData.subTeacherId}
                 selectedTeacherId={0}
                 initialView="timeGridWeek"

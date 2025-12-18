@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect x="4" y="8" width="56" height="52" rx="8" fill="#00838f"/>
+
+  <!-- Top bar (slightly darker for contrast) -->
+  <rect x="4" y="8" width="56" height="14" rx="8" fill="#006f78"/>
+
+  <!-- Rings -->
+  <rect x="18" y="2" width="6" height="12" rx="3" fill="#006f78"/>
+  <rect x="40" y="2" width="6" height="12" rx="3" fill="#006f78"/>
+
+  <!-- Date dots -->
+  <g fill="#FFFFFF">
+    <circle cx="20" cy="32" r="3"/>
+    <circle cx="32" cy="32" r="3"/>
+    <circle cx="44" cy="32" r="3"/>
+    <circle cx="20" cy="44" r="3"/>
+    <circle cx="32" cy="44" r="3"/>
+    <circle cx="44" cy="44" r="3"/>
+  </g>
+</svg>
