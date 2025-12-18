@@ -9,7 +9,7 @@
 
 ## Description
 
-The backend for TFIP to manage teachers schedules such as leaves and sections. Managers are able to login and carry out the following features:
+The frontend for TFIP to manage teachers schedules such as leaves and sections. Managers are able to login and carry out the following features:
 
 - View teacher details
 - View leave details
@@ -22,11 +22,14 @@ The backend for TFIP to manage teachers schedules such as leaves and sections. M
 ## Technology Used
 
 - [React](https://react.dev/)
+- [React Router](https://reactrouter.com/)
+- [Axios] (https://axios-http.com/)
 
 ## Requirements
 
-- [React v19.1.1 ](https://nodejs.org/en)
+- [React v19.1.1 ](https://react.dev/)
 - [Node.js v22](https://nodejs.org/en)
+- [npm v11.6.2](https://www.npmjs.com/)
 
 ## Local Setup
 
