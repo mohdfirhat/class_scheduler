@@ -9,9 +9,9 @@ const getTogglableColumns = (columns) => {
 
 //Main table component
 const Table = (props) => {
+
   //passing handlers passed down in props to the columns props
   //so that the RenderButton function can access them
-
   if (props.handleEditClick) {
     props.columns.find((col) => col.field == "button").handleEditClick = props.handleEditClick;
   }
@@ -34,7 +34,6 @@ const Table = (props) => {
     props.columns.find((col) => col.field == "button").handleViewConflict = props.handleViewConflict;
   }
 
-  // console.log(props);
   return (
     <Typography component="div">
       <DataGrid

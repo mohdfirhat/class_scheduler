@@ -38,8 +38,11 @@ const columns = [
 
 //Main table component
 const CourseTable = (props) => {
+  //context for passing in user that is logged in and his/her department id
   const { user } = useContext(UserContext);
   const departmentId = user.department.id;
+  
+  //state for saving table data after fetching for back end. Used for propagating down to Datagrid as props
   const [courses, setCourses] = useState([]);
 
   //useEffect for fetching all course data on page load

@@ -17,6 +17,7 @@ import { BACKEND_URL } from "../../api/api";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 
+//Column properties and formatting to be passed to DataGrid in the Table component
 const columns = [
   {
     field: "id",
@@ -108,8 +109,13 @@ const columns = [
 
 //Main table component
 const LeaveTable = (props) => {
+  //state for saving table data after fetching for back end. Used for propagating down to Datagrid as props
   const [leaves, setLeaves] = useState([]);
+  
+  //state used to determine whether to show the affected sections column in the table. used to hide that column in the nonPending tab
   const [showAffectedSections, setShowAffectedSections] = useState(true);
+
+  //state used to save the details of the latest update, used to rerender table data to reflect changes
   const [latestUpdate, setLatestUpdate] = useState([]);
 
   //handler(s) for table buttons defined here to be passed down to DataGrid via props
@@ -125,7 +131,6 @@ const LeaveTable = (props) => {
     const handleApproveClick = async (rowData) => {
         try {
             const res = await axios.put(`${BACKEND_URL}/api/leaves/approve/${rowData.id}`);
-            console.log(res);
             toast.success(res.data, {position: 'top-center',});
             setLatestUpdate(res.data);
 

@@ -101,7 +101,8 @@ const TeacherTable = () => {
     navigate(`/schedules/${rowData.id}`);
   };
 
-  const [teachers, setTeachers] = useState([]);
+    //State used for "saving" section data
+    const [teachers, setTeachers] = useState([]);
 
   // useEffect for retrieving all teacher records on page load
   //and sending data to DataGrid in Table component

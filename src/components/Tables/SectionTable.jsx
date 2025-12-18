@@ -111,7 +111,7 @@ const SectionTable = (props) => {
   //State used for "saving" section data
   const [sections, setSections] = useState([]);
 
-  //State used for re-rendering table when changes are made to any section
+  //state used to save the details of the latest update, used to rerender table data to reflect changes
   const [latestUpdate, setLatestUpdate] = useState([]);
 
   //handler(s) for table buttons defined here to be passed down to DataGrid via props
