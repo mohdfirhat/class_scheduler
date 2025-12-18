@@ -8,6 +8,7 @@ import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+//default variables for section form
 const defaultSection = {
   courseCode: "",
   remarks: "",
@@ -17,6 +18,8 @@ const defaultSection = {
   teacherId: "",
   venueId: "",
 };
+
+//default variables for tentitive section
 const defaultTentitiveSection = {
   course: {
     courseCode: "",
@@ -32,7 +35,8 @@ const defaultTentitiveSection = {
   },
 };
 
-const CreateSectionTab = ({ sectionId, isUpdating }) => {
+const CreateSectionTab = ({ isUpdating }) => {
+  // Reducer function for formData mutation
   const formReducerFunc = (prevState, action) => {
     switch (action.type) {
       case "date":
@@ -80,19 +84,31 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
         };
     }
   };
+  // initial State of reducer
   const initState = { formData: defaultSection, validClassSize: true };
-  const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
 
+  // Reducer for formState and dispatch function
+  const [formState, dispatchFormData] = useReducer(formReducerFunc, initState);
+  // Reference for FullCalendar
   const calendarOneRef = useRef(null);
+  // State for available teachers
   const [availTeacher, setAvailTeacher] = useState([]);
+  // State for available venues
   const [availVenues, setAvailVenues] = useState([]);
+  // State for teacherOneId teachers
   const [teacherOneId, setTeacherOneId] = useState(null);
+  // State for teacherOne leaves
   const [teacherOneLeaves, setTeacherOneLeaves] = useState([]);
+  // State for teacherOne sections
   const [teacherOneSections, setTeacherOneSections] = useState([]);
+  // State for teacherOne
   const [teacherOne, setTeacherOne] = useState(null);
+  // State for tentitive Section
   const [tentitiveSection, setTentitiveSection] = useState(defaultTentitiveSection);
+  // State to toggle refreshing data from database
   const [refreshSchedule, setRefreshSchedule] = useState(true);
 
+  // useEffect to change FullCalendar page on form date change
   useEffect(() => {
     const calendarOneApi = calendarOneRef.current?.getApi();
     if (calendarOneApi) {
@@ -101,7 +117,7 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
     }
   }, [formState.formData.date]);
 
-  // fetch teacher schedule(sections and leaves)
+  // useEffect to fetch teacher schedule(sections and leaves)
   useEffect(() => {
     if (teacherOneId && refreshSchedule) {
       const fetchTeacherSchedule = async () => {
@@ -123,7 +139,6 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
   }, [teacherOneId, refreshSchedule]);
 
   return (
-    //TODO: Firhat
     <>
       <SectionForm
         formState={formState}

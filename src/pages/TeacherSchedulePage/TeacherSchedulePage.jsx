@@ -8,11 +8,17 @@ import ScheduleFullCalendar from "../../components/Calender/ScheduleFullCalendar
 import toast from "react-hot-toast";
 
 const TeacherSchedulePage = () => {
+  // get the initialDate from state that is passed from TeacherTable(if passed)
   const { state } = useLocation();
+  // extract teacherId from Params
   const { teacherId } = useParams();
+  // Reference for FullCalendar
   const calRef = useRef(null);
+  // State for Teacher Leaves
   const [leaves, setLeaves] = useState([]);
+  // State for Teacher Sections
   const [sections, setSections] = useState([]);
+  // State for Teacher
   const [teacher, setTeacher] = useState(null);
 
   // change document title on new page
@@ -20,6 +26,7 @@ const TeacherSchedulePage = () => {
     document.title = "Schedules | Lesson Scheduler";
   }, []);
 
+  // Fetch Teacher Schedule when teacherId param changes
   useEffect(() => {
     const fetchTeacherSchedule = async () => {
       try {

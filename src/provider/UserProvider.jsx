@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 
+// Default State for Logged in User (Manager)
 const defaultUser = {
   id: 1,
   firstName: "Ada",
@@ -20,6 +21,7 @@ const defaultUser = {
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  // State for Logged in User (Manager)
   const [user, setUser] = useState(defaultUser);
 
   return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;

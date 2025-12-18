@@ -23,17 +23,21 @@ export default function AppFullCalendar({
   setFormData = undefined,
   conflictSections = undefined,
 }) {
+  // function to format startDate for the calendar events
   function formatStartDate(date) {
     const start = new Date(date);
     start.setHours(8, 0, 0, 0);
     return start;
   }
+
+  // function to format endDate for the calendar events
   function formatEndDate(date) {
     const start = new Date(date);
     start.setHours(20, 0, 0, 0);
     return start;
   }
 
+  // function to choose section event color
   const sectionColour = (section) => {
     if (section.id == selectedConflictSection) {
       return "#A52A2A"; //selected teacher and pending color(red)
@@ -58,6 +62,7 @@ export default function AppFullCalendar({
     }
   };
 
+  // function to choose leave event color
   const leaveColor = (leave, conflictingLeaveId) => {
     if (leave.id == conflictingLeaveId) {
       return "#FF9D8A"; //conflicting leave (red)
@@ -83,6 +88,7 @@ export default function AppFullCalendar({
     }
   };
 
+  // function to create Section Event Object for FullCalander
   const createSectionEvent = (section) => ({
     title: `${section.course.courseCode} (${section.status.type.toUpperCase()})`,
     start: `${section.date}T${section.timeslot.startTime}`,
@@ -98,35 +104,42 @@ export default function AppFullCalendar({
     },
   });
 
+  // function to create Leave Event Object for FullCalander
   const createLeaveEvent = (leave) => ({
     title: `${leave.teacher.firstName} ${leave.teacher.lastName} Leave (${leave.status.type.toUpperCase()})`,
     start: formatStartDate(leave.startDate),
     end: formatEndDate(leave.endDate),
-    // allDay: true,
     color: leaveColor(leave, conflictingLeaveId),
-    // leave.teacher.id === selectedTeacherId ? (leave.status.type === "pending" ? "lightblue" : "blue") : "sandybrown",
-    // borderColor: leave.teacher.id === selectedTeacherId ? "blue" : "sandybrown",
     extendedProps: {
       type: "leave",
       data: leave,
     },
   });
+
+  // variable for filtered Sections
   const filteredSections = sections.filter(
     (section) => section.teacher.id == selectedTeacherId || section.teacher.id == otherTeacherId
   );
+
+  // Add the Conflicting Section for the other Teacher if selected teacher and section
   if (displayConflictingSection) {
     //add conflicting section
     const conflictingSection = sections.find((section) => section.id == conflictingSectionId);
-    console.log(conflictingSection);
+
     if (conflictingSection != undefined) {
       filteredSections.push(conflictingSection);
     }
   }
+
+  // variable for Section Events
   const sectionEvents = filteredSections.map((section) => createSectionEvent(section));
+
+  // variable for filtered Leave Events
   const filteredLeaveEvents = leaves.filter(
     (leave) => leave.teacher.id == selectedTeacherId || leave.teacher.id == otherTeacherId
   );
 
+  //variable for Leave Events for Full Calander
   const leaveEvents = filteredLeaveEvents.map((leave) => createLeaveEvent(leave));
   const events = [...sectionEvents, ...leaveEvents];
 

@@ -4,6 +4,7 @@ import { BACKEND_URL } from "../../api/api";
 import axios from "axios";
 
 const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAndTeachers, setRefetchData }) => {
+  // function to handle submit button
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,6 +29,7 @@ const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAn
     }
   };
 
+  // function to handle form change
   const handleChange = (field) => (event) => {
     setFormData((oldForm) => ({
       ...oldForm,
@@ -36,11 +38,10 @@ const ConflictForm = ({ conflictLeave, formData, setFormData, conflictSectionsAn
     }));
   };
 
-  // Extract conflictingLessons
+  // variable to extract sections and remove availableTeachers
   const conflictSections = conflictSectionsAndTeachers.map(({ availableTeachers, ...section }) => section);
 
-  // Extract availableTeachers
-  // const availableTeachers = conflictSectionsAndTeachers.map((lesson) => lesson.availableTeachers);
+  // variable to extract sections and remove availableTeachers
   const availableTeachers = formData.selectedSectionId
     ? conflictSectionsAndTeachers.find((lesson) => lesson.id == formData.selectedSectionId).availableTeachers
     : [];

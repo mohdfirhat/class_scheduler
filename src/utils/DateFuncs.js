@@ -1,3 +1,4 @@
+// Function to get LocalDateTime in formatted String
 export const getLocalDatetimeString = (date) => {
   const pad = (n) => (n < 10 ? "0" + n : n);
   return (

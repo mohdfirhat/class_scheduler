@@ -28,10 +28,16 @@ const SectionForm = ({
   const [courses, setCourses] = useState([]);
   const [timeslots, setTimeslots] = useState([]);
 
+  // variable for user object from context
   const { user } = useContext(UserContext);
+
+  // variable for user department Id
   const departmentId = user.department.id;
+
+  // variable for user manager Id
   const managerId = user.id;
 
+  // function to handle form change
   const handleChange = (field) => (event) => {
     dispatchFormData({ type: field, value: event.target.value });
     if (field == "courseCode") {
@@ -61,12 +67,14 @@ const SectionForm = ({
     }
   };
 
+  // function to handle date change
   const handleDateChange = (newDate) => {
     if (!newDate) return;
     dispatchFormData({ type: "date", value: newDate });
     setTentitiveSection((prevState) => ({ ...prevState, date: newDate }));
   };
 
+  // function to handle form submit
   const handleSubmit = async (event) => {
     // prevent refresh of page
     event.preventDefault();

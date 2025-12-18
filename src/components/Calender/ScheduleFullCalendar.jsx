@@ -19,17 +19,21 @@ export default function ScheduleFullCalendar({
   setFormData = undefined,
   conflictSections = undefined,
 }) {
+  // function to format startDate for the calendar events
   function formatStartDate(date) {
     const start = new Date(date);
     start.setHours(8, 0, 0, 0);
     return start;
   }
+
+  // function to format endDate for the calendar events
   function formatEndDate(date) {
     const start = new Date(date);
     start.setHours(20, 0, 0, 0);
     return start;
   }
 
+  // function to choose section event color
   const sectionColour = (section, teacher) => {
     if (teacher.id == selectedTeacherId) {
       if (section.status.type == "pending") {
@@ -51,6 +55,7 @@ export default function ScheduleFullCalendar({
     }
   };
 
+  // function to choose leave event color
   const leaveColor = (leave, teacher) => {
     if (teacher.id == selectedTeacherId) {
       // https://htmlcolorcodes.com/colors/shades-of-orange/
@@ -73,6 +78,7 @@ export default function ScheduleFullCalendar({
     }
   };
 
+  // function to create Section Event Object for FullCalander
   const createSectionEvent = (section, teacher) => ({
     title: `${section.course.courseCode} (${section.status.type.toUpperCase()})`,
     start: `${section.date}T${section.timeslot.startTime}`,
@@ -87,6 +93,8 @@ export default function ScheduleFullCalendar({
       notes: section.remark,
     },
   });
+
+  // function to create Tentitive Section Event Object for FullCalander
   const createTentitiveSectionEvent = (section, teacher) => ({
     title: section.course.courseCode,
     start: `${section.date.format("YYYY-MM-DD")}T${section.timeslot.startTime}`,
@@ -101,7 +109,8 @@ export default function ScheduleFullCalendar({
       notes: section.remark,
     },
   });
-  console.log(leaves);
+
+  // function to create Leave Event Object for FullCalander
   const createLeaveEvent = (leave, teacher) => ({
     title: `${teacher.firstName} ${teacher.lastName} Leave (${leave.status.type.toUpperCase()})`,
     start: formatStartDate(leave.startDate),
@@ -116,15 +125,20 @@ export default function ScheduleFullCalendar({
     },
   });
 
+  // variable for Section Events for Full Calendar
   const sectionEvents = sections ? sections.map((section) => createSectionEvent(section, teacher)) : [];
+
+  // variable for Leave Events for Full Calendar
   const leaveEvents = leaves ? leaves.map((leave) => createLeaveEvent(leave, teacher)) : [];
+
+  // variable for All events for Full Calendar
   const events = [...sectionEvents, ...leaveEvents];
+
   // if there is tentitveSection with date and time, add to events
   if (tentitiveSection && teacher && tentitiveSection.date && tentitiveSection.timeslot.id) {
     const createdTentitiveEvent = createTentitiveSectionEvent(tentitiveSection, teacher);
     events.push(createdTentitiveEvent);
   }
-  console.log(teacher);
 
   return (
     <div>

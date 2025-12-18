@@ -12,14 +12,13 @@ import TeachersOverviewPage from "./pages/TeachersOverviewPage";
 import SectionOverviewTab from "./components/Tabs/CourseOverviewTab";
 import LeaveOverviewPage from "./pages/LeaveOverviewPage";
 import CreateSectionTab from "./components/Tabs/CreateSectionTab";
-import VenuePopup from "./components/VenuePopup/VenuePopup";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="dashboard/courses" replace />} />
       <Route path="dashboard/courses" element={<SectionOverviewTab />} />
-      <Route path="/sections/:sectionId?" element={<CreateSectionTab />} />
+      <Route path="/sections/:sectionId" element={<CreateSectionTab />} />
       <Route path="dashboard/leaves" element={<LeaveOverviewPage />} />
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />
       <Route path="/schedules/:teacherId" element={<TeacherSchedulePage />} />
