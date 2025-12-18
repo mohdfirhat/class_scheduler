@@ -89,7 +89,7 @@ const CreateSectionTab = ({ sectionId, isUpdating }) => {
   const [teacherOneId, setTeacherOneId] = useState(null);
   const [teacherOneLeaves, setTeacherOneLeaves] = useState([]);
   const [teacherOneSections, setTeacherOneSections] = useState([]);
-  const [teacherOne, setTeacherOne] = useState({});
+  const [teacherOne, setTeacherOne] = useState(null);
   const [tentitiveSection, setTentitiveSection] = useState(defaultTentitiveSection);
   const [refreshSchedule, setRefreshSchedule] = useState(true);
 
