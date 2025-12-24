@@ -23,6 +23,7 @@ function App() {
       <Route path="dashboard/teachers" element={<TeachersOverviewPage />} />
       <Route path="/schedules/:teacherId" element={<TeacherSchedulePage />} />
       <Route path="/conflicts/:leaveId" element={<LeaveConflictPage />} />
+      <Route path="*" element={<Navigate to="/dashboard/courses" replace />} />
     </Routes>
   );
 }

@@ -11,6 +11,7 @@ const LeaveOverviewPage = () => {
   useEffect(() => {
     document.title = "Leaves | Lesson Scheduler";
   }, []);
+  
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <NavBar />
