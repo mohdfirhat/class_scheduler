@@ -156,7 +156,7 @@ const SectionForm = ({
 
   //fetch the available teachers and venues after basic params filled
   useEffect(() => {
-    if (isBasicParamsFilled) {
+    if (isBasicParamsFilled && formState.validClassSize) {
       const fetchAvailableTeachersWithSchedule = async () => {
         const url = new URL(`${BACKEND_URL}/api/teachers/${managerId}/available`);
         url.searchParams.append("date", formState.formData.date.format("YYYY-MM-DD"));
@@ -290,9 +290,9 @@ const SectionForm = ({
             fullWidth
           />
         </Stack>
-        {/* Date + Timeslot Pickers */}
+        {/* Date Pickers */}
         <Stack direction="row" spacing={2}>
-          {/* Date on top */}
+          {/* Date on left */}
           <DatePicker
             label="Section Date"
             inputFormat="DD/MM/YYYY"
@@ -300,10 +300,10 @@ const SectionForm = ({
             value={formState.formData.date ? dayjs(formState.formData.date) : null}
             shouldDisableDate={(date) => date.day() === 0 || date.day() === 6}
             onChange={handleDateChange}
-            slotProps={{ textField: { fullWidth: true, required: true } }}
+            slotProps={{ textField: { fullWidth: true, required: true, readOnly: true } }}
           />
 
-          {/* Timeslot Input */}
+          {/* Timeslot on right */}
           <TextField
             select
             label="Timeslot"

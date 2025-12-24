@@ -50,7 +50,7 @@ const CreateSectionTab = ({ isUpdating }) => {
 
       case "classSize":
         //validation for class size field for non-number inputs and min/max class sizes
-        if (/[^0-9]/g.test(action.value) || action.value > 200 || action.value < 1) {
+        if (/[^0-9]/g.test(action.value) || action.value < 1) {
           return {
             ...prevState,
             formData: {
