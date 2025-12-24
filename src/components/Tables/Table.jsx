@@ -18,6 +18,9 @@ const Table = (props) => {
   if (props.handleCancelClick) {
     props.columns.find((col) => col.field == "button").handleCancelClick = props.handleCancelClick;
   }
+  if (props.handleApprovedCancelClick) {
+    props.columns.find((col) => col.field == "button").handleApprovedCancelClick = props.handleApprovedCancelClick;
+  }
   if (props.handleViewScheduleClick) {
     props.columns.find((col) => col.field == "button").handleViewScheduleClick = props.handleViewScheduleClick;
   }

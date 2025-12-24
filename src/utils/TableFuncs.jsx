@@ -35,6 +35,9 @@ export const RenderButton = (props) => {
   const handleApproveClick = () => {
     props.colDef.handleApproveClick(props.row);
   };
+  const handleApprovedCancelClick = () => {
+    props.colDef.handleApprovedCancelClick(props.row);
+  };
   const handleRejectClick = () => {
     props.colDef.handleRejectClick(props.row);
   };
@@ -55,7 +58,7 @@ export const RenderButton = (props) => {
         ? (btnProps.find((btn) => btn.name == "Edit Section").onclick = handleEditClick)
         : null;
       btnProps.find((btn) => btn.name == "Cancel Section")
-        ? (btnProps.find((btn) => btn.name == "Cancel Section").onclick = handleCancelClick)
+        ? (btnProps.find((btn) => btn.name == "Cancel Section").onclick = handleApprovedCancelClick)
         : null;
       btnProps.find((btn) => btn.name == "View Schedule")
         ? (btnProps.find((btn) => btn.name == "View Schedule").onclick = handleViewScheduleClick)

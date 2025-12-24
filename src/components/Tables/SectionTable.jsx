@@ -135,6 +135,16 @@ const SectionTable = (props) => {
             toast.error(error.response.data,{position: 'top-center',});
         }    
     };
+    const handleApprovedCancelClick = async (rowData) => {
+        try {
+            const res = await axios.put(`${BACKEND_URL}/api/sections/cancelApproved/${rowData.id}`);
+            toast.success(res.data,{position: 'top-center',});
+            setLatestUpdate(res.data);
+
+        } catch (error){
+            toast.error(error.response.data,{position: 'top-center',});
+        }    
+    };
   
   // useEffect for retrieving all section records on page load
   //and sending data to DataGrid in Table component
@@ -191,6 +201,7 @@ const SectionTable = (props) => {
               },
                       }}
         handleApproveClick = {handleApproveClick}
+        handleApprovedCancelClick = {handleApprovedCancelClick}
         handleCancelClick = {handleCancelClick} 
       />
     </div>
